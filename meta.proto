@@ -1,0 +1,13 @@
+message Package{
+	optional string virtualPath = 1;
+	optional int32 num = 2;//0=insert, 1=find, 2=remove.
+	
+	optional string realFullPath = 3;
+	optional bool isDir = 4;
+	repeated string listItem = 5;
+	optional int32 openMode = 6;
+	optional int32 mode = 7;
+
+	optional int32 Operation = 8;		
+	optional int32 replicaNo =9; //nagative number means it's not an original request.
+}
