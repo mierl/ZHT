@@ -65,6 +65,7 @@ struct HostEntity {
 	string host;
 	int port;
 	bool valid;
+	vector<unsigned long long> ringID;
 };
 
 vector<struct HostEntity> getMembership(string fileName) {

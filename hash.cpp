@@ -31,17 +31,18 @@ struct threaddata {
 	char buffer[RCV_MSG_SIZE];
 };
 #endif
-//raman-replication-s
+
 struct HostEntity {
 	struct sockaddr_in si;
 	int sock;
 	string host;
 	int port;
 	bool valid;
+	vector<unsigned long long> ringID;
 };
 vector<struct HostEntity> hostList;
 int nHost;
-//raman-replication-e
+
 //raman-sigpipe-s
 bool sigpipe_flag = false;
 uint32_t sigpipe_count = 0;
