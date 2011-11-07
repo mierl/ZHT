@@ -1,5 +1,5 @@
 =============================================
-
+This is a branch for consistent hashing, it's not stable yet.
 
 
 
