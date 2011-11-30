@@ -4,7 +4,8 @@
 #include <cstring>
 #include <iostream>
 #include <fstream>
-#include "d3_transport.h"
+#include <algorithm>
+//#include "d3_transport.h"
 #include "meta.pb.h"
 #include <signal.h>
 #include <sys/time.h>
@@ -12,8 +13,9 @@
 #include <list>
 #include <vector>
 #include <netdb.h>
-#include "d3_sys_globals.h"
+#include "zht_util.h"
 //raman-client-replication-s
+//#include "d3_sys_globals.h"
 #include <pthread.h>
 #include <error.h>
 using namespace std;
@@ -26,119 +28,132 @@ vector<struct HostEntity> hostList;
 list<string> myPackagelist;
 //raman-client-replication-e
 
-struct timeval tp;
+//struct timeval tp;
 
 //raman-configfile-s
 int REPLICATION_TYPE; //1 for Client-side replication
 //raman-configfile-e
 
 int NUM_REPLICAS; //=0;
-
-double getTime_usec() {
-	gettimeofday(&tp, NULL);
-	return static_cast<double>(tp.tv_sec) * 1E6
-			+ static_cast<double>(tp.tv_usec);
-}
-double getTime_msec() {
-	gettimeofday(&tp, NULL);
-	return static_cast<double>(tp.tv_sec) * 1E3
-			+ static_cast<double>(tp.tv_usec) / 1E3;
-}
-double getTime_sec() {
-	gettimeofday(&tp, NULL);
-	return static_cast<double>(tp.tv_sec)
-			+ static_cast<double>(tp.tv_usec) / 1E6;
-}
-string randomString(int len) {
-	string s(len, ' ');
-	static const char alphanum[] = "0123456789"
-			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			"abcdefghijklmnopqrstuvwxyz";
-	for (int i = 0; i < len; ++i) {
-		s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
-	}
-	return s;
-}
-struct HostEntity {
-	struct sockaddr_in si;
-	int sock;
-	string host;
-	int port;
-	bool valid;
-	vector<unsigned long long> ringID;
-};
-
-vector<struct HostEntity> getMembership(string fileName) {
-	vector<struct HostEntity> hostList;
-	ifstream in(fileName.c_str(), ios::in); //make a file input stream
-	string host;
-	int port;
-	HostEntity aHost;
-	struct sockaddr_in si_other;
-	hostent *record;
-	in_addr *address;
-	string ip_address;
-	if (!in.is_open()) {
-		cout << "File read failed." << endl;
-		return hostList;
-	}
-	if (!in.eof()) {
-		in >> host >> port;
-	}
-	record = gethostbyname(host.c_str());
-	address = (in_addr *) record->h_addr;
-	ip_address = inet_ntoa(*address);
-	while (!in.eof()) {
-		int s, i, slen = sizeof(si_other);
-		memset((char *) &si_other, 0, sizeof(si_other));
-		si_other.sin_family = AF_INET;
-		si_other.sin_port = htons(port);
-		if (inet_aton(ip_address.c_str(), &si_other.sin_addr) == 0) {
-			fprintf(stderr, "inet_aton() failed\n"); //address to number
-		}
-		aHost.si = si_other;
-		aHost.host = host;
-		aHost.port = port;
-		aHost.valid = true;
-		hostList.push_back(aHost);
-		in >> host >> port;
-		record = gethostbyname(host.c_str());
-		address = (in_addr *) record->h_addr;
-		ip_address = inet_ntoa(*address);
-	}
-	in.close();
-	cout << "finished reading membership info, " << hostList.size() << " nodes"
-			<< endl;
-	return hostList;
-}
 /*
- int hash(const char *str, int mod) { //djb2
- unsigned long hash = 5381;
+ double getTime_usec() {
+ gettimeofday(&tp, NULL);
+ return static_cast<double>(tp.tv_sec) * 1E6
+ + static_cast<double>(tp.tv_usec);
+ }
+ double getTime_msec() {
+ gettimeofday(&tp, NULL);
+ return static_cast<double>(tp.tv_sec) * 1E3
+ + static_cast<double>(tp.tv_usec) / 1E3;
+ }
+ double getTime_sec() {
+ gettimeofday(&tp, NULL);
+ return static_cast<double>(tp.tv_sec)
+ + static_cast<double>(tp.tv_usec) / 1E6;
+ }
+ string randomString(int len) {
+ string s(len, ' ');
+ static const char alphanum[] = "0123456789"
+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+ "abcdefghijklmnopqrstuvwxyz";
+ for (int i = 0; i < len; ++i) {
+ s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+ }
+ return s;
+ }
+ struct HostEntity {
+ struct sockaddr_in si;
+ int sock;
+ string host;
+ int port;
+ bool valid;
+ vector<unsigned long long> ringID;//assume each node has multiple ringID.---problem?
+ };
+
+ int hash(const char *str, int mod) { //int type return
+ unsigned long hash = 0;
  int c;
- while (c = *str++)
- hash = ((hash << 5) + hash) + c; // hash * 33 + c
+
+ while (c = *str++){
+ hash = c + (hash << 6) + (hash << 16) - hash;
+ }
  return hash % mod;
  }
+
+ unsigned long long hash_64bit_ring(const char *str) { //unsigned long long: 64 bit
+ unsigned long long hash = 0;
+ unsigned long long c;
+
+ while (c = *str++){
+ hash = c + (hash << 6) + (hash << 16) - hash;
+ }
+ return hash;
+ }
+
+ bool myCompare(HostEntity i, HostEntity j){
+ return (i.ringID.begin() < j.ringID.begin()); //potential problem: here only consider each node has one string ID.
+
+ }
+
  */
-int hash(const char *str, int mod){
+/*
+ vector<struct HostEntity> getMembership(string fileName) {
+ vector<struct HostEntity> hostList;
+ ifstream in(fileName.c_str(), ios::in); //make a file input stream
+ string host;
+ int port;
+ HostEntity aHost;
+ struct sockaddr_in si_other;
+ hostent *record;
+ in_addr *address;
+ string ip_address;
+ if (!in.is_open()) {
+ cout << "File read failed." << endl;
+ return hostList;
+ }
+ if (!in.eof()) {
+ in >> host >> port;
+ }
+ record = gethostbyname(host.c_str());
+ address = (in_addr *) record->h_addr;
+ ip_address = inet_ntoa(*address);
+ while (!in.eof()) {
+ int s, i, slen = sizeof(si_other);
+ memset((char *) &si_other, 0, sizeof(si_other));
+ si_other.sin_family = AF_INET;
+ si_other.sin_port = htons(port);
+ if (inet_aton(ip_address.c_str(), &si_other.sin_addr) == 0) {
+ fprintf(stderr, "inet_aton() failed\n"); //address to number
+ }
+ aHost.si = si_other;
+ aHost.host = host;
+ aHost.port = port;
+ aHost.valid = true;
 
-	unsigned long hash = 0;
-	int c;
+ aHost.ringID.push_back(hash_64bit_ring(randomString(30).c_str()));//this is for one node has multiple ring IDs, which are stored in a vector.
+ //insert(hash_64bit_ring(randomString(30)));//----------------------------------------ringID
+ hostList.push_back(aHost);
+ in >> host >> port;
+ record = gethostbyname(host.c_str());
+ address = (in_addr *) record->h_addr;
+ ip_address = inet_ntoa(*address);
+ }
+ in.close();
+ cout << "finished reading membership info, " << hostList.size() << " nodes"
+ << endl;
 
-	while (c = *str++)
-	hash = c + (hash << 6) + (hash << 16) - hash;
+ sort(hostList.begin(), hostList.end(), myCompare );
+ return hostList;
+ }
+ */
 
-	return hash % mod;
-}
-
-//raman-sigpipe-s
 void sig_pipe(int signum) {
 	printf("SIGPIPE Caught!\n");
 	signal(SIGPIPE, sig_pipe);
 }
-//raman-sigpipe-e
 
 //raman-configfile-s
+
 int setconfigvariables() {
 	FILE *fp;
 	char line[100], *key, *svalue;
@@ -166,9 +181,11 @@ int setconfigvariables() {
 	}
 	return 0;
 }
+
 //raman-configfile-e
 
 //raman-client-replication-s
+/*
 void *replicator(void *) {
 	int nHost = hostList.size();
 	vector<struct HostEntity> sendDestList;
@@ -192,7 +209,7 @@ void *replicator(void *) {
 			package.ParseFromString(str);
 			//package.set_replicano(NUM_REPLICAS - t);
 			package.set_replicano(3); //just a backup, not original(5).
-			int index = hash((package.virtualpath()).c_str(), nHost) + t;
+			int index = myhash((package.virtualpath()).c_str(), nHost) + t;
 			index = index % nHost;
 			destHost = hostList.at(index);
 #if TRANS_PROTOCOL == USE_TCP
@@ -244,6 +261,8 @@ void *replicator(void *) {
 	d3_closeConnection(client_sock_r);
 #endif
 }
+
+*/
 //raman-client-replication-e
 
 //----------------------------------Making API---------------------------------------
@@ -252,85 +271,71 @@ void *replicator(void *) {
 
 //	int simpleReceive();
 //Send a plain string to dest while keep the socket for future receive, NOT closing the socket in this function, so it must be closed somewhere else.
-int simpleSend(string str, struct HostEntity destination, int &current_sock) {
+/*
+ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 
-	//cout<< "contactReplica: newly received msg: package.replicano= " << package.replicano()<< ", package.ByteSize()="<< package.ByteSize() <<endl;//here the correct package was received: -1
+ //cout<< "contactReplica: newly received msg: package.replicano= " << package.replicano()<< ", package.ByteSize()="<< package.ByteSize() <<endl;//here the correct package was received: -1
 
-	int i = 0, port, client_sock, r = 0;
-	int32_t str_size = str.length();
-	string hostName;
-	sockaddr_in toAddr, recv_addr;
+ int i = 0, port, client_sock, r = 0;
+ int32_t str_size = str.length();
+ string hostName;
+ sockaddr_in toAddr, recv_addr;
 
-#if TRANS_PROTOCOL == USE_TCP
-	client_sock = d3_makeConnection((destination.host).c_str(),
-			destination.port);
-#elif TRANS_PROTOCOL == USE_UDP
+ #if TRANS_PROTOCOL == USE_TCP
+ client_sock = d3_makeConnection((destination.host).c_str(),
+ destination.port);
+ #elif TRANS_PROTOCOL == USE_UDP
 
-	cout << endl << "simpleSend makeSocket start-----" << endl;
-	client_sock = d3_svr_makeSocket((time(NULL) % 10000) + rand() % 10000); //client can use any port to talk to server
-//	client_sock = d3_svr_makeSocket(destination.port);
-	cout << "simpleSend makeSocket end-----" << endl << endl;
-#endif
+ cout << endl << "simpleSend makeSocket start-----" << endl;
+ client_sock = d3_svr_makeSocket((time(NULL) % 10000) + rand() % 10000); //client can use any port to talk to server
+ //	client_sock = d3_svr_makeSocket(destination.port);
+ cout << "simpleSend makeSocket end-----" << endl << endl;
+ #endif
 
-	if (client_sock < 0) { //only report error, doesn't handle it
-		cout << " " << endl;
-		return -9;
-	}
+ if (client_sock < 0) { //only report error, doesn't handle it
+ cout << " " << endl;
+ return -9;
+ }
 
-	toAddr = d3_make_sockaddr_in((destination.host).c_str(), destination.port);
+ toAddr = d3_make_sockaddr_in((destination.host).c_str(), destination.port);
 
-	cout << "simpleSend trying to reach host:" << destination.host << ", port:"
-			<< destination.port << endl;
+ cout << "simpleSend trying to reach host:" << destination.host << ", port:"
+ << destination.port << endl;
 
-	r = d3_send_data(client_sock, (void*) str.c_str(), str_size, 0, &toAddr);
-	/*
-	 if (sigpipe_flag) {
-	 sigpipe_flag = false;
-	 cout << "Primary got SIGPIPE while inserting package to a replica. "
-	 << client_sock << " : " << r << endl;
-	 return -8;
-	 }
-	 */
-	if (r < 0) {
-		cerr << "Sending data failed." << endl;
-		return -7;
-	}
+ r = d3_send_data(client_sock, (void*) str.c_str(), str_size, 0, &toAddr);
 
-	void *buff_return = (void*) malloc(sizeof(int32_t));
-	r = d3_recv_data(client_sock, buff_return, sizeof(int32_t), 0);
-	//d3_recv_data(int sock,void *buffer,size_t size,int flags);
-	/*
-	 if (sigpipe_flag) {
-	 cout
-	 << "Error: Got SIGPIPE while receiving return state."
-	 << endl;
-	 return -8;
-	 }
-	 */
-	if (r < 0) {
-		cerr << "Receiving return state failed." << endl;
-		return -7;
-	}
-	int32_t ret = *(int32_t*) buff_return;
-	switch (ret) {
-	case 0:
-		break;
-	case 1:
-		break;
-	case -2:
-		cerr << "Failed to remove from replica." << endl;
-		break;
-	case -3:
-		cerr << "Failed to insert into replica." << endl;
-		break;
-	default:
-		cerr << "What the hell was that?" << endl;
-		break;
-	}
-	current_sock = client_sock;
-	//d3_closeConnection(client_sock);//not close here?
-	return ret;
-}
+ if (r < 0) {
+ cerr << "Sending data failed." << endl;
+ return -7;
+ }
+
+ void *buff_return = (void*) malloc(sizeof(int32_t));
+ r = d3_recv_data(client_sock, buff_return, sizeof(int32_t), 0);
+
+ if (r < 0) {
+ cerr << "Receiving return state failed." << endl;
+ return -7;
+ }
+ int32_t ret = *(int32_t*) buff_return;
+ switch (ret) {
+ case 0:
+ break;
+ case 1:
+ break;
+ case -2:
+ cerr << "Failed to remove from replica." << endl;
+ break;
+ case -3:
+ cerr << "Failed to insert into replica." << endl;
+ break;
+ default:
+ cerr << "What the hell was that?" << endl;
+ break;
+ }
+ current_sock = client_sock;
+ //d3_closeConnection(client_sock);//not close here?
+ return ret;
+ }*/
 
 class ZHTClient {
 public:
@@ -380,7 +385,7 @@ int ZHTClient::initialize(string configFilePath, string memberListFilePath) {
 		} //other config options follow this way(if).
 
 		else if ((strcmp(key, "NUM_REPLICAS")) == 0) {
-			this->NUM_REPLICAS = ivalue +1; //note: +1 is must
+			this->NUM_REPLICAS = ivalue + 1; //note: +1 is must
 			//cout<<"NUM_REPLICAS = "<< NUM_REPLICAS <<endl;
 		} else {
 			cout << "Config file is not correct." << endl;
@@ -392,10 +397,11 @@ int ZHTClient::initialize(string configFilePath, string memberListFilePath) {
 
 }
 
+//transfer a key to a host index where it should go
 struct HostEntity ZHTClient::str2Host(string str) {
 	Package pkg;
 	pkg.ParseFromString(str);
-	int index = hash(pkg.virtualpath().c_str(), this->NUM_REPLICAS);
+	int index = myhash(pkg.virtualpath().c_str(), this->NUM_REPLICAS);
 	struct HostEntity host = this->memberList.at(index);
 
 	return host;
@@ -414,9 +420,9 @@ int ZHTClient::lookup(string str, string &returnStr) {
 	int sock = -1;
 	struct HostEntity dest = this->str2Host(str);
 	int ret = simpleSend(str, dest, sock);
-	char buff[134];
+	char buff[MAX_MSG_SIZE];//MAX_MSG_SIZE
 	if (ret == 0) {
-		d3_recv_data(sock, buff, 134, 0);
+		d3_recv_data(sock, buff, MAX_MSG_SIZE, 0);//MAX_MSG_SIZE
 		returnStr.assign(buff);
 	}
 	d3_closeConnection(sock);
@@ -432,61 +438,196 @@ int ZHTClient::remove(string str) {
 	return ret;
 }
 
-//This is an example.
-int main() {
+int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
+		ZHTClient &clientRet, int numTest, int lenString) {
 
-	string cfgFile = "zht.cfg";
-	string memberList = "neighbor";
+	ZHTClient client;
 
-	ZHTClient cl;
-
-	if (cl.initialize(cfgFile, memberList) != 0) {
+	if (client.initialize(cfgFile, memberList) != 0) {
 		cout << "Crap! ZHTClient initialization failed, program exits." << endl;
 		return -1;
 	}
 
-	Package package, package_ret;
-	package.set_virtualpath(randomString(25)); //as key
-	//package.set_virtualpath("Virtual/some");
-	package.set_isdir(false);
-	//package.set_replicano(NUM_REPLICAS);
-	package.set_replicano(5); //orginal--Note: never let it be nagative, it will increase the package size to 143!!!
-	package.set_realfullpath("Some-Real-longer-longer-and-longer-Path--------");
-	package.add_listitem("item1-1234567890001");
-	package.add_listitem("item2-1234567890001");
-	package.add_listitem("item3-1234567890001");
-	package.add_listitem("item4-123456789");
-	package.add_listitem("item5-123456789");
-	package.set_operation(3);
+	clientRet = client; //reserve this client object for other benchmark(lookup/remove) to use.
 
-	string str = package.SerializeAsString();
 
-	if (cl.insert(str) < 0) {
-		cout << "Insert failed. " << endl;
-		return -1;
-	};
-
-	cout << "Insert succeeded." << endl;
-	string result;
-	package.set_operation(1); //1:lookup, 2:remove, 3:insert
-	string str_lookup = package.SerializeAsString();
-	cout << "Lookup package size = " << str_lookup.length() << endl;
-	if (cl.lookup(str_lookup, result) != 0) { //stupid.
-		cout << "Lookup failed." << endl;
-		return -1;
-	} else {
-		package_ret.ParseFromString(result);
-		cout << "Result real path = " << package_ret.realfullpath() << endl;
+	//vector<string> pkgList;
+	int i = 0;
+	for (i = 0; i < numTest; i++) {
+		Package package, package_ret;
+		package.set_virtualpath(randomString(lenString)); //as key
+		package.set_isdir(false);
+		package.set_replicano(5); //orginal--Note: never let it be nagative!!!
+		package.set_operation(3); // 3 for insert, 1 for look up, 2 for remove
+		package.set_realfullpath(
+				"Some-Real-longer-longer-and-longer-Paths--------");
+		package.add_listitem("item--1");
+		package.add_listitem("item--2");
+		package.add_listitem("item--3");
+		package.add_listitem("item--4");
+		package.add_listitem("item--5");
+		string str = package.SerializeAsString();
+		pkgList.push_back(str);
 	}
 
-	package.set_operation(2);
-	string str_remove = package.SerializeAsString();
-	if (cl.remove(str_remove) < 0) {
-		cout << "Remove failed." << endl;
-		return -1;
-	} else
-		cout << "Remove succeeded." << endl;
+	double start = 0;
+		double end = 0;
+	start = getTime_msec();
+	int errCount = 0;
+	vector<string>::iterator it;
+	for (it = pkgList.begin(); it != pkgList.end(); it++) {
+		if (client.insert((*it)) < 0)
+			errCount++;
+	}
+	end = getTime_msec();
+
+	cout << "Inserted " << numTest - errCount << " packages out of " << numTest
+			<< ", cost " << end - start << " ms" << endl;
+
 	return 0;
+}
+
+float benchmarkLookup(vector<string> strList, ZHTClient client) {
+	vector<string>::iterator it;
+
+	for(it=strList.begin(); it!=strList.end();it++){
+		Package package;
+		package.ParseFromString((*it));
+		package.set_operation(1);// 3 for insert, 1 for look up, 2 for remove
+		package.set_replicano(3);//5: original, 3 not original
+
+		strList.erase(it);
+		string newStr=package.SerializeAsString();
+		strList.push_back(newStr);
+	}
+
+
+	double start = 0;
+		double end = 0;
+	start = getTime_msec();
+	int errCount = 0;
+
+	for (it = strList.begin(); it != strList.end(); it++) {
+		string result;
+		if (client.lookup((*it), result) < 0){
+			errCount++;}
+		else if(result.empty()){//empty string
+			errCount++;
+		}
+	}
+
+	end = getTime_msec();
+
+	cout << "Lookup " << strList.size() - errCount << " packages out of " << strList.size()
+			<< ", cost " << end - start << " ms" << endl;
+	return 0;
+}
+
+float benchmarkRemove(vector<string> strList, ZHTClient client) {
+	vector<string>::iterator it;
+
+		for(it=strList.begin(); it!=strList.end();it++){
+			Package package;
+			package.ParseFromString((*it));
+			package.set_operation(2);// 3 for insert, 1 for look up, 2 for remove
+			package.set_replicano(3);//5: original, 3 not original
+
+			strList.erase(it);
+			string newStr=package.SerializeAsString();
+			strList.push_back(newStr);
+		}
+
+
+		double start = 0;
+			double end = 0;
+		start = getTime_msec();
+		int errCount = 0;
+
+		for (it = strList.begin(); it != strList.end(); it++) {
+			string result;
+			if (client.remove((*it)) < 0){
+				errCount++;
+			}
+
+		}
+
+		end = getTime_msec();
+
+		cout << "Remove " << strList.size() - errCount << " packages out of " << strList.size()
+				<< ", cost " << end - start << " ms" << endl;
+		return 0;
+
+	return 0;
+}
+//This is an example.
+
+int benchmarkALL(int numTest, int strLen){//103+length
+	int para = strLen -128;
+	return 0;
+}
+int main() {
+
+	string cfgFile = "zht.cfg";
+	string memberList = "neighbor";
+	vector<string> pkgList;
+	ZHTClient testClient;
+	benchmarkInsert(cfgFile, memberList, pkgList, testClient, 10, 15); //25fro 128bytes.
+	benchmarkLookup(pkgList, testClient);
+	benchmarkRemove(pkgList, testClient);
+
+			/*
+			 ZHTClient cl;
+
+			 if (cl.initialize(cfgFile, memberList) != 0) {
+			 cout << "Crap! ZHTClient initialization failed, program exits." << endl;
+			 return -1;
+			 }
+
+			 Package package, package_ret;
+			 package.set_virtualpath(randomString(25)); //as key
+			 //package.set_virtualpath("Virtual/some");
+			 package.set_isdir(false);
+			 //package.set_replicano(NUM_REPLICAS);
+			 package.set_replicano(5); //orginal--Note: never let it be nagative, it will increase the package size to 143!!!
+			 package.set_realfullpath(
+			 "Some-Real-longer-longer-and-longer-Paths--------");
+			 package.add_listitem("item--1");
+			 package.add_listitem("item--2");
+			 package.add_listitem("item--3");
+			 package.add_listitem("item--4");
+			 package.add_listitem("item--5");
+			 package.set_operation(3);
+
+			 string str = package.SerializeAsString();
+
+			 if (cl.insert(str) < 0) {
+			 cout << "Insert failed. " << endl;
+			 return -1;
+			 };
+			 cout << "Insert succeeded." << endl;
+
+			 string result;
+			 package.set_operation(1); //1:lookup, 2:remove, 3:insert
+			 string str_lookup = package.SerializeAsString();
+			 cout << "Lookup package size = " << str_lookup.length() << endl;
+			 if (cl.lookup(str_lookup, result) != 0) { //stupid.
+			 cout << "Lookup failed." << endl;
+			 return -1;
+			 } else {
+			 package_ret.ParseFromString(result);
+			 cout << "Result real path = " << package_ret.realfullpath() << endl;
+			 }
+
+			 package.set_operation(2);
+			 string str_remove = package.SerializeAsString();
+			 if (cl.remove(str_remove) < 0) {
+			 cout << "Remove failed." << endl;
+			 return -1;
+			 } else
+			 cout << "Remove succeeded." << endl;
+			 return 0;
+			 */
+
 }
 
 //--------------------------------Making API End-------------------------------------

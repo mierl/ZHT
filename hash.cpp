@@ -4,18 +4,23 @@
 #include <cstring>
 #include <sys/time.h>
 #include <stdlib.h>
-using namespace std;
-using namespace kyotocabinet;
+
 #include <netdb.h>
+#include "zht_util.h"
 #include "meta.pb.h"
-#include "d3_transport.h"
-#include "d3_sys_globals.h"
-//HashDB db;//file based hash
-ProtoHashDB db; //in-mem hash
+//#include "d3_transport.h"
+//#include "d3_sys_globals.h"
+
 #include <pthread.h>
 #include <iomanip>
+using namespace std;
+using namespace kyotocabinet;
+
 #define MAX_THREADS 400 //from 400
-#define RCV_MSG_SIZE 1024//a fixed package is neither reasonable nor practicable.
+//#define MAX_MSG_SIZE 1024//a fixed package is neither reasonable nor practicable.
+
+//HashDB db;//file based hash
+ProtoHashDB db; //in-mem hash
 
 int NUM_REPLICAS;
 int REPLICATION_TYPE;//1 for Client-side replication
@@ -28,10 +33,11 @@ struct threaddata {
 #elif TRANS_PROTOCOL==USE_UDP
 struct threaddata {
 	struct sockaddr_in sockinfo;
-	char buffer[RCV_MSG_SIZE];
+	char buffer[MAX_MSG_SIZE];
 };
 #endif
 
+/*
 struct HostEntity {
 	struct sockaddr_in si;
 	int sock;
@@ -40,6 +46,8 @@ struct HostEntity {
 	bool valid;
 	vector<unsigned long long> ringID;
 };
+*/
+
 vector<struct HostEntity> hostList;
 int nHost;
 
@@ -55,7 +63,10 @@ static void sigpipe_handler(int signum, siginfo_t *siginfo, void *context) {
 static int server_sock = 0;
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 int numthreads = 0;
-struct timeval tp;
+
+//struct timeval tp;
+
+/*
 double getTime_usec() {
 	gettimeofday(&tp, NULL);
 	return static_cast<double> (tp.tv_sec) * 1E6
@@ -81,6 +92,71 @@ string randomString(int len) {
 	}
 	return s;
 }
+
+
+double getTime_usec() {
+	gettimeofday(&tp, NULL);
+	return static_cast<double>(tp.tv_sec) * 1E6
+			+ static_cast<double>(tp.tv_usec);
+}
+double getTime_msec() {
+	gettimeofday(&tp, NULL);
+	return static_cast<double>(tp.tv_sec) * 1E3
+			+ static_cast<double>(tp.tv_usec) / 1E3;
+}
+double getTime_sec() {
+	gettimeofday(&tp, NULL);
+	return static_cast<double>(tp.tv_sec)
+			+ static_cast<double>(tp.tv_usec) / 1E6;
+}
+string randomString(int len) {
+	string s(len, ' ');
+	static const char alphanum[] = "0123456789"
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			"abcdefghijklmnopqrstuvwxyz";
+	for (int i = 0; i < len; ++i) {
+		s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+	}
+	return s;
+}
+struct HostEntity {
+	struct sockaddr_in si;
+	int sock;
+	string host;
+	int port;
+	bool valid;
+	vector<unsigned long long> ringID;//assume each node has multiple ringID.---problem?
+};
+
+int hash(const char *str, int mod) { //int type return
+	unsigned long hash = 0;
+	int c;
+
+	while (c = *str++){
+		hash = c + (hash << 6) + (hash << 16) - hash;
+	}
+	return hash % mod;
+}
+
+unsigned long long hash_64bit_ring(const char *str) { //unsigned long long: 64 bit
+	unsigned long long hash = 0;
+	unsigned long long c;
+
+	while (c = *str++){
+		hash = c + (hash << 6) + (hash << 16) - hash;
+	}
+	return hash;
+}
+
+bool myCompare(HostEntity i, HostEntity j){
+	return (i.ringID.begin() < j.ringID.begin()); //potential problem: here only consider each node has one string ID.
+
+}
+
+
+
+*/
+
 int HB_insert(DB &db, Package package) {
 	//int opt = package.operation();//opt not be used?
 	string package_str = package.SerializeAsString();
@@ -107,6 +183,8 @@ string * HB_lookup(DB &db, Package package) {
 	return result;
 }
 */
+
+
 int HB_remove(DB &db, string key) {
 	int ret = db.remove(key); //True for success False for fail.
 	if (!ret) {
@@ -127,7 +205,7 @@ int myhash(const char *str, int mod) { //old hash
 	return hash % mod;
 }
 */
-
+/*
 int myhash(const char *str, int mod){
 
 	unsigned long hash = 0;
@@ -138,7 +216,7 @@ int myhash(const char *str, int mod){
 
 	return hash% mod;
 }
-
+*/
 
 int setconfigvariables() {
 	FILE *fp;
@@ -256,7 +334,7 @@ int contactReplica(Package package, struct HostEntity destination) {
 void *dbService(void *threadarg) {
 	srand(kyotocabinet::getpid() + clock());
 	cout << "Current service thread ID = " << pthread_self()<< ", dbService() begin..." << endl;
-	char buff[RCV_MSG_SIZE];
+	char buff[MAX_MSG_SIZE];
 	int32_t operation_status;
 	sockaddr_in toAddr;
 	int client_sock, r;
@@ -274,13 +352,13 @@ void *dbService(void *threadarg) {
 	//raman-e
 	cout<<"Thread: receive request from client..."<<endl;
 #if TRANS_PROTOCOL == USE_TCP
-	r = d3_svr_recv(client_sock, buff, RCV_MSG_SIZE * sizeof(char), 0, &toAddr);
+	r = d3_svr_recv(client_sock, buff, MAX_MSG_SIZE * sizeof(char), 0, &toAddr);
 	if (r <= 0) {
 		cout << "Server could not recv data" << endl;
 	}
 #endif
 	Package package;
-	package.ParseFromArray(buff, RCV_MSG_SIZE);
+	package.ParseFromArray(buff, MAX_MSG_SIZE);
 	string result;
 	cout << endl << endl <<"in dbService: received replicano = "<< package.replicano()<<endl;
 	cout << "package size: " << package.ByteSize() << endl;
@@ -334,13 +412,13 @@ void *dbService(void *threadarg) {
 		cout << "Server could not send acknowledgement to client" << endl;
 	}
 	if(!result.empty()){//return lookup result.
-		r = d3_send_data(client_sock, (void*)result.c_str(), RCV_MSG_SIZE*sizeof(char), 0, &toAddr);//RCV_MSG_SIZE = 134
+		r = d3_send_data(client_sock, (void*)result.c_str(), MAX_MSG_SIZE*sizeof(char), 0, &toAddr);//RCV_MSG_SIZE = 134
 	}
 
 #elif TRANS_PROTOCOL == USE_UDP
 	d3_send_data( server_sock, buff1, sizeof(int32_t), 0, &toAddr );
 	if(!result.empty()){//return lookup result.
-			r = d3_send_data(client_sock, (void*)result.c_str(), RCV_MSG_SIZE*sizeof(char), 0, &toAddr);//RCV_MSG_SIZE = 134
+			r = d3_send_data(client_sock, (void*)result.c_str(), MAX_MSG_SIZE*sizeof(char), 0, &toAddr);//RCV_MSG_SIZE = 134
 		}
 #endif
 	//raman-s
@@ -465,7 +543,7 @@ cout<<"tell if new package..."<<endl;
 	((struct threaddata *) threadarg)->socket = -1;//this should work but seems it donesn't.-----------------????
 #elif TRANS_PROTOCOL==USE_UDP
 	memset( &(((struct threaddata *) threadarg)->sockinfo), 0, sizeof(sockaddr_in) );
-	memset( (((struct threaddata *) threadarg)->buffer), 0, sizeof(RCV_MSG_SIZE) );
+	memset( (((struct threaddata *) threadarg)->buffer), 0, sizeof(MAX_MSG_SIZE) );
 #endif
 	//cout << "leaving thread..."<<endl;
 	pthread_mutex_lock(&mutex1);
@@ -478,6 +556,8 @@ cout<<"tell if new package..."<<endl;
 	pthread_exit(NULL);
 }
 //raman-replication-s
+
+/*
 vector<struct HostEntity> getMembership(string fileName) {
 	vector<struct HostEntity> hostList;
 	ifstream in(fileName.c_str(), ios::in);
@@ -520,11 +600,15 @@ vector<struct HostEntity> getMembership(string fileName) {
 	cout << "finished reading membership info, " << hostList.size() << " nodes"
 			<< endl;
 	return hostList;
-}
+}*/
+
 //raman-replication-e
 int main(int argc, char* argv[]) {
+
+
 	cout<< "Use: hash <port> <neighbor_list_file>" << endl;
 	cout<<"Start Server..."<<endl;
+//	ProtoHashDB db; //in-mem hash
 	srand(kyotocabinet::getpid() + clock());
 	if (setconfigvariables() != 0) {
 		cout << "Not able to read configuration file." << endl;
@@ -532,7 +616,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	int rcv_size, i, client_sock, new_req_indicator, r, thread_status;
-	char tmp_buf[RCV_MSG_SIZE];
+	char tmp_buf[MAX_MSG_SIZE];
 	sockaddr_in tmp_sockaddr;
 	struct threaddata threaddata_array[MAX_THREADS];
 	pthread_t thread[MAX_THREADS];
@@ -547,7 +631,7 @@ int main(int argc, char* argv[]) {
 	}
 	//raman-sigpipe-e
 	int svrPort = kyotocabinet::atoi(argv[1]);
-	if (!db.open("mybase", ProtoHashDB::OWRITER | HashDB::OCREATE)) {
+	if (!db.open("mybase", ProtoHashDB::OWRITER | ProtoHashDB::OCREATE)) {
 		cerr << "open error: " << db.error().name() << endl;
 	}
 	//raman-replication-s
@@ -560,7 +644,7 @@ int main(int argc, char* argv[]) {
 		threaddata_array[i].socket = -1;
 #elif TRANS_PROTOCOL==USE_UDP
 		memset( &(threaddata_array[i].sockinfo), 0, sizeof(sockaddr_in) );
-		memset( &(threaddata_array[i].buffer), 0, sizeof(RCV_MSG_SIZE) );
+		memset( &(threaddata_array[i].buffer), 0, sizeof(MAX_MSG_SIZE) );
 #endif
 	}
 	cout<<endl<<"main: makeSocket -----"<<endl;
@@ -574,7 +658,7 @@ int main(int argc, char* argv[]) {
 #elif TRANS_PROTOCOL==USE_UDP
 		memset( tmp_buf, 0, sizeof(tmp_buf) );
 		memset( &tmp_sockaddr, 0, sizeof(sockaddr_in) );
-		rcv_size = d3_svr_recv( server_sock, tmp_buf, RCV_MSG_SIZE, 0, &tmp_sockaddr );
+		rcv_size = d3_svr_recv( server_sock, tmp_buf, MAX_MSG_SIZE, 0, &tmp_sockaddr );
 		new_req_indicator = tmp_sockaddr.sin_port;
 #endif
 		if (new_req_indicator > 0) {//
