@@ -12,10 +12,10 @@
 #include <iostream>
 #include <arpa/inet.h>
 #include <algorithm>
-
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/string.hpp>
-
+#include <fstream>
+//#include <boost/serialization/vector.hpp>
+//#include <boost/serialization/string.hpp>
+#include "meta.pb.h"
 #include "d3_transport.h"
 
 struct timeval tp;
@@ -25,6 +25,10 @@ using namespace std;
 int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
 
 int const MAX_MSG_SIZE = 1024; //transferd string maximum size
+
+int REPLICATION_TYPE; //1 for Client-side replication
+
+int NUM_REPLICAS;
 //====================================================================================
 
 double getTime_usec() {
@@ -90,6 +94,34 @@ bool myCompare(struct HostEntity i, struct HostEntity j) {
 
 }
 
+int setconfigvariables() {
+	FILE *fp;
+	char line[100], *key, *svalue;
+	int ivalue;
+	fp = fopen("zht.cfg", "r");
+	if (fp == NULL) {
+		cout << "Error opening the file." << endl;
+		return -1;
+	}
+	while (fgets(line, 100, fp) != NULL) {
+		key = strtok(line, "=");
+		svalue = strtok(NULL, "=");
+		ivalue = atoi(svalue);
+
+		if ((strcmp(key, "REPLICATION_TYPE")) == 0) {
+			REPLICATION_TYPE = ivalue;
+			//cout<<"REPLICATION_TYPE = "<< REPLICATION_TYPE <<endl;
+		} //other config options follow this way(if).
+
+		if ((strcmp(key, "NUM_REPLICAS")) == 0) {
+			NUM_REPLICAS = ivalue;
+			//cout<<"NUM_REPLICAS = "<< NUM_REPLICAS <<endl;
+		}
+
+	}
+	return 0;
+}
+
 vector<struct HostEntity> getMembership(string fileName) {
 	vector<struct HostEntity> hostList;
 	ifstream in(fileName.c_str(), ios::in);
@@ -134,24 +166,28 @@ vector<struct HostEntity> getMembership(string fileName) {
 	return hostList;
 }
 
+//string str
 int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 
 	//cout<< "contactReplica: newly received msg: package.replicano= " << package.replicano()<< ", package.ByteSize()="<< package.ByteSize() <<endl;//here the correct package was received: -1
 
-	int i = 0, port, client_sock, r = 0;
+	int i = 0, port, client_sock, sent_size = 0;
 	int32_t str_size = str.length();
+//	int32_t str_size = len;//strlen(str);
 	string hostName;
 	sockaddr_in toAddr, recv_addr;
-
+	int ret = 0;
 #if TRANS_PROTOCOL == USE_TCP
 	client_sock = d3_makeConnection((destination.host).c_str(),
 			destination.port);
 #elif TRANS_PROTOCOL == USE_UDP
 
-	cout << endl << "simpleSend makeSocket start-----" << endl;
-	client_sock = d3_svr_makeSocket((time(NULL) % 10000) + rand() % 10000); //client can use any port to talk to server
-//	client_sock = d3_svr_makeSocket(destination.port);
-	cout << "simpleSend makeSocket end-----" << endl << endl;
+//	cout << endl << "simpleSend makeSocket start-----" << endl;
+//	client_sock = d3_svr_makeSocket((time(NULL) % 10000) + rand() % 10000); //old, with consideration on multiple port conflicts.
+
+	client_sock = d3_makeConnection(); //possible right one.
+
+//	cout << "simpleSend makeSocket end-----" << endl << endl;
 #endif
 
 	if (client_sock < 0) { //only report error, doesn't handle it
@@ -159,44 +195,53 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 		return -9;
 	}
 
-	toAddr = d3_make_sockaddr_in((destination.host).c_str(), destination.port);
+	toAddr = d3_make_sockaddr_in_client((destination.host).c_str(),
+			destination.port);
 
-	cout << "simpleSend trying to reach host:" << destination.host << ", port:"
-			<< destination.port << endl;
+//	cout << "simpleSend trying to reach host:" << destination.host << ", port:" << destination.port << endl;
 
-	r = d3_send_data(client_sock, (void*) str.c_str(), str_size, 0, &toAddr);
-
-	if (r < 0) {
+	//r = d3_send_data(client_sock, (void*) str.c_str(), str_size, 0, &toAddr);
+//	cout<<"simpleSend:string:"<<endl;
+//			cout<<"string: "<<str<<endl;
+//			cout<<"c_str(): "<<str.c_str()<<endl;
+//			cout<<"(void*)c_str(): "<< (void*)str.c_str()<<endl;
+//			printf("printf %s \n\n\n",str.c_str());
+	sent_size = d3_send_data(client_sock, (void*) str.data(), str_size, 0, &toAddr);
+//	cout << "simpleSend: sent " << r << " bytes:" << str << endl;
+	if (sent_size < 0) {
 		cerr << "Sending data failed." << endl;
 		return -7;
 	}
-
-	void *buff_return = (void*) malloc(sizeof(int32_t));
-	r = d3_recv_data(client_sock, buff_return, sizeof(int32_t), 0);
-
-	if (r < 0) {
-		cerr << "zht_util.h: Receiving return state failed." << endl;
-		return -7;
-	}
-	int32_t ret = *(int32_t*) buff_return;
-	switch (ret) {
-	case 0:
-		break;
-	case 1:
-		break;
-	case -2:
-		cerr << "zht_util.h: Failed to remove from replica." << endl;
-		break;
-	case -3:
-		cerr << "zht_util.h: Failed to insert into replica." << endl;
-		break;
-	default:
-		cerr << "zht_util.h: What the hell was that? ret = " <<ret<< endl;
-		break;
+	if (TRANS_PROTOCOL == USE_TCP) {
+		void *buff_return = (void*) malloc(sizeof(int32_t));
+		int r = d3_recv_data(client_sock, buff_return, sizeof(int32_t), 0);
+		//this is the return status, not search result.
+		if (r < 0) {
+			cerr << "zht_util.h: Receiving return state failed." << endl;
+			return -7;
+		}
+		ret = *(int32_t*) buff_return;
+		switch (ret) {
+		case 0:
+			break;
+		case 1:
+			break;
+		case -2:
+			cerr << "zht_util.h: Failed to remove from replica." << endl;
+			break;
+		case -3:
+			cerr << "zht_util.h: Failed to insert into replica." << endl;
+			break;
+		default:
+//			cerr << "zht_util.h: What the hell was that? ret = " << ret << endl;
+			break;
+		}
+	} else if (TRANS_PROTOCOL == USE_UDP) {
+		//ret = sent_size;
 	}
 	current_sock = client_sock;
 	//d3_closeConnection(client_sock);//not close here?
-	return ret;
+	return sent_size;
 }
 
 int myIndex(vector<struct HostEntity> memberList, struct HostEntity aHost) { //give host position on the list, not consider ringID
@@ -230,10 +275,10 @@ int broadcast_ST(vector<struct HostEntity> memberList, struct HostEntity me,
 	neighbor2 = memberList.at(2 * self + 2);
 
 	int sock1 = d3_makeConnection(neighbor1.host.c_str(), neighbor1.port);
-	int ret1 = simpleSend(msg, neighbor1, sock1);
+//	int ret1 = simpleSend(msg, neighbor1, sock1);
 
 	int sock2 = d3_makeConnection(neighbor2.host.c_str(), neighbor2.port);
-	int ret2 = simpleSend(msg, neighbor2, sock2);
+//	int ret2 = simpleSend(msg, neighbor2, sock2);
 
 }
 
@@ -245,21 +290,21 @@ bool areYouAlive(string hostName, int port) { //this one only detect if physical
 	} else
 		return false;
 }
-
-class MsgSys {
-private:
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
-		ar & msgType;
-		ar & memberList;
-		ar & mics;
-	}
-	int msgType; //
-	vector<struct HostEntity> memberList;
-	string mics;
-};
-
+/*
+ class MsgSys {
+ private:
+ friend class boost::serialization::access;
+ template<class Archive>
+ void serialize(Archive & ar, const unsigned int version) {
+ ar & msgType;
+ ar & memberList;
+ ar & mics;
+ }
+ int msgType; //
+ vector<struct HostEntity> memberList;
+ string mics;
+ };
+ */
 int sendFile(string readPath, struct HostEntity toHost) {
 
 }

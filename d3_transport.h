@@ -32,6 +32,7 @@ int d3_svr_accept_udp(int sock);
 int d3_svr_recv(int sock,void *buffer,size_t size,int flags, sockaddr_in *toAddr);
 int d3_svr_recv_tcp(int sock,void *buffer,size_t size,int flags);
 int d3_svr_recv_udp(int sock,void *buffer,size_t size,int flags, sockaddr_in *toAddr);
+struct sockaddr_in d3_make_sockaddr_in_client(const char *rmserver, int port);
 /* udp unique send mode for acknowledge */
 int d3_send_via_sockaddr_in( int sock, void *buffer, size_t size, int flags, sockaddr_in *toAddr );
 struct sockaddr_in d3_make_sockaddr_in( const char *rmserver, int port );
