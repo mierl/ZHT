@@ -397,7 +397,7 @@ int ZHTClient::initialize(string configFilePath, string memberListFilePath) {
 struct HostEntity ZHTClient::str2Host(string str) {
 	Package pkg;
 	pkg.ParseFromString(str);
-	int index = myhash(pkg.virtualpath().c_str(), this->NUM_REPLICAS);
+	int index = myhash(pkg.virtualpath().c_str(), this->memberList.size());
 	struct HostEntity host = this->memberList.at(index);
 
 	return host;
