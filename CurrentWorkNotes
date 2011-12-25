@@ -1,5 +1,0 @@
-=============
-zht-current
-=============
-1. client.cpp:320: it defined server-side replication, 
-	why line 324 still go through all replicas? It should only send to 1 direct replica and mark it (non)-repica?

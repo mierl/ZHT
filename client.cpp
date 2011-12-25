@@ -127,18 +127,18 @@ int ZHTClient::lookup(string str, string &returnStr) {
 
 	int sock = -1;
 	struct HostEntity dest = this->str2Host(str);
-	cout << "client::lookup is called, now send request..." << endl;
+//	cout << "client::lookup is called, now send request..." << endl;
 
 	Package pack;
 	pack.ParseFromString(str);
-	cout<<"ZHTClient::lookup: operation = "<<pack.operation()<<endl;
+//	cout<<"ZHTClient::lookup: operation = "<<pack.operation()<<endl;
 
 	int ret = simpleSend(str, dest, sock);
-	cout << "ZHTClient::lookup: simpleSend return = " << ret << endl;
+//	cout << "ZHTClient::lookup: simpleSend return = " << ret << endl;
 	char buff[MAX_MSG_SIZE]; //MAX_MSG_SIZE
 	memset(buff, 0, sizeof(buff));
 	if (ret == str.length()) { //this only work for TCP. UDP need to make a new one so accept returns from server.
-		cout << "before protocol judge" << endl;
+//		cout << "before protocol judge" << endl;
 
 		int rcv_size = -1;
 		if (TRANS_PROTOCOL == USE_TCP) {
@@ -170,7 +170,7 @@ int ZHTClient::lookup(string str, string &returnStr) {
 			returnStr.assign(buff);
 		}
 
-		cout << "after protocol judge" << endl;
+//		cout << "after protocol judge" << endl;
 	}
 	d3_closeConnection(sock);
 
@@ -179,6 +179,13 @@ int ZHTClient::lookup(string str, string &returnStr) {
 
 int ZHTClient::remove(string str) {
 	int sock = -1;
+
+	Package package;
+	package.ParseFromString(str);
+	package.set_operation(2); // 3 for insert, 1 for look up, 2 for remove
+	package.set_replicano(3); //5: original, 3 not original
+	str = package.SerializeAsString();
+
 	struct HostEntity dest = this->str2Host(str);
 	int ret = simpleSend(str, dest, sock);
 	d3_closeConnection(sock);

@@ -10,7 +10,7 @@ fileName=$(echo $sourceFile | awk -F '.' '{print $1}')
 
 
 #  This works for general situation
-g++ -g -Xlinker -zmuldefs -I/home/tony/Installed/built/include $sourceFile -o $fileName -L/home/tony/Installed/built/lib -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc meta.pb.cc d3_tcp.cpp d3_udp.cpp
+g++ -g -Xlinker -zmuldefs -I/home/tony/Installed/built/include $sourceFile -o $fileName -L/home/tony/Installed/built/lib -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc meta.pb.cc d3_tcp.cpp d3_udp.cpp phashmap.cxx
 
 
 

@@ -1,13 +1,13 @@
 #include <kchashdb.h>
 #include <kcprotodb.h>
-#include <string>
-#include <cstring>
-#include <sys/time.h>
+//#include <string>
+//#include <cstring>
+//#include <sys/time.h>
 #include <stdlib.h>
 
-#include <netdb.h>
+//#include <netdb.h>
 #include "zht_util.h"
-#include "meta.pb.h"
+//#include "meta.pb.h"
 //#include "d3_transport.h"
 //#include "d3_sys_globals.h"
 

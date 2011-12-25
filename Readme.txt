@@ -1,13 +1,12 @@
 =============================================
-This is a branch for consistent hashing, it's not stable yet.
-
+This latest version adopts our own persistent hash table instead of Kyotocabinet.
 
 
 
 =============================================
 Software requirement
 ---------------------------------------------
-Kyotokabinet 1.2.60
+Kyotokabinet 1.2.60(required only for old version, hash.cpp)
 Google protocol buffers 2.3.0
 
 

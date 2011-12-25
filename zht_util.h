@@ -13,11 +13,15 @@
 #include <arpa/inet.h>
 #include <algorithm>
 #include <fstream>
+#include <netdb.h>
+#include <stdlib.h>
 //#include <boost/serialization/vector.hpp>
 //#include <boost/serialization/string.hpp>
 #include "meta.pb.h"
 #include "d3_transport.h"
-
+#include "phashmap.h" //Kevin's persistent hash table
+#include<signal.h>
+# include <errno.h>
 struct timeval tp;
 using namespace std;
 
@@ -227,13 +231,16 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 		case 1:
 			break;
 		case -2:
-			cerr << "zht_util.h: Failed to remove from replica." << endl;
+			cerr << "zht_util.h: Failed to remove." << endl;
 			break;
 		case -3:
-			cerr << "zht_util.h: Failed to insert into replica." << endl;
+			cerr << "zht_util.h: Failed to insert." << endl;
+			break;
+		case -99:
+			cerr <<"zht_util.h: such operation is not supported." <<endl;
 			break;
 		default:
-//			cerr << "zht_util.h: What the hell was that? ret = " << ret << endl;
+			//cerr << "zht_util.h: default:  What the hell was that? ret = " << ret << endl;
 			break;
 		}
 	} else if (TRANS_PROTOCOL == USE_UDP) {
