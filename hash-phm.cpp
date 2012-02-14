@@ -344,7 +344,7 @@ void *dbService(void *threadarg) {
 						<< " and before send replicano() = "
 						<< package.replicano() << endl;
 				//sleep(3);
-				int ret = socket_Replica(package, destination);
+				int ret = socket_replica(package, destination);
 
 				i--;
 			}
@@ -360,11 +360,10 @@ void *dbService(void *threadarg) {
 				n = myhash((package.virtualpath()).c_str(), nHost) + i;
 				n = n % hostList.size();
 				struct HostEntity destination = hostList.at(n);
-				contactReplica(package, destination);
 				cout << "Replica remove: sent to " << destination.port
 						<< " and before send replicano() = "
 						<< package.replicano() << endl;
-				int ret = socket_Replica(package, destination);
+				int ret = socket_replica(package, destination);
 
 				i--;
 			}
