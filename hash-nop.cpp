@@ -4,17 +4,22 @@
 //#include <cstring>
 //#include <sys/time.h>
 #include <stdlib.h>
-
+#include <stdio.h>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 //#include <netdb.h>
 #include "zht_util.h"
 //#include "meta.pb.h"
 //#include "d3_transport.h"
 //#include "d3_sys_globals.h"
-
+#include <fcntl.h>
 #include <pthread.h>
 #include <iomanip>
+#include <map>
+
 #include "novoht.h" //Kevin's implementation of persistent hash table
-#include "hashtable.h"//a in memory hash table
+
 using namespace std;
 //using namespace kyotocabinet;
 
@@ -24,9 +29,27 @@ using namespace std;
 //HashDB db;//file based hash
 //ProtoHashDB db; //in-mem hash
 NoVoHT *pmap; //move to main().
+map<string, string> hmap;
+//An in-memory hash table
+
+
+
 int turn_off;
+
+
+
 //int NUM_REPLICAS;
 //int REPLICATION_TYPE;//1 for Client-side replication
+
+void setnonblock(int fd)
+{
+  int flags;
+
+  flags = fcntl(fd, F_GETFL);
+  flags |= O_NONBLOCK;
+  fcntl(fd, F_SETFL, flags);
+}
+
 
 #if TRANS_PROTOCOL==USE_TCP
 struct threaddata {
@@ -81,6 +104,7 @@ int numthreads = 0;
  return 0;
  }
  */
+
 int HB_insert(NoVoHT *map, Package &package) {
 	//int opt = package.operation();//opt not be used?
 	string package_str = package.SerializeAsString();
@@ -92,7 +116,7 @@ int HB_insert(NoVoHT *map, Package &package) {
 //	cout<<"value:"<<value<<endl;
 //	cout<<"Insert: k-v ready. put..."<<endl;
 	int ret = map->put(key, value);
-	cout << "end inserting, ret = " << ret << endl;
+//	cout << "end inserting, ret = " << ret << endl;
 
 	if (ret != 0) {
 		return -3;
@@ -104,6 +128,43 @@ int HB_insert(NoVoHT *map, Package &package) {
 		return 0;
 }
 
+int HB_insert(map<string, string> &hmap, Package &package){
+	//int opt = package.operation();//opt not be used?
+		string package_str = package.SerializeAsString();
+		//int ret = db.set(package.virtualpath(), package_str); //virtualpath as key
+	//	cout<<"Insert to pmap..."<<endl;
+		string key = package.virtualpath();
+	//	cout<<"key:"<<key<<endl;
+		string value = package_str;
+	//	cout<<"value:"<<value<<endl;
+	//	cout<<"Insert: k-v ready. put..."<<endl;
+
+
+		//pair<map<string,string>::iterator,bool> ret;
+		pair<map<string,string>::iterator,bool> ret;
+		ret = hmap.insert(pair<string, string> (key, value));
+
+		if (ret.second == false) {
+			return -3;
+		}
+		else
+			return 0;
+}
+
+string HB_lookup(map<string, string> &hmap, Package &package) {
+	string value;
+//		cout << "lookup in HB_lookup" << endl;
+		string key = package.virtualpath();
+//		cout << "key:" << key << endl;
+		map<string, string>::iterator it;
+		it = hmap.find(key);
+		if (it == hmap.end()){
+			string nullString = "Empty";
+					return nullString;
+		}
+		return (*it).second;
+}
+
 /*
  string HB_lookup(DB &db, Package package) {
  string value;
@@ -113,11 +174,11 @@ int HB_insert(NoVoHT *map, Package &package) {
 
 string HB_lookup(NoVoHT *map, Package &package) {
 	string value;
-	cout << "lookup in HB_lookup" << endl;
+//	cout << "lookup in HB_lookup" << endl;
 	string key = package.virtualpath();
-	cout << "key:" << key << endl;
+//	cout << "key:" << key << endl;
 	string *strP = map->get(key); //problem
-	cout << "lookup end." << endl;
+//	cout << "lookup end." << endl;
 
 	if (strP == NULL) {
 		cout << "lookup find nothing." << endl;
@@ -126,6 +187,8 @@ string HB_lookup(NoVoHT *map, Package &package) {
 	}
 	return *strP;
 }
+
+
 
 int HB_remove(NoVoHT *map, Package &package) {
 	string key = package.virtualpath();
@@ -137,7 +200,101 @@ int HB_remove(NoVoHT *map, Package &package) {
 		return 0; //succeed.
 }
 
-// This function is to send a package to a GIVEN replica, it dones't choose which to send
+int HB_remove(map<string, string> &hmap, Package &package){
+	unsigned int r = hmap.erase(package.virtualpath());
+			if(r==0){
+				cout<<"Remove nothing, no match found."<<endl;
+				return -1;
+			}
+	return 0;
+
+}
+// This function is to send a package to a GIVEN replica, it dones't choose which to send.
+// It works as a client.
+int contactReplica(Package package, struct HostEntity destination) {
+
+	//cout<< "contactReplica: newly received msg: package.replicano= " << package.replicano()<< ", package.ByteSize()="<< package.ByteSize() <<endl;//here the correct package was received: -1
+
+	int client_sock, r = 0;
+	int32_t str_size;
+	string hostName, str;
+	sockaddr_in toAddr, recv_addr;
+
+#if TRANS_PROTOCOL == USE_TCP
+	client_sock = d3_makeConnection((destination.host).c_str(),
+			destination.port);
+#elif TRANS_PROTOCOL == USE_UDP
+
+//	cout<<endl<<"contactReplica makeSocket start-----"<<endl;
+	client_sock = d3_svr_makeSocket( (time(NULL)%10000)+rand()%10000 ); //client can use any port to talk to server
+//	client_sock = d3_svr_makeSocket(destination.port);
+//	cout<<"contactReplica makeSocket end-----"<<endl<<endl;
+#endif       
+	if (client_sock < 0) { //what's this mechanism: only report error, doesn't handle it
+		int me = myhash((package.virtualpath()).c_str(), nHost);
+		//since dbService already take over the routing, this will to extra map which is unnecessary and wrong.
+
+//		cout << "contactReplica:get msg: package.replicano= " << package.replicano() << endl;
+		me = me % hostList.size();
+		struct HostEntity source = hostList.at(me);
+		cerr << "Error connecting to replica: " << (destination.host).c_str()
+				<< " : " << destination.port << " .Primary sever: "
+				<< (source.host).c_str() << " : " << source.port << ". "
+				<< strerror(errno) << endl; //This error msg is misleading.
+		return -1;
+	}
+	str = package.SerializeAsString();
+	str_size = str.length();
+	toAddr = d3_make_sockaddr_in_client((destination.host).c_str(),
+			destination.port);
+//	cout << "contactReplica trying to reach host:" << destination.host << ", port:" << destination.port << endl;
+	r = d3_send_data(client_sock, (void*) str.c_str(), str_size, 0, &toAddr);
+
+	if (sigpipe_flag) {
+		sigpipe_flag = false;
+		cout << "Primary got SIGPIPE while inserting package to a replica. "
+				<< client_sock << " : " << r << endl;
+		return -1;
+	}
+	if (r < 0) {
+		cerr << "Primary Server could not send data to secondary." << endl;
+		return -1;
+	}
+	void *buff_return = (void*) malloc(sizeof(int32_t));
+	r = d3_svr_recv(client_sock, buff_return, sizeof(int32_t), 0, &recv_addr);
+	if (sigpipe_flag) {
+		cout
+				<< "Primary got SIGPIPE while receiving replica insert status from a secondary."
+				<< endl;
+		return -1;
+	}
+	if (r < 0) {
+		cerr
+				<< "Primary Server could not receive request status from secondary."
+				<< endl;
+		return -1;
+	}
+	int32_t ret = *(int32_t*) buff_return;
+	switch (ret) {
+	case 0:
+		break;
+	case 1:
+		break;
+	case -2:
+		cerr << "Primary server failed to remove from replica." << endl;
+		break;
+	case -3:
+		cerr << "Primary server failed to insert into replica." << endl;
+		break;
+	default:
+		cerr << "What the hell was that?" << endl;
+		break;
+	}
+	d3_closeConnection(client_sock);
+	return ret;
+}
+
+
 
 
 int socket_replica(Package package, struct HostEntity destination){
@@ -187,7 +344,6 @@ int socket_replica(Package package, struct HostEntity destination){
 }
 
 
-
 void *dbService(void *threadarg) {
 	srand(getpid() + clock());
 	//srand(kyotocabinet::getpid() + clock());
@@ -212,7 +368,7 @@ void *dbService(void *threadarg) {
 	//raman-s
 	//	if (size > 0) { //if size < 0, consider it as a "quit command"
 	//raman-e
-	cout << "Thread: receive request from client..." << endl;
+//	cout << "Thread: receive request from client..." << endl;
 #if TRANS_PROTOCOL == USE_TCP
 	r = d3_svr_recv(client_sock, buff, MAX_MSG_SIZE * sizeof(char), 0, &toAddr);
 	if (r <= 0) {
@@ -222,18 +378,18 @@ void *dbService(void *threadarg) {
 	Package package;
 	package.ParseFromArray(buff, MAX_MSG_SIZE);
 	string result;
-	cout << endl << endl << "in dbService: received replicano = "
-			<< package.replicano() << endl;
+//	cout << endl << endl << "in dbService: received replicano = " << package.replicano() << endl;
 
-	cout << "package size: " << package.ByteSize() << endl;
+//	cout << "package size: " << package.ByteSize() << endl;
 //	cout <<"Package content: "<< buff<<endl;
 	switch (package.operation()) {
 
 	case 3: //insert
-		cout << "Insert..." << endl;
+//		cout << "Insert..." << endl;
 		//operation_status = HB_insert(db, package);
-		operation_status = HB_insert(pmap, package);
-		cout << "insert finished, return: " << operation_status << endl;
+		operation_status = HB_insert(hmap, package);
+//cout<<"Inserted: key: "<< package.virtualpath()<<endl;
+//		cout << "insert finished, return: " << operation_status << endl;
 		buff1 = &operation_status;
 		r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
 		if (r <= 0) {
@@ -241,15 +397,16 @@ void *dbService(void *threadarg) {
 		}
 		break;
 	case 1: //lookup
-		cout << "Lookup..." << endl;
+//		cout << "Lookup..." << endl;
 		if (package.virtualpath().empty()) {
 			cerr << "Bad key: nothing to find" << endl;
 			operation_status = -1;
 		} else {
 			//result = HB_lookup(db, package);
-			cout << "Lookup...2" << endl;
-			result = HB_lookup(pmap, package);
-			cout << "Lookup...3" << endl;
+//			cout << "Lookup...2" << endl;
+//cout<<"Will lookup key: "<< package.virtualpath()<<endl;
+			result = HB_lookup(hmap, package);
+//			cout << "Lookup...3" << endl;
 			//don't really send result back to client now, do it latter.
 			if (result.compare("Empty") == 0) {
 				operation_status = -2;
@@ -257,9 +414,9 @@ void *dbService(void *threadarg) {
 
 			} else { //find result, send back here
 
-				cout << "Lookup: Result found, sending back..." << endl;
-				cout << "What I found on server: \n";
-				cout << result.c_str() << endl;
+//				cout << "Lookup: Result found, sending back..." << endl;
+//				cout << "What I found on server: \n";
+//				cout << result.c_str() << endl;
 				//=====================================
 				//how to know where to send back? Use the one that created when receive request as above.
 
@@ -280,24 +437,25 @@ void *dbService(void *threadarg) {
 		}
 		break;
 	case 2: //remove
-		cout << "Remove..." << endl;
+//cout << "Remove..." << endl;
+//cout << "Package:key "<<package.virtualpath()<<endl;
 		if (package.virtualpath().empty()) {
 			cerr << "Bad key: nothing to remove" << endl;
 			operation_status = -1;
 		} else {
 			//operation_status = HB_remove(db, package);
-			operation_status = HB_remove(pmap, package);
+			operation_status = HB_remove(hmap, package);
 			buff1 = &operation_status;
 			r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
 			if (r <= 0) {
 				cout << "Server could not send acknowledgement to client"
 						<< endl;
 			}
-			cout << "Remove succeeded, return " << operation_status << endl;
+//			cout << "Remove succeeded, return " << operation_status << endl;
 		}
 		break;
 	case 99: //shut the server
-		cout << "Server will be shut shortly." << endl;
+//		cout << "Server will be shut shortly." << endl;
 		turn_off = 1; //turn off service.
 		break;
 	default:
@@ -326,8 +484,17 @@ void *dbService(void *threadarg) {
 	 */
 #endif
 
+#if TRANS_PROTOCOL==USE_TCP
+	int closingSock = ((struct threaddata *) threadarg)->socket;
+	close(closingSock);
+	((struct threaddata *) threadarg)->socket = -1; //this should work but seems it donesn't.-----------------????
+#elif TRANS_PROTOCOL==USE_UDP
+			memset( &(((struct threaddata *) threadarg)->sockinfo), 0, sizeof(sockaddr_in) );
+			memset( (((struct threaddata *) threadarg)->buffer), 0, sizeof(MAX_MSG_SIZE) );
+#endif
+
 	if (package.replicano() == 5) { //only forward orginal copy:5--Tony
-		cout << "tell if new package..." << endl;
+//		cout << "tell if new package..." << endl;
 
 		if (package.operation() == 3) { //insert
 //			int32_t numReplica = package.replicano();
@@ -340,12 +507,13 @@ void *dbService(void *threadarg) {
 				n = myhash((package.virtualpath()).c_str(), nHost) + i;
 				n = n % hostList.size();
 				struct HostEntity destination = hostList.at(n);
-				cout << "Replica insert: sent to " << destination.port
-						<< " and before send replicano() = "
-						<< package.replicano() << endl;
+//				cout << "Replica insert: sent to " << destination.port	<< " and before send replicano() = " << package.replicano() << endl;
 				//sleep(3);
-				int ret = socket_Replica(package, destination);
-
+				int ret = socket_replica(package, destination);
+				//the only thing this function does is to send a package to dest, that's it!!!!
+				//seems don't need to handle failure here
+				//	cout << "Replica Insert: i = " << i << endl;
+				//numReplica--;
 				i--;
 			}
 
@@ -360,46 +528,17 @@ void *dbService(void *threadarg) {
 				n = myhash((package.virtualpath()).c_str(), nHost) + i;
 				n = n % hostList.size();
 				struct HostEntity destination = hostList.at(n);
-				contactReplica(package, destination);
-				cout << "Replica remove: sent to " << destination.port
-						<< " and before send replicano() = "
-						<< package.replicano() << endl;
-				int ret = socket_Replica(package, destination);
+				socket_replica(package, destination);
+//				cout << "Replica remove: sent to " << destination.port 	<< " and before send replicano() = "<< package.replicano() << endl;
 
+//				cout << "Replica Remove: i = " << i << endl;
+				//numReplica--;
 				i--;
 			}
-
-			/*			//-------------copied from end, for stop the thread
-			 #if TRANS_PROTOCOL==USE_TCP
-			 int closingSock = ((struct threaddata *) threadarg)->socket;
-			 close(closingSock);
-			 ((struct threaddata *) threadarg)->socket = -1;
-			 #elif TRANS_PROTOCOL==USE_UDP
-			 memset( &(((struct threaddata *) threadarg)->sockinfo), 0, sizeof(sockaddr_in) );
-			 memset( (((struct threaddata *) threadarg)->buffer), 0, sizeof(RCV_MSG_SIZE) );
-			 #endif
-			 cout << "leaving thread..."<<endl;
-			 pthread_mutex_lock(&mutex1);
-			 numthreads--;
-			 pthread_mutex_unlock(&mutex1);
-			 cout << "After unlock mutex..."<<endl;
-			 pthread_detach(pthread_self());//end thread.
-			 cout << "After detach thread..."<<endl;
-			 pthread_exit(NULL);
-			 //-------------copied from end
-			 */
 		}
-
 	}
 	//raman-replication-e
-#if TRANS_PROTOCOL==USE_TCP
-	int closingSock = ((struct threaddata *) threadarg)->socket;
-	close(closingSock);
-	((struct threaddata *) threadarg)->socket = -1; //this should work but seems it donesn't.-----------------????
-#elif TRANS_PROTOCOL==USE_UDP
-			memset( &(((struct threaddata *) threadarg)->sockinfo), 0, sizeof(sockaddr_in) );
-			memset( (((struct threaddata *) threadarg)->buffer), 0, sizeof(MAX_MSG_SIZE) );
-#endif
+
 	//cout << "leaving thread..."<<endl;
 	pthread_mutex_lock(&mutex1);
 	numthreads--;
@@ -407,8 +546,8 @@ void *dbService(void *threadarg) {
 	//cout << "Ending thread: "<< pthread_self() <<endl;
 
 	pthread_detach(pthread_self()); //end thread.
-	cout << "After detach thread..." << endl;
-	cout << "End operation: " << package.operation() << endl << endl;
+//	cout << "After detach thread..." << endl;
+//	cout << "End operation: " << package.operation() << endl << endl;
 	//free(buff1);
 	pthread_exit(NULL);
 }
@@ -416,11 +555,18 @@ void *dbService(void *threadarg) {
 
 int main(int argc, char* argv[]) {
 
-	cout << "Use: hash <port> <neighbor_list_file>" << endl;
-	cout << "Start Server..." << endl;
+//	cout << "Use: hash <port> <neighbor_list_file>" << endl;
+//	cout << "Start Server..." << endl;
 //	ProtoHashDB db; //in-mem hash
 	string cfgFile(argv[3]);
-	srand(getpid() + clock());
+	
+
+//	const string cmd = "cat /proc/personality.sh | grep BG_PSETORG";
+//      string torusID = exec(cmd);
+//        torusID.resize(torusID.size()-1);
+ //       srand( getTime_msec()+ myhash(torusID.c_str(), 10000000) );
+		srand(getTime_msec() + getpid());
+
 	if (setconfigvariables(cfgFile) != 0) {
 		cout << "Server: Not able to read configuration file." << endl;
 		exit(1);
@@ -442,15 +588,12 @@ int main(int argc, char* argv[]) {
 	}
 	//raman-sigpipe-e
 	int svrPort = atoi(argv[1]);
-	/*	if (!db.open("mybase", ProtoHashDB::OWRITER | ProtoHashDB::OCREATE)) {
-	 cerr << "open error: " << db.error().name() << endl;
-	 }
-	 */
 
-	string randStr = randomString(5);
-	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
-	pmap = new NoVoHT(fileName, 100, 10, 0.7);
-
+//	string randStr = randomString(5);
+//	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
+//	pmap = new NoVoHT(fileName, 100, 10, 0.7);
+//	map<string, string> hashMap;
+//	*hmap = hashMap;
 	//raman-replication-s
 	string membershipFile(argv[2]);
 	hostList = getMembership(membershipFile);
@@ -466,19 +609,39 @@ int main(int argc, char* argv[]) {
 		threaddata_array[i].p_pmap = pmap;
 #endif
 	}
-	cout << endl << "main: makeSocket -----" << endl;
+//	cout << endl << "main: makeSocket -----" << endl;
 	server_sock = d3_svr_makeSocket(svrPort);
 
 	turn_off = 0;
 	if (server_sock > 0) {
+	
+		//report: I'm now serving!
+		//ofstream myfile;
+		//stringstream ss;
+
+		//string tmpStr = "/intrepid-fs0/users/tonglin/persistent/Register_";
+		//ss << tmpStr << nHost;
+		//string nNodes = ss.str();
+		//myfile.open(ss.str().c_str());
+		//myfile << torusID << "\n";
+		//myfile.close();
+//		system("echo $IP >> /intrepid-fs0/users/tonglin/persistent/Register_$NNODE");
+
+		
 		while (turn_off == 0) {
-			cout << "while: turn_off = " << turn_off << endl;
+//			cout << "while: turn_off = " << turn_off << endl;
 
 			new_req_indicator = 0;
 #if TRANS_PROTOCOL==USE_TCP
-			cout << "begin accept" << endl;
+//			cout << "begin accept" << endl;
 			client_sock = d3_svr_accept(server_sock);
-			cout << "end accept" << endl;
+
+
+			//set reuse socket
+			int optval=1;
+			setsockopt(client_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
+			//setnonblock(client_sock);//set non-blocking: cause all error.
+//			cout << "end accept" << endl;
 			new_req_indicator = client_sock;
 #elif TRANS_PROTOCOL==USE_UDP
 			memset( tmp_buf, 0, sizeof(tmp_buf) );

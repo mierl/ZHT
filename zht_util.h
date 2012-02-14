@@ -19,7 +19,7 @@
 //#include <boost/serialization/string.hpp>
 #include "meta.pb.h"
 #include "d3_transport.h"
-#include "phashmap.h" //Kevin's persistent hash table
+#include "novoht.h" //Kevin's persistent hash table
 #include<signal.h>
 # include <errno.h>
 struct timeval tp;
@@ -55,7 +55,7 @@ double getTime_sec() {
 
 string randomString(int len) {
 	string s(len, ' ');
-	srand(getpid() + clock() + getTime_usec());
+
 	static const char alphanum[] = "0123456789"
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			"abcdefghijklmnopqrstuvwxyz";
@@ -98,11 +98,12 @@ bool myCompare(struct HostEntity i, struct HostEntity j) {
 
 }
 
-int setconfigvariables() {
+int setconfigvariables(string cfgFile) {
 	FILE *fp;
 	char line[100], *key, *svalue;
 	int ivalue;
-	fp = fopen("zht.cfg", "r");
+
+	fp = fopen(cfgFile.data(), "r");
 	if (fp == NULL) {
 		cout << "Error opening the file." << endl;
 		return -1;
@@ -137,7 +138,7 @@ vector<struct HostEntity> getMembership(string fileName) {
 	in_addr *address;
 	string ip_address;
 	if (!in.is_open()) {
-		cout << "File read failed." << endl;
+		cout << "Membership File read failed." << endl;
 		return hostList;
 	}
 	if (!in.eof()) {
@@ -147,7 +148,7 @@ vector<struct HostEntity> getMembership(string fileName) {
 	address = (in_addr *) record->h_addr;
 	ip_address = inet_ntoa(*address);
 	while (!in.eof()) {
-		int s, i, slen = sizeof(si_other);
+//		int s, i, slen = sizeof(si_other);
 		memset((char *) &si_other, 0, sizeof(si_other));
 		si_other.sin_family = AF_INET;
 		si_other.sin_port = htons(port);
@@ -175,15 +176,20 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 
 	//cout<< "contactReplica: newly received msg: package.replicano= " << package.replicano()<< ", package.ByteSize()="<< package.ByteSize() <<endl;//here the correct package was received: -1
 
-	int i = 0, port, client_sock, sent_size = 0;
+	int client_sock, sent_size = 0;
 	int32_t str_size = str.length();
 //	int32_t str_size = len;//strlen(str);
 	string hostName;
-	sockaddr_in toAddr, recv_addr;
+	sockaddr_in toAddr;
 	int ret = 0;
 #if TRANS_PROTOCOL == USE_TCP
+
+	//set reuse socket
+
 	client_sock = d3_makeConnection((destination.host).c_str(),
 			destination.port);
+	int optval=1;
+	if(setsockopt(client_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)<0) cerr<<"simpleSend: reuse failed."<<endl;
 #elif TRANS_PROTOCOL == USE_UDP
 
 //	cout << endl << "simpleSend makeSocket start-----" << endl;
@@ -195,7 +201,7 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 #endif
 
 	if (client_sock < 0) { //only report error, doesn't handle it
-		cout << " " << endl;
+		cerr << "zht_util.h: make connection failed: " << strerror(errno)<<endl;
 		return -9;
 	}
 
@@ -203,8 +209,7 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 			destination.port);
 
 //	cout << "simpleSend trying to reach host:" << destination.host << ", port:" << destination.port << endl;
-
-	//r = d3_send_data(client_sock, (void*) str.c_str(), str_size, 0, &toAddr);
+//r = d3_send_data(client_sock, (void*) str.c_str(), str_size, 0, &toAddr);
 //	cout<<"simpleSend:string:"<<endl;
 //			cout<<"string: "<<str<<endl;
 //			cout<<"c_str(): "<<str.c_str()<<endl;
@@ -217,7 +222,7 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 		return -7;
 	}
 	if (TRANS_PROTOCOL == USE_TCP) {
-		void *buff_return = (void*) malloc(sizeof(int32_t));
+		void *buff_return = malloc(sizeof(int32_t));//int32_t
 		int r = d3_recv_data(client_sock, buff_return, sizeof(int32_t), 0);
 		//this is the return status, not search result.
 		if (r < 0) {
@@ -225,6 +230,7 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 			return -7;
 		}
 		ret = *(int32_t*) buff_return;
+		free(buff_return);
 		switch (ret) {
 		case 0:
 			break;
@@ -240,7 +246,7 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 			cerr <<"zht_util.h: such operation is not supported." <<endl;
 			break;
 		default:
-			//cerr << "zht_util.h: default:  What the hell was that? ret = " << ret << endl;
+//			cerr << "zht_util.h: default:  What the hell was that? ret = " << ret << endl;
 			break;
 		}
 	} else if (TRANS_PROTOCOL == USE_UDP) {
@@ -286,7 +292,7 @@ int broadcast_ST(vector<struct HostEntity> memberList, struct HostEntity me,
 
 	int sock2 = d3_makeConnection(neighbor2.host.c_str(), neighbor2.port);
 //	int ret2 = simpleSend(msg, neighbor2, sock2);
-
+	return 0;
 }
 
 bool areYouAlive(string hostName, int port) { //this one only detect if physical link alive
@@ -313,9 +319,10 @@ bool areYouAlive(string hostName, int port) { //this one only detect if physical
  };
  */
 int sendFile(string readPath, struct HostEntity toHost) {
-
+	return 0;
 }
 
 int receiveFile(string storePath, int fromSocket) {
-
+	return 0;
 }
+
