@@ -51,10 +51,8 @@ int d3_svr_makeSocket_udp(int port) {
 		fromAddr.sin_port = htons(port);
 
 	if (bind(sock, (struct sockaddr*) &fromAddr, sizeof(fromAddr)) < 0) {
-		printf(
-				"Error occurred when binding the socket:%d to the server port:%d\n",
-				sock, port);
-		printf("%s\n", strerror(errno));
+/*		printf(	"Error occurred when binding the socket:%d to the server port:%d\n",sock, port);
+		printf("%s\n", strerror(errno));*/
 		close(sock);
 		return -1;
 	}
@@ -66,7 +64,7 @@ int d3_svr_recv_udp(int sock, void *buffer, size_t size, int flags,
 		sockaddr_in *toAddr) {
 	unsigned int addrLen;
 	int recvLen;
-	char cnf[16] = "confirmed";
+//	char cnf[16] = "confirmed";
 
 	memset(buffer, 0, size);
 	memset(toAddr, 0, sizeof(sockaddr_in));
@@ -112,7 +110,7 @@ struct sockaddr_in d3_make_sockaddr_in_client(const char *rmserver, int port) {
 
 struct sockaddr_in d3_make_sockaddr_in_server(int port) {
 	struct sockaddr_in fromAddr;
-	struct hostent *hinfo;
+//	struct hostent *hinfo;
 
 	memset((char *) &fromAddr, 0, sizeof(fromAddr));
 	fromAddr.sin_family = AF_INET;
@@ -123,12 +121,12 @@ struct sockaddr_in d3_make_sockaddr_in_server(int port) {
 int d3_send_data_udp(int sock, void *buffer, size_t size, int flags,
 		const char *rmserver, int port) {
 	struct sockaddr_in toAddr;
-	struct sockaddr_in fromAddr;
+//	struct sockaddr_in fromAddr;
 	struct hostent *hinfo;
 	char *buf;
 //	char *recvbuf = (char *)malloc(size*sizeof(char));
-	unsigned int fromLen;
-	char cnf[16];
+//	unsigned int fromLen;
+//	char cnf[16];
 
 	buf =  (char *)buffer;
 	hinfo = gethostbyname(rmserver);

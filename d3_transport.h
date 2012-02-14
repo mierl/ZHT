@@ -37,7 +37,7 @@ struct sockaddr_in d3_make_sockaddr_in_client(const char *rmserver, int port);
 int d3_send_via_sockaddr_in( int sock, void *buffer, size_t size, int flags, sockaddr_in *toAddr );
 struct sockaddr_in d3_make_sockaddr_in( const char *rmserver, int port );
 
-
+/*    This part was moved to d3_tcp.cpp so to solve multiple definition problem.
 int d3_makeConnection(const char *rmserver,int port){
         return d3_makeConnection_tcp(rmserver,port,NMSPACE,STYLE,PROTOCOL);
 }
@@ -87,3 +87,4 @@ int d3_svr_recv(int sock,void *buffer,size_t size,int flags,sockaddr_in *toAddr)
 	if( TRANS_PROTOCOL == USE_UDP )
 		return d3_svr_recv_udp(sock,buffer,size,flags,toAddr);
 }
+*/

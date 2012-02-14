@@ -9,6 +9,8 @@
 #include <netdb.h>
 #include <errno.h>
 
+#include "d3_trans_globals.h"
+#include "d3_transport.h"
 #define MAX_INT_MSG_SIZE 8
 
 struct sockaddr_in dest;                                            /*holds info about server m/c*/
@@ -28,7 +30,7 @@ int d3_svr_makeSocket_tcp(int port){
         close(mysocket);
         return -1;
     }
-    r = listen(mysocket, 5);                                            /* start listening, allowing a queue of up to 1 pending connection */
+    r = listen(mysocket, 5000);                                            /* start listening, allowing a queue of up to 1 pending connection */
     if(r<0) {
         printf("Error occurred while enabling listen on the socket:%d\n",mysocket);
         printf("%s",strerror(errno));
@@ -95,10 +97,71 @@ int d3_send_data_tcp(int sock,void *buffer,size_t size,int flags){
     if (r < 0){
         printf("d3_tcp.cpp:90 Error sending data: %s\n", strerror(errno));
     }
+    return r;
 }
 int d3_recv_data_tcp(int sock,void *buffer,size_t size,int flags){
     return recv(sock,buffer,size,flags);
 }
 int d3_closeConnection_tcp(int sock){
     return close(sock);
+}
+
+
+
+
+//-----------------------------------------------------------------------------------------------------
+
+//----------------------------Moved from d3_transport.h------------------------------------------------
+
+
+
+
+int d3_makeConnection(const char *rmserver,int port){
+        return d3_makeConnection_tcp(rmserver,port,NMSPACE,STYLE,PROTOCOL);
+}
+int d3_makeConnection(){
+        return d3_makeConnection_udp();
+}
+
+int d3_send_data(int sock,void *buffer,size_t size,int flags, sockaddr_in *toAddr){
+	if( TRANS_PROTOCOL == USE_TCP )
+		return d3_send_data_tcp( sock, buffer, size, flags );
+	else if( TRANS_PROTOCOL == USE_UDP )
+		return d3_send_via_sockaddr_in( sock, buffer, size, flags, toAddr );
+}
+
+int d3_recv_data(int sock,void *buffer,size_t size,int flags){
+    if(TRANS_PROTOCOL==USE_TCP){
+        return d3_recv_data_tcp(sock,buffer,size,flags);
+    }else if(TRANS_PROTOCOL==USE_UDP){
+//        return d3_recv_data_udp(sock,buffer,size,flags);
+    }
+}
+int d3_closeConnection(int sock){
+    if(TRANS_PROTOCOL==USE_TCP){
+        return d3_closeConnection_tcp(sock);
+    }else if(TRANS_PROTOCOL==USE_UDP){
+        return d3_closeConnection_udp(sock);
+    }
+}
+int d3_svr_makeSocket(int port){
+    if(TRANS_PROTOCOL==USE_TCP){
+        return d3_svr_makeSocket_tcp(port);
+    }else if(TRANS_PROTOCOL==USE_UDP){
+       return d3_svr_makeSocket_udp(port);
+    }
+}
+int d3_svr_accept(int sock){
+    if(TRANS_PROTOCOL==USE_TCP){
+        return d3_svr_accept_tcp(sock);
+    }else if(TRANS_PROTOCOL==USE_UDP){
+       return d3_svr_accept_udp(sock);
+    }
+}
+
+int d3_svr_recv(int sock,void *buffer,size_t size,int flags,sockaddr_in *toAddr) {
+	if( TRANS_PROTOCOL == USE_TCP )
+		return d3_svr_recv_tcp(sock,buffer,size,flags);
+	if( TRANS_PROTOCOL == USE_UDP )
+		return d3_svr_recv_udp(sock,buffer,size,flags,toAddr);
 }
