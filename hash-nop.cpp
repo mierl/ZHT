@@ -301,13 +301,7 @@ int socket_replica(Package package, struct HostEntity destination){
 	string str = package.SerializeAsString();
 
 	int to_sock = socket(PF_INET, SOCK_STREAM, 0);//try change here.................................................
-	int optval=1;
 
-	if(setsockopt(to_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)<0) cerr<<"replica: reuse failed."<<endl;
-	if(to_sock<0){
-			cerr<<"socket_replica: error on socket(): "<< strerror(errno) << endl;
-			return -1;
-		}
 	//socket(nmspace,style,protocol), originally be socket(AF_INET, SOCK_STREAM, 0)
 
 
@@ -326,6 +320,13 @@ int socket_replica(Package package, struct HostEntity destination){
 		return -1;
 	}
 
+	int optval=1;
+
+		if(setsockopt(to_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)<0) cerr<<"replica: reuse failed."<<endl;
+		if(to_sock<0){
+				cerr<<"socket_replica: error on socket(): "<< strerror(errno) << endl;
+				return -1;
+			}
 	int ret_snd = send(to_sock, (const void*)str.c_str(),str.size(),0 );// may try other flags......................
 	if(ret_snd<0){
 		cerr<<"socket_replica: error on socket(): "<< strerror(errno) << endl;
@@ -370,6 +371,8 @@ void *dbService(void *threadarg) {
 	//raman-e
 //	cout << "Thread: receive request from client..." << endl;
 #if TRANS_PROTOCOL == USE_TCP
+	int optval=1;
+				if(setsockopt(client_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)<0) cerr<<"Server: reuse failed."<< strerror(errno)<<endl;
 	r = d3_svr_recv(client_sock, buff, MAX_MSG_SIZE * sizeof(char), 0, &toAddr);
 	if (r <= 0) {
 		cout << "Server could not recv data" << endl;
@@ -387,7 +390,8 @@ void *dbService(void *threadarg) {
 	case 3: //insert
 //		cout << "Insert..." << endl;
 		//operation_status = HB_insert(db, package);
-		operation_status = HB_insert(hmap, package);
+		operation_status = HB_insert(pmap, package);
+		//operation_status = HB_insert(hmap, package);
 //cout<<"Inserted: key: "<< package.virtualpath()<<endl;
 //		cout << "insert finished, return: " << operation_status << endl;
 		buff1 = &operation_status;
@@ -405,7 +409,8 @@ void *dbService(void *threadarg) {
 			//result = HB_lookup(db, package);
 //			cout << "Lookup...2" << endl;
 //cout<<"Will lookup key: "<< package.virtualpath()<<endl;
-			result = HB_lookup(hmap, package);
+			//result = HB_lookup(hmap, package);
+			result = HB_lookup(pmap, package);
 //			cout << "Lookup...3" << endl;
 			//don't really send result back to client now, do it latter.
 			if (result.compare("Empty") == 0) {
@@ -444,7 +449,8 @@ void *dbService(void *threadarg) {
 			operation_status = -1;
 		} else {
 			//operation_status = HB_remove(db, package);
-			operation_status = HB_remove(hmap, package);
+			//operation_status = HB_remove(hmap, package);
+			operation_status = HB_remove(pmap, package);
 			buff1 = &operation_status;
 			r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
 			if (r <= 0) {
@@ -486,7 +492,7 @@ void *dbService(void *threadarg) {
 
 #if TRANS_PROTOCOL==USE_TCP
 	int closingSock = ((struct threaddata *) threadarg)->socket;
-	close(closingSock);
+//	close(closingSock); keep it for cache
 	((struct threaddata *) threadarg)->socket = -1; //this should work but seems it donesn't.-----------------????
 #elif TRANS_PROTOCOL==USE_UDP
 			memset( &(((struct threaddata *) threadarg)->sockinfo), 0, sizeof(sockaddr_in) );
@@ -538,7 +544,7 @@ void *dbService(void *threadarg) {
 		}
 	}
 	//raman-replication-e
-
+close(client_sock);
 	//cout << "leaving thread..."<<endl;
 	pthread_mutex_lock(&mutex1);
 	numthreads--;
@@ -555,7 +561,7 @@ void *dbService(void *threadarg) {
 
 int main(int argc, char* argv[]) {
 
-//	cout << "Use: hash <port> <neighbor_list_file>" << endl;
+	cout << "Use: hash <port> <neighbor_list_file> <config_file>" << endl;
 //	cout << "Start Server..." << endl;
 //	ProtoHashDB db; //in-mem hash
 	string cfgFile(argv[3]);
@@ -589,9 +595,9 @@ int main(int argc, char* argv[]) {
 	//raman-sigpipe-e
 	int svrPort = atoi(argv[1]);
 
-//	string randStr = randomString(5);
-//	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
-//	pmap = new NoVoHT(fileName, 100, 10, 0.7);
+	string randStr = randomString(5);
+	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
+	pmap = new NoVoHT(fileName, 100000, 1000, 0.7);
 //	map<string, string> hashMap;
 //	*hmap = hashMap;
 	//raman-replication-s
@@ -635,11 +641,9 @@ int main(int argc, char* argv[]) {
 #if TRANS_PROTOCOL==USE_TCP
 //			cout << "begin accept" << endl;
 			client_sock = d3_svr_accept(server_sock);
-
-
 			//set reuse socket
-			int optval=1;
-			setsockopt(client_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
+
+
 			//setnonblock(client_sock);//set non-blocking: cause all error.
 //			cout << "end accept" << endl;
 			new_req_indicator = client_sock;
@@ -666,8 +670,10 @@ int main(int argc, char* argv[]) {
 #if TRANS_PROTOCOL == USE_TCP
 							threaddata_array[i].socket = client_sock; //----------???maybe reason why repeat?
 							//cout << "new socket= "<<threaddata_array[i].socket<<endl;
+
 							r = pthread_create(&thread[i], NULL, dbService,
 									(void *) &threaddata_array[i]);
+							//cout << "Thread bucket " << i << ", socket= " << client_sock << endl;
 							//cout << "Main: new thread created: " << r << endl;
 							//cout << " i=  " << i<< endl;
 

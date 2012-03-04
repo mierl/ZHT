@@ -114,6 +114,7 @@ struct HostEntity ZHTClient::str2Host(string str) {
 int ZHTClient::insert(string str) {
 	int sock = -1;
 	struct HostEntity dest = this->str2Host(str);
+//	cout<<"Client: will send to "<<dest.host<<endl;
 	int ret = simpleSend(str, dest, sock);
 	d3_closeConnection(sock);
 	return ret;
@@ -428,10 +429,10 @@ int main(int argc, char* argv[]) {
 	ss << pid;
 
 	string recordFile = "record." + ss.str();
-	benmarkTimeAnalize(cfgFile, memberList, pkgList, testClient, numOper, 15, recordFile);
-//	benchmarkInsert(cfgFile, memberList, pkgList, testClient, numOper, 15); //25fro 128bytes.
-//	benchmarkLookup(pkgList, testClient);
-//	benchmarkRemove(pkgList, testClient);
+//	benmarkTimeAnalize(cfgFile, memberList, pkgList, testClient, numOper, 15, recordFile);
+	benchmarkInsert(cfgFile, memberList, pkgList, testClient, numOper, 15); //25fro 128bytes.
+	benchmarkLookup(pkgList, testClient);
+	benchmarkRemove(pkgList, testClient);
 
 
 }

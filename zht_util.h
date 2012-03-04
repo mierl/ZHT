@@ -20,6 +20,7 @@
 #include "meta.pb.h"
 #include "d3_transport.h"
 #include "novoht.h" //Kevin's persistent hash table
+#include "lru_cache.h"
 #include<signal.h>
 # include <errno.h>
 struct timeval tp;
@@ -171,6 +172,111 @@ vector<struct HostEntity> getMembership(string fileName) {
 	return hostList;
 }
 
+
+//make socket for client to send/receive
+int makeClientSocket(const char* host, int port, bool tcp) {
+	int to_sock;
+	if (tcp == true) {
+		struct sockaddr_in dest;
+		memset(&dest, 0, sizeof(struct sockaddr_in)); /*zero the struct*/
+		struct hostent * hinfo = gethostbyname(host);
+		if (hinfo == NULL)
+			printf("getbyname failed!\n");
+		dest.sin_family = PF_INET; /*storing the server info in sockaddr_in structure*/
+		dest.sin_addr = *(struct in_addr *) (hinfo->h_addr); /*set destination IP number*/
+		dest.sin_port = htons(port);
+		to_sock = socket(PF_INET, SOCK_STREAM, 0); //try change here.................................................
+		if (to_sock < 0) {
+					cerr << "socket_replica: error on socket(): " << strerror(errno)
+							<< endl;
+					return -1;
+				}
+
+		int ret_con = connect(to_sock, (struct sockaddr *) &dest,
+				sizeof(sockaddr));
+		if (ret_con < 0) {
+			cerr << "net_util: error on connect(): " << strerror(errno) << endl;
+			return -1;
+		}
+
+	} else { //UDP
+		to_sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+		if (to_sock < 0) {
+			printf("Error occurred when creating the socket:%d\n", to_sock);
+			printf("%s\n", strerror(errno));
+			close(to_sock);
+			return -1;
+		}
+	}
+	return to_sock;
+}
+
+//general send, include TCP & UDP
+int generalSend(const char* host, int port, int to_sock, const char* buff, bool tcp) {
+	int buff_size = strlen(buff);
+	int sentSize;
+	struct sockaddr_in dest;
+	memset(&dest, 0, sizeof(struct sockaddr_in)); /*zero the struct*/
+	struct hostent * hinfo = gethostbyname(host);
+	if (hinfo == NULL)
+		printf("getbyname failed!\n");
+	dest.sin_family = PF_INET; /*storing the server info in sockaddr_in structure*/
+	dest.sin_addr = *(struct in_addr *) (hinfo->h_addr); /*set destination IP number*/
+	dest.sin_port = htons(port);
+
+	if (tcp == true) {
+		//socket(nmspace,style,protocol), originally be socket(AF_INET, SOCK_STREAM, 0)
+
+		sentSize = send(to_sock, (const void*) buff, buff_size, 0); // may try other flags......................
+		if (sentSize < 0) {
+			cerr << "net_util: error on send(): " << strerror(errno) << endl;
+			return -1;
+		}
+	} else { //UDP
+		int sentSize = sendto(to_sock, (const void*) buff, buff_size, 0,
+				(struct sockaddr*) &dest, sizeof(dest));
+		if (sentSize != buff_size) {
+			printf("generalSend:udp: send failed. error:");
+			printf("%s\n", strerror(errno));
+			close(to_sock);
+			return -1;
+		}
+	}
+	return sentSize;
+}
+
+int generalReceive(int sock, char* host, int port, void *buffer, size_t size,
+		int flags, bool tcp) {
+	memset(buffer, 0, size);
+	if (tcp == true) {
+		return recv(sock, buffer, size, flags);
+	} else {
+		unsigned int addrLen;
+
+		//Here I strongly adopt that this will work, I made a sockaddr_in with specified address: host and port
+		struct sockaddr_in rcvFromAddr;
+		int recvLen;
+		memset(&rcvFromAddr, 0, sizeof(struct sockaddr_in)); /*zero the struct*/
+		struct hostent * hinfo = gethostbyname(host);
+		if (hinfo == NULL)
+			printf("getbyname failed!\n");
+		rcvFromAddr.sin_family = PF_INET; /*storing the server info in sockaddr_in structure*/
+		rcvFromAddr.sin_addr = *(struct in_addr *) (hinfo->h_addr); /*set destination IP number*/
+		rcvFromAddr.sin_port = htons(port);
+		//--------------------------------------------------
+		addrLen = sizeof(rcvFromAddr);
+		recvLen = recvfrom(sock, buffer, size, 0,
+				(struct sockaddr*) &rcvFromAddr, &addrLen); //this cast from sockaddr_in to sockaddr could be wrong.
+		if (recvLen < 0) {
+			printf("generalReceive recvfrom failed, error: %s\n",
+					strerror(errno));
+			close(sock);
+			return -1;
+		}
+		return recvLen;
+	}
+}
+
 //string str
 int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 
@@ -188,8 +294,7 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 
 	client_sock = d3_makeConnection((destination.host).c_str(),
 			destination.port);
-	int optval=1;
-	if(setsockopt(client_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)<0) cerr<<"simpleSend: reuse failed."<<endl;
+
 #elif TRANS_PROTOCOL == USE_UDP
 
 //	cout << endl << "simpleSend makeSocket start-----" << endl;
@@ -215,6 +320,8 @@ int simpleSend(string str, struct HostEntity destination, int &current_sock) {
 //			cout<<"c_str(): "<<str.c_str()<<endl;
 //			cout<<"(void*)c_str(): "<< (void*)str.c_str()<<endl;
 //			printf("printf %s \n\n\n",str.c_str());
+	int optval=1;
+		if(setsockopt(client_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)<0) cerr<<"simpleSend: reuse failed."<< strerror(errno)<<endl;
 	sent_size = d3_send_data(client_sock, (void*) str.data(), str_size, 0, &toAddr);
 //	cout << "simpleSend: sent " << r << " bytes:" << str << endl;
 	if (sent_size < 0) {

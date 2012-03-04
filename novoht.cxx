@@ -96,7 +96,7 @@ NoVoHT::~NoVoHT(){
 //0 success, -1 no insert, -2 no write
 int NoVoHT::put(string k, string v){
    //while(resizing || map_lock){ /* Wait till done */}
-   //while(map_lock){ }
+   while(map_lock){ }
    map_lock=true;
    if (numEl >= size*resizeNum) {
       if (resizeNum !=0){
@@ -176,9 +176,9 @@ int NoVoHT::remove(string k){
 //write hashmap to file
 int NoVoHT::writeFile(){
    while (write_lock){}
+   if (!dbfile)return (filename.compare("") == 0 ? 0 : -2);
    write_lock=true;
    int ret =0;
-   if (!dbfile)return (filename.compare("") == 0 ? 0 : -2);
    rewind(dbfile);
    for (int i=0; i<size;i++){
       kvpair *cur = kvpairs[i];
@@ -223,8 +223,8 @@ void NoVoHT::resize(int ns){
 //write kvpair to file
 int NoVoHT::write(kvpair * p){
    while (write_lock){}
-   write_lock=true;
    if (!dbfile)return (filename.compare("") == 0 ? 0 : -2);
+   write_lock=true;
    fseek(dbfile, 0, SEEK_END);
    fgetpos(dbfile, &(p->pos));
    fprintf(dbfile, "%s\t%s\t", p->key.c_str(), p->val.c_str());
@@ -236,8 +236,8 @@ int NoVoHT::write(kvpair * p){
 //mark line in file for deletion
 int NoVoHT::mark(fpos_t position){
    while(write_lock){}
-   write_lock=true;
    if (!dbfile)return (filename.compare("") == 0 ? 0 : -2);
+   write_lock=true;
    fsetpos(dbfile, &position);
    fputc((int) '~', dbfile);
    write_lock=false;
@@ -246,7 +246,7 @@ int NoVoHT::mark(fpos_t position){
 char *readTabString(FILE *file, char *buffer){
    int n =0;
    char t;
-   while((t=fgetc(file)) != EOF){
+   while((t=fgetc(file)) != EOF && n < 300){
       if (t == '\t') {
          buffer[n] = '\0';
          return buffer;

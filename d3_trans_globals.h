@@ -4,7 +4,7 @@
 the transport is TCP or UDP or may be any other implementation. Please use the
 values USE_TCP or USE_UDP to define the transport type*/
 #define USE_TCP 0
-#define USE_UDP 1
+#define USE_UDP 0 //UDP has problem not solved yet.
 #define TRANS_PROTOCOL USE_TCP
 
 /*The following pre processing will ease the usage complexity for the 

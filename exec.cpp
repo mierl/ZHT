@@ -11,7 +11,7 @@
 using namespace std;
 
 string exec(string str) {
-    char* cmd = str.c_str();
+    char* cmd = (char*)str.c_str();
 	FILE* pipe = popen(cmd, "r");
     if (!pipe) return "ERROR";
     char buffer[128];
