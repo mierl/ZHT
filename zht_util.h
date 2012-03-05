@@ -20,7 +20,7 @@
 #include "meta.pb.h"
 #include "d3_transport.h"
 #include "novoht.h" //Kevin's persistent hash table
-#include "lru_cache.h"
+//#include "lru_cache.h"
 #include<signal.h>
 # include <errno.h>
 struct timeval tp;
