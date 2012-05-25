@@ -2,6 +2,9 @@
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "meta.pb.h"
+
+#include <algorithm>
+
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
@@ -100,8 +103,6 @@ struct StaticDescriptorInitializer_meta_2eproto {
 
 // ===================================================================
 
-const ::std::string Package::_default_virtualpath_;
-const ::std::string Package::_default_realfullpath_;
 #ifndef _MSC_VER
 const int Package::kVirtualPathFieldNumber;
 const int Package::kNumFieldNumber;
@@ -130,9 +131,9 @@ Package::Package(const Package& from)
 
 void Package::SharedCtor() {
   _cached_size_ = 0;
-  virtualpath_ = const_cast< ::std::string*>(&_default_virtualpath_);
+  virtualpath_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   num_ = 0;
-  realfullpath_ = const_cast< ::std::string*>(&_default_realfullpath_);
+  realfullpath_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   isdir_ = false;
   openmode_ = 0;
   mode_ = 0;
@@ -146,10 +147,10 @@ Package::~Package() {
 }
 
 void Package::SharedDtor() {
-  if (virtualpath_ != &_default_virtualpath_) {
+  if (virtualpath_ != &::google::protobuf::internal::kEmptyString) {
     delete virtualpath_;
   }
-  if (realfullpath_ != &_default_realfullpath_) {
+  if (realfullpath_ != &::google::protobuf::internal::kEmptyString) {
     delete realfullpath_;
   }
   if (this != default_instance_) {
@@ -178,14 +179,14 @@ Package* Package::New() const {
 
 void Package::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (_has_bit(0)) {
-      if (virtualpath_ != &_default_virtualpath_) {
+    if (has_virtualpath()) {
+      if (virtualpath_ != &::google::protobuf::internal::kEmptyString) {
         virtualpath_->clear();
       }
     }
     num_ = 0;
-    if (_has_bit(2)) {
-      if (realfullpath_ != &_default_realfullpath_) {
+    if (has_realfullpath()) {
+      if (realfullpath_ != &::google::protobuf::internal::kEmptyString) {
         realfullpath_->clear();
       }
     }
@@ -232,7 +233,7 @@ bool Package::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &num_)));
-          _set_bit(1);
+          set_has_num();
         } else {
           goto handle_uninterpreted;
         }
@@ -265,7 +266,7 @@ bool Package::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
                  input, &isdir_)));
-          _set_bit(3);
+          set_has_isdir();
         } else {
           goto handle_uninterpreted;
         }
@@ -299,7 +300,7 @@ bool Package::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &openmode_)));
-          _set_bit(5);
+          set_has_openmode();
         } else {
           goto handle_uninterpreted;
         }
@@ -315,7 +316,7 @@ bool Package::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &mode_)));
-          _set_bit(6);
+          set_has_mode();
         } else {
           goto handle_uninterpreted;
         }
@@ -331,7 +332,7 @@ bool Package::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &operation_)));
-          _set_bit(7);
+          set_has_operation();
         } else {
           goto handle_uninterpreted;
         }
@@ -347,7 +348,7 @@ bool Package::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &replicano_)));
-          _set_bit(8);
+          set_has_replicano();
         } else {
           goto handle_uninterpreted;
         }
@@ -374,7 +375,7 @@ bool Package::MergePartialFromCodedStream(
 void Package::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // optional string virtualPath = 1;
-  if (_has_bit(0)) {
+  if (has_virtualpath()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->virtualpath().data(), this->virtualpath().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
@@ -383,12 +384,12 @@ void Package::SerializeWithCachedSizes(
   }
   
   // optional int32 num = 2;
-  if (_has_bit(1)) {
+  if (has_num()) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->num(), output);
   }
   
   // optional string realFullPath = 3;
-  if (_has_bit(2)) {
+  if (has_realfullpath()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->realfullpath().data(), this->realfullpath().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
@@ -397,7 +398,7 @@ void Package::SerializeWithCachedSizes(
   }
   
   // optional bool isDir = 4;
-  if (_has_bit(3)) {
+  if (has_isdir()) {
     ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->isdir(), output);
   }
   
@@ -411,22 +412,22 @@ void Package::SerializeWithCachedSizes(
   }
   
   // optional int32 openMode = 6;
-  if (_has_bit(5)) {
+  if (has_openmode()) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->openmode(), output);
   }
   
   // optional int32 mode = 7;
-  if (_has_bit(6)) {
+  if (has_mode()) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->mode(), output);
   }
   
   // optional int32 Operation = 8;
-  if (_has_bit(7)) {
+  if (has_operation()) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->operation(), output);
   }
   
   // optional int32 replicaNo = 9;
-  if (_has_bit(8)) {
+  if (has_replicano()) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->replicano(), output);
   }
   
@@ -439,7 +440,7 @@ void Package::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Package::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // optional string virtualPath = 1;
-  if (_has_bit(0)) {
+  if (has_virtualpath()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->virtualpath().data(), this->virtualpath().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
@@ -449,12 +450,12 @@ void Package::SerializeWithCachedSizes(
   }
   
   // optional int32 num = 2;
-  if (_has_bit(1)) {
+  if (has_num()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->num(), target);
   }
   
   // optional string realFullPath = 3;
-  if (_has_bit(2)) {
+  if (has_realfullpath()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->realfullpath().data(), this->realfullpath().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
@@ -464,7 +465,7 @@ void Package::SerializeWithCachedSizes(
   }
   
   // optional bool isDir = 4;
-  if (_has_bit(3)) {
+  if (has_isdir()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->isdir(), target);
   }
   
@@ -478,22 +479,22 @@ void Package::SerializeWithCachedSizes(
   }
   
   // optional int32 openMode = 6;
-  if (_has_bit(5)) {
+  if (has_openmode()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->openmode(), target);
   }
   
   // optional int32 mode = 7;
-  if (_has_bit(6)) {
+  if (has_mode()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->mode(), target);
   }
   
   // optional int32 Operation = 8;
-  if (_has_bit(7)) {
+  if (has_operation()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(8, this->operation(), target);
   }
   
   // optional int32 replicaNo = 9;
-  if (_has_bit(8)) {
+  if (has_replicano()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->replicano(), target);
   }
   
@@ -599,30 +600,30 @@ void Package::MergeFrom(const Package& from) {
   GOOGLE_CHECK_NE(&from, this);
   listitem_.MergeFrom(from.listitem_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from._has_bit(0)) {
+    if (from.has_virtualpath()) {
       set_virtualpath(from.virtualpath());
     }
-    if (from._has_bit(1)) {
+    if (from.has_num()) {
       set_num(from.num());
     }
-    if (from._has_bit(2)) {
+    if (from.has_realfullpath()) {
       set_realfullpath(from.realfullpath());
     }
-    if (from._has_bit(3)) {
+    if (from.has_isdir()) {
       set_isdir(from.isdir());
     }
-    if (from._has_bit(5)) {
+    if (from.has_openmode()) {
       set_openmode(from.openmode());
     }
-    if (from._has_bit(6)) {
+    if (from.has_mode()) {
       set_mode(from.mode());
     }
-    if (from._has_bit(7)) {
+    if (from.has_operation()) {
       set_operation(from.operation());
     }
   }
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    if (from._has_bit(8)) {
+    if (from.has_replicano()) {
       set_replicano(from.replicano());
     }
   }
