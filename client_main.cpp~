@@ -42,7 +42,7 @@ void sig_pipe(int signum) {
 	signal(SIGPIPE, sig_pipe);
 }
 
-// Main class for client
+
 class ZHTClient {
 public:
 	int REPLICATION_TYPE; //serverside or client side. -1:error
