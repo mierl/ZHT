@@ -5,12 +5,11 @@
 #include <stdio.h>
 using namespace std;
 
+//int NUM_REPLICAS = 0;
 struct thread_data {
 	vector<struct HostEntity> hostList;
 	list<string> packageList;
 };
-
-//int NUM_REPLICAS = 0;
 vector<struct HostEntity> hostList;
 list<string> myPackagelist;
 bool TCP;
