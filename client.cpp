@@ -22,6 +22,7 @@
 #include <pthread.h>
 #include <error.h>
 #include "lru_cache.h"
+#include "client.h"
 
 ZHTClient::ZHTClient() { // default all invalid value, so the client must be initialized to set the variables.
 	//Since constructor can't return anything, we must have an initialization function that can return possible error message.
