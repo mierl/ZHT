@@ -21,7 +21,12 @@
 //#include "d3_sys_globals.h"
 #include <pthread.h>
 #include <error.h>
+<<<<<<< HEAD
 #include "../inc/lru_cache.h"
+=======
+#include "lru_cache.h"
+#include "client.h"
+>>>>>>> a91a017acffad8eb7cfd98510c0836ebb52d0774
 
 ZHTClient::ZHTClient() { // default all invalid value, so the client must be initialized to set the variables.
 	//Since constructor can't return anything, we must have an initialization function that can return possible error message.
