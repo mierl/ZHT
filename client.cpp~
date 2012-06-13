@@ -125,8 +125,8 @@ int ZHTClient::str2Sock(string str) { //give socket and update the vector of net
 		}
 //		cout<<"str2Sock: after update: sock = "<<this->str2Host(str).sock<<endl;
 		return dest.sock;
-	}else{ //UDP
-		if (UDP_SOCKET < 0) {
+	}else{//UDP
+		if(UDP_SOCKET < 0){
 			UDP_SOCKET = makeClientSocket(dest.host.c_str(), dest.port, TCP);
 		}
 		return UDP_SOCKET;
