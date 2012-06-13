@@ -16,12 +16,12 @@
 #include <list>
 #include <vector>
 #include <netdb.h>
-#include "zht_util.h"
+#include "../inc/zht_util.h"
 //raman-client-replication-s
 //#include "d3_sys_globals.h"
 #include <pthread.h>
 #include <error.h>
-#include "lru_cache.h"
+#include "../inc/lru_cache.h"
 
 ZHTClient::ZHTClient() { // default all invalid value, so the client must be initialized to set the variables.
 	//Since constructor can't return anything, we must have an initialization function that can return possible error message.

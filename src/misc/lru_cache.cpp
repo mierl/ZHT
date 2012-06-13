@@ -8,7 +8,7 @@
  * @file lru_cache.cpp Template cache with an LRU removal policy (unit tests)
  * @author Patrick Audley
 */
-#include "lru_cache.h"
+#include "../inc/lru_cache.h"
 
 #ifdef UNITTEST
 #include "unit_test.h"

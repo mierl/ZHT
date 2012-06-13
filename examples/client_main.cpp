@@ -8,7 +8,7 @@
 
 #include <algorithm>
 //#include "d3_transport.h"
-//#include "meta.pb.h"
+//#include "../inc/meta.pb.h"
 #include <signal.h>
 #include <sys/time.h>
 #include <stdlib.h>
@@ -16,12 +16,12 @@
 #include <list>
 #include <vector>
 #include <netdb.h>
-#include "zht_util.h"
+#include "../inc/zht_util.h"
 //raman-client-replication-s
 //#include "d3_sys_globals.h"
 #include <pthread.h>
 #include <error.h>
-#include "lru_cache.h"
+#include "../inc/lru_cache.h"
 
 using namespace std;
 

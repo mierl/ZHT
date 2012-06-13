@@ -1,6 +1,6 @@
 #ifndef PHASHMAP_H
 #define PHASHMAP_H
-#include "novoht.h"
+//#include "novoht.h" //AutoInclude?? WTF
 #include <string>
 #include <stdio.h>
 using namespace std;
