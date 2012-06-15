@@ -9,5 +9,10 @@ message Package{
 	optional int32 mode = 7;
 
 	optional int32 Operation = 8;		
-	optional int32 replicaNo =9; //nagative number means it's not an original request.
+	optional int32 replicaNo = 9; //nagative number means it's not an original request.
+	repeated int32 ecChunkIds = 10;
+	optional int32 ecCoding = 11;
+	optional int32 ecK = 12;
+	optional int32 ecM = 13;
+	optional int32 ecBufSize = 14;
 }

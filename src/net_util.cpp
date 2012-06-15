@@ -18,7 +18,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <errno.h>
-#include "net_util.h"
+#include "../inc/net_util.h"
 using namespace std;
 
 //make socket for server, include bind and listen(if TCP), return socket

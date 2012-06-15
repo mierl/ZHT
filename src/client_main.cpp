@@ -16,29 +16,59 @@
 #include <list>
 #include <vector>
 #include <netdb.h>
-#include "zht_util.h"
+#include "../inc/zht_util.h"
 //raman-client-replication-s
 //#include "d3_sys_globals.h"
 #include <pthread.h>
 #include <error.h>
-#include "lru_cache.h"
-#include "client.h"
+#include "../inc/lru_cache.h"
+#include "../inc/client.h"
 
 using namespace std;
 
-int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
-		ZHTClient &clientRet, int numTest, int lenString) {
+/*
+ * Serializes the metadata of the file and then inserts it in ZHT
+ */
+int insertMetadata(string cfgFile, string memberList, vector<string> &pkgList,
+		ZHTClient &clientRet, int numTest, int lenString, string localPath, int codingId, int k, int m, int bufsize) {
 
-//	ZHTClient client;
+	//ZHTClient client;
 
 	if (clientRet.initialize(cfgFile, memberList) != 0) {
 		cout << "Crap! ZHTClient initialization failed, program exits." << endl;
 		return -1;
 	}
+	
+	// Define the package for the file, the chunk ids and more
+	Package package, package_ret;
+	package.set_virtualpath(randomString(lenString)); // as key
+	package.set_isdir(true);
+	package.set_replicano(5); // original--Note: never let it be negative!!!
+	package.set_operation(3); // 3 for insert, 1 for look up, 2 for remove
+	package.set_realfullpath(path);
+	
+	// Assign the chunk ids to the metadata
+	// TODO: Each insertion for just one chunk or all of them?
+	package.set_ecChunkIds(chunkId);
+	
+	package.set_ecCoding(codingId);
+	package.set_ecK(k);
+	package.set_ecM(m);
+	package.set_ecBufSize(bufsize);
+	
+	string str = package.SerializeAsString();
+//		cout << "package size = " << str.size() << endl;
+//		cout<<"Client.cpp:insertMetadata: "<<endl;
+//		cout<<"string: "<<str<<endl;
+//		cout<<"Insert str: "<<str.c_str()<<endl;
+//		cout<<"data(): "<< str.data()<<endl;
+
+	pkgList.push_back(str);
 
 //	clientRet = client; //reserve this client object for other benchmark(lookup/remove) to use.
 
 	//vector<string> pkgList;
+	/*
 	int i = 0;
 	for (i = 0; i < numTest; i++) {
 		Package package, package_ret;
@@ -55,13 +85,14 @@ int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
 		package.add_listitem("item-----6");
 		string str = package.SerializeAsString();
 //		cout << "package size = " << str.size() << endl;
-//		cout<<"Client.cpp:benchmarkInsert: "<<endl;
+//		cout<<"Client.cpp:insertMetadata: "<<endl;
 //		cout<<"string: "<<str<<endl;
 //		cout<<"Insert str: "<<str.c_str()<<endl;
 //		cout<<"data(): "<< str.data()<<endl;
 
 		pkgList.push_back(str);
 	}
+	*/
 
 	double start = 0;
 	double end = 0;
@@ -80,29 +111,24 @@ int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
 	 */
 
 	for (it = pkgList.begin(); it != pkgList.end(); it++) {
-
-//		cout <<"insert count "<< c << endl;
+		//cout <<"insert count "<< c << endl;
 
 		c++;
-
 		string str_ins = *it;
-//cout << "-----1" << endl;
+		//cout << "-----1" << endl;
 		int ret = clientRet.insert(str_ins);
-//cout << "-----2" << endl;
+		//cout << "-----2" << endl;
 		if (ret < 0) {
-
 			errCount++;
 		}
-
 	}
-//close(sock);
+	//close(sock);
 	end = getTime_msec();
 
 	cout << "Inserted " << numTest - errCount << " packages out of " << numTest
 			<< ", cost " << end - start << " ms" << endl;
 
 	return 0;
-
 }
 
 int benmarkTimeAnalize(string cfgFile, string memberList,
@@ -136,7 +162,7 @@ int benmarkTimeAnalize(string cfgFile, string memberList,
 		package.add_listitem("item-----5");
 		string str = package.SerializeAsString();
 //		cout << "package size = " << str.size() << endl;
-//		cout<<"Client.cpp:benchmarkInsert: "<<endl;
+//		cout<<"Client.cpp:insertMetadata: "<<endl;
 //		cout<<"string: "<<str<<endl;
 //		cout<<"Insert str: "<<str.c_str()<<endl;
 //		cout<<"data(): "<< str.data()<<endl;
@@ -312,12 +338,11 @@ int main(int argc, char* argv[]) {
 //	string recordFile = "record." + ss.str();
 //	benmarkTimeAnalize(cfgFile, memberList, pkgList, testClient, numOper, 15, recordFile);
 //cout<<"start to insert..."<<endl;
-	benchmarkInsert(cfgFile, memberList, pkgList, testClient, numOper, 15); //25fro 128bytes.
+	insertMetadata(cfgFile, memberList, pkgList, testClient, numOper, 15); //25fro 128bytes.
 //cout << "Client:main, start lookup \n";
 	benchmarkLookup(pkgList, testClient);
 	benchmarkRemove(pkgList, testClient);
 	testClient.tearDownTCP(TCP);
 	return 0;
-
 }
 

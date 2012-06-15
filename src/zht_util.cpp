@@ -1,5 +1,5 @@
 /*
- * zht_util.h
+ * zht_util.cpp
  *
  *  Created on: Nov 26, 2011
  *      Author: tony
@@ -18,14 +18,14 @@
 #include <string.h>
 //#include <boost/serialization/vector.hpp>
 //#include <boost/serialization/string.hpp>
-#include "meta.pb.h"
+#include "../inc/meta.pb.h"
 //#include "d3_transport.h"
-#include "novoht.h" //Kevin's persistent hash table
+#include "../inc/novoht.h" //Kevin's persistent hash table
 //#include "lru_cache.h"
 #include<signal.h>
 # include <errno.h>
-#include "net_util.h"
-#include "zht_util.h"
+#include "../inc/net_util.h"
+#include "../inc/zht_util.h"
 //struct timeval tp;
 using namespace std;
 
