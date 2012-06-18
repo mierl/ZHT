@@ -11,7 +11,7 @@
 #include "../inc/lru_cache.h"
 
 #ifdef UNITTEST
-#include "unit_test.h"
+#include "../inc/unit_test.h"
 #include <string>
 #include <stdlib.h>
 

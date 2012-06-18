@@ -8,7 +8,7 @@
 
 #include <algorithm>
 //#include "d3_transport.h"
-//#include "../inc/meta.pb.h"
+//#include "meta.pb.h"
 #include <signal.h>
 #include <sys/time.h>
 #include <stdlib.h>
@@ -31,8 +31,6 @@ using namespace std;
  */
 int insertMetadata(string cfgFile, string memberList, vector<string> &pkgList,
 		ZHTClient &clientRet, int numTest, int lenString, string localPath, int codingId, int k, int m, int bufsize) {
-
-	//ZHTClient client;
 
 	if (clientRet.initialize(cfgFile, memberList) != 0) {
 		cout << "Crap! ZHTClient initialization failed, program exits." << endl;
