@@ -1,5 +1,5 @@
-#ifndef PHASHMAP_H
-#define PHASHMAP_H
+#ifndef ZHTCLIENT_H
+#define ZHTCLIENT_H
 #include "client.h"
 #include <string>
 #include <stdio.h>
@@ -44,3 +44,4 @@ public:
 	int tearDownTCP(bool tcp); //only for TCP
 
 };
+#endif
