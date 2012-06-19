@@ -20,8 +20,9 @@
 #include <sstream>
 #include <fstream>
 #include <string>
-#include "../inc/zht_util.h"
-#include "../inc/novoht.h"
+
+#include <zht_util.h>
+#include <novoht.h>
 
 using namespace std;
 #define MAXEVENTS 64
