@@ -437,3 +437,106 @@ int ZHTClient::remove(string str) {
 
 	return ret_1;
 }
+
+/*
+ * Serializes the metadata of the file and then inserts it in ZHT
+ */
+int ZHTClient::insertMetadata(string cfgFile, string memberList, vector<string> &pkgList, int numTest, int lenString, string localPath, int codingId, int k, int m, int bufsize) {
+
+	if (this.initialize(cfgFile, memberList) != 0) {
+		cout << "Crap! ZHTClient initialization failed, program exits." << endl;
+		return -1;
+	}
+	
+	// Define the package for the file, the chunk ids and more
+	Package package, package_ret;
+	package.set_virtualpath(randomString(lenString)); // as key TODO
+	package.set_isdir(true);
+	package.set_replicano(5); // original--Note: never let it be negative!!!
+	package.set_operation(3); // 3 for insert, 1 for look up, 2 for remove
+	package.set_realfullpath(localPath);
+	
+	// Assign the chunk ids to the metadata
+	// TODO: Each insertion for just one chunk or all of them?
+	package.set_ecChunkIds(chunkId);
+	
+	package.set_ecCoding(codingId);
+	package.set_ecK(k);
+	package.set_ecM(m);
+	package.set_ecBufSize(bufsize);
+	
+	string str = package.SerializeAsString();
+	//cout << "package size = " << str.size() << endl;
+	//cout<<"Client.cpp:insertMetadata: "<<endl;
+	//cout<<"string: "<<str<<endl;
+	//cout<<"Insert str: "<<str.c_str()<<endl;
+	//cout<<"data(): "<< str.data()<<endl;
+
+	pkgList.push_back(str);
+
+	//clientRet = client; //reserve this client object for other benchmark(lookup/remove) to use.
+
+	//vector<string> pkgList;
+	/*
+	int i = 0;
+	for (i = 0; i < numTest; i++) {
+		Package package, package_ret;
+		package.set_virtualpath(randomString(lenString)); //as key
+		package.set_isdir(true);
+		package.set_replicano(5); //orginal--Note: never let it be nagative!!!
+		package.set_operation(3); // 3 for insert, 1 for look up, 2 for remove
+		package.set_realfullpath(
+				"Some-Real-longer-longer-and-longer-Paths--------");
+		package.add_listitem("item-----2");
+		package.add_listitem("item-----3");
+		package.add_listitem("item-----4");
+		package.add_listitem("item-----5");
+		package.add_listitem("item-----6");
+		string str = package.SerializeAsString();
+		//cout << "package size = " << str.size() << endl;
+		//cout<<"Client.cpp:insertMetadata: "<<endl;
+		//cout<<"string: "<<str<<endl;
+		//cout<<"Insert str: "<<str.c_str()<<endl;
+		//cout<<"data(): "<< str.data()<<endl;
+
+		pkgList.push_back(str);
+	}
+	*/
+
+	double start = 0;
+	double end = 0;
+	start = getTime_msec();
+	int errCount = 0;
+	vector<string>::iterator it;
+	int c = 0;
+	//cout << "-----2" << endl;
+
+	//string sampleString  = *(pkgList.begin());
+	//struct HostEntity aHost = client.str2Host(sampleString);
+	/*
+	 int sock = makeClientSocket("localhost", 50000, 1);
+	 cout<<"client sock = "<< sock<<endl;
+	 reuseSock(sock);
+	*/
+
+	for (it = pkgList.begin(); it != pkgList.end(); it++) {
+		//cout <<"insert count "<< c << endl;
+
+		c++;
+		string str_ins = *it;
+		//cout << "-----1" << endl;
+		int ret = this.insert(str_ins);
+		//cout << "-----2" << endl;
+		if (ret < 0) {
+			errCount++;
+		}
+	}
+	//close(sock);
+	end = getTime_msec();
+
+	cout << "Inserted " << numTest - errCount << " packages out of " << numTest
+			<< ", cost " << end - start << " ms" << endl;
+
+	return 0;
+}
+
