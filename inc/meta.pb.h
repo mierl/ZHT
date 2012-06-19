@@ -168,6 +168,46 @@ class Package : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 replicano() const;
   inline void set_replicano(::google::protobuf::int32 value);
   
+  // repeated int32 ecChunkIds = 10;
+  inline int ecchunkids_size() const;
+  inline void clear_ecchunkids();
+  static const int kEcChunkIdsFieldNumber = 10;
+  inline ::google::protobuf::int32 ecchunkids(int index) const;
+  inline void set_ecchunkids(int index, ::google::protobuf::int32 value);
+  inline void add_ecchunkids(::google::protobuf::int32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      ecchunkids() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_ecchunkids();
+  
+  // optional int32 ecCoding = 11;
+  inline bool has_eccoding() const;
+  inline void clear_eccoding();
+  static const int kEcCodingFieldNumber = 11;
+  inline ::google::protobuf::int32 eccoding() const;
+  inline void set_eccoding(::google::protobuf::int32 value);
+  
+  // optional int32 ecK = 12;
+  inline bool has_eck() const;
+  inline void clear_eck();
+  static const int kEcKFieldNumber = 12;
+  inline ::google::protobuf::int32 eck() const;
+  inline void set_eck(::google::protobuf::int32 value);
+  
+  // optional int32 ecM = 13;
+  inline bool has_ecm() const;
+  inline void clear_ecm();
+  static const int kEcMFieldNumber = 13;
+  inline ::google::protobuf::int32 ecm() const;
+  inline void set_ecm(::google::protobuf::int32 value);
+  
+  // optional int32 ecBufSize = 14;
+  inline bool has_ecbufsize() const;
+  inline void clear_ecbufsize();
+  static const int kEcBufSizeFieldNumber = 14;
+  inline ::google::protobuf::int32 ecbufsize() const;
+  inline void set_ecbufsize(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:Package)
  private:
   inline void set_has_virtualpath();
@@ -186,6 +226,14 @@ class Package : public ::google::protobuf::Message {
   inline void clear_has_operation();
   inline void set_has_replicano();
   inline void clear_has_replicano();
+  inline void set_has_eccoding();
+  inline void clear_has_eccoding();
+  inline void set_has_eck();
+  inline void clear_has_eck();
+  inline void set_has_ecm();
+  inline void clear_has_ecm();
+  inline void set_has_ecbufsize();
+  inline void clear_has_ecbufsize();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -198,9 +246,14 @@ class Package : public ::google::protobuf::Message {
   ::google::protobuf::int32 mode_;
   ::google::protobuf::int32 operation_;
   ::google::protobuf::int32 replicano_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > ecchunkids_;
+  ::google::protobuf::int32 eccoding_;
+  ::google::protobuf::int32 eck_;
+  ::google::protobuf::int32 ecm_;
+  ::google::protobuf::int32 ecbufsize_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(14 + 31) / 32];
   
   friend void  protobuf_AddDesc_meta_2eproto();
   friend void protobuf_AssignDesc_meta_2eproto();
@@ -506,6 +559,119 @@ inline ::google::protobuf::int32 Package::replicano() const {
 inline void Package::set_replicano(::google::protobuf::int32 value) {
   set_has_replicano();
   replicano_ = value;
+}
+
+// repeated int32 ecChunkIds = 10;
+inline int Package::ecchunkids_size() const {
+  return ecchunkids_.size();
+}
+inline void Package::clear_ecchunkids() {
+  ecchunkids_.Clear();
+}
+inline ::google::protobuf::int32 Package::ecchunkids(int index) const {
+  return ecchunkids_.Get(index);
+}
+inline void Package::set_ecchunkids(int index, ::google::protobuf::int32 value) {
+  ecchunkids_.Set(index, value);
+}
+inline void Package::add_ecchunkids(::google::protobuf::int32 value) {
+  ecchunkids_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+Package::ecchunkids() const {
+  return ecchunkids_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+Package::mutable_ecchunkids() {
+  return &ecchunkids_;
+}
+
+// optional int32 ecCoding = 11;
+inline bool Package::has_eccoding() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void Package::set_has_eccoding() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void Package::clear_has_eccoding() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void Package::clear_eccoding() {
+  eccoding_ = 0;
+  clear_has_eccoding();
+}
+inline ::google::protobuf::int32 Package::eccoding() const {
+  return eccoding_;
+}
+inline void Package::set_eccoding(::google::protobuf::int32 value) {
+  set_has_eccoding();
+  eccoding_ = value;
+}
+
+// optional int32 ecK = 12;
+inline bool Package::has_eck() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void Package::set_has_eck() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void Package::clear_has_eck() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void Package::clear_eck() {
+  eck_ = 0;
+  clear_has_eck();
+}
+inline ::google::protobuf::int32 Package::eck() const {
+  return eck_;
+}
+inline void Package::set_eck(::google::protobuf::int32 value) {
+  set_has_eck();
+  eck_ = value;
+}
+
+// optional int32 ecM = 13;
+inline bool Package::has_ecm() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void Package::set_has_ecm() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void Package::clear_has_ecm() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void Package::clear_ecm() {
+  ecm_ = 0;
+  clear_has_ecm();
+}
+inline ::google::protobuf::int32 Package::ecm() const {
+  return ecm_;
+}
+inline void Package::set_ecm(::google::protobuf::int32 value) {
+  set_has_ecm();
+  ecm_ = value;
+}
+
+// optional int32 ecBufSize = 14;
+inline bool Package::has_ecbufsize() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void Package::set_has_ecbufsize() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void Package::clear_has_ecbufsize() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void Package::clear_ecbufsize() {
+  ecbufsize_ = 0;
+  clear_has_ecbufsize();
+}
+inline ::google::protobuf::int32 Package::ecbufsize() const {
+  return ecbufsize_;
+}
+inline void Package::set_ecbufsize(::google::protobuf::int32 value) {
+  set_has_ecbufsize();
+  ecbufsize_ = value;
 }
 
 

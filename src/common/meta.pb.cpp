@@ -29,7 +29,7 @@ void protobuf_AssignDesc_meta_2eproto() {
       "meta.proto");
   GOOGLE_CHECK(file != NULL);
   Package_descriptor_ = file->message_type(0);
-  static const int Package_offsets_[9] = {
+  static const int Package_offsets_[14] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, virtualpath_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, num_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, realfullpath_),
@@ -39,6 +39,11 @@ void protobuf_AssignDesc_meta_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, mode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, operation_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, replicano_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, ecchunkids_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, eccoding_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, eck_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, ecm_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, ecbufsize_),
   };
   Package_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -81,11 +86,13 @@ void protobuf_AddDesc_meta_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\nmeta.proto\"\250\001\n\007Package\022\023\n\013virtualPath\030"
+    "\n\nmeta.proto\"\373\001\n\007Package\022\023\n\013virtualPath\030"
     "\001 \001(\t\022\013\n\003num\030\002 \001(\005\022\024\n\014realFullPath\030\003 \001(\t"
     "\022\r\n\005isDir\030\004 \001(\010\022\020\n\010listItem\030\005 \003(\t\022\020\n\010ope"
     "nMode\030\006 \001(\005\022\014\n\004mode\030\007 \001(\005\022\021\n\tOperation\030\010"
-    " \001(\005\022\021\n\treplicaNo\030\t \001(\005", 183);
+    " \001(\005\022\021\n\treplicaNo\030\t \001(\005\022\022\n\necChunkIds\030\n "
+    "\003(\005\022\020\n\010ecCoding\030\013 \001(\005\022\013\n\003ecK\030\014 \001(\005\022\013\n\003ec"
+    "M\030\r \001(\005\022\021\n\tecBufSize\030\016 \001(\005", 266);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "meta.proto", &protobuf_RegisterTypes);
   Package::default_instance_ = new Package();
@@ -113,6 +120,11 @@ const int Package::kOpenModeFieldNumber;
 const int Package::kModeFieldNumber;
 const int Package::kOperationFieldNumber;
 const int Package::kReplicaNoFieldNumber;
+const int Package::kEcChunkIdsFieldNumber;
+const int Package::kEcCodingFieldNumber;
+const int Package::kEcKFieldNumber;
+const int Package::kEcMFieldNumber;
+const int Package::kEcBufSizeFieldNumber;
 #endif  // !_MSC_VER
 
 Package::Package()
@@ -139,6 +151,10 @@ void Package::SharedCtor() {
   mode_ = 0;
   operation_ = 0;
   replicano_ = 0;
+  eccoding_ = 0;
+  eck_ = 0;
+  ecm_ = 0;
+  ecbufsize_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -197,8 +213,13 @@ void Package::Clear() {
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     replicano_ = 0;
+    eccoding_ = 0;
+    eck_ = 0;
+    ecm_ = 0;
+    ecbufsize_ = 0;
   }
   listitem_.Clear();
+  ecchunkids_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -352,6 +373,92 @@ bool Package::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(80)) goto parse_ecChunkIds;
+        break;
+      }
+      
+      // repeated int32 ecChunkIds = 10;
+      case 10: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ecChunkIds:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 1, 80, input, this->mutable_ecchunkids())));
+        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
+                   == ::google::protobuf::internal::WireFormatLite::
+                      WIRETYPE_LENGTH_DELIMITED) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, this->mutable_ecchunkids())));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(80)) goto parse_ecChunkIds;
+        if (input->ExpectTag(88)) goto parse_ecCoding;
+        break;
+      }
+      
+      // optional int32 ecCoding = 11;
+      case 11: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ecCoding:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &eccoding_)));
+          set_has_eccoding();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(96)) goto parse_ecK;
+        break;
+      }
+      
+      // optional int32 ecK = 12;
+      case 12: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ecK:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &eck_)));
+          set_has_eck();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(104)) goto parse_ecM;
+        break;
+      }
+      
+      // optional int32 ecM = 13;
+      case 13: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ecM:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &ecm_)));
+          set_has_ecm();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(112)) goto parse_ecBufSize;
+        break;
+      }
+      
+      // optional int32 ecBufSize = 14;
+      case 14: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ecBufSize:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &ecbufsize_)));
+          set_has_ecbufsize();
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -431,6 +538,32 @@ void Package::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->replicano(), output);
   }
   
+  // repeated int32 ecChunkIds = 10;
+  for (int i = 0; i < this->ecchunkids_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(
+      10, this->ecchunkids(i), output);
+  }
+  
+  // optional int32 ecCoding = 11;
+  if (has_eccoding()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->eccoding(), output);
+  }
+  
+  // optional int32 ecK = 12;
+  if (has_eck()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(12, this->eck(), output);
+  }
+  
+  // optional int32 ecM = 13;
+  if (has_ecm()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(13, this->ecm(), output);
+  }
+  
+  // optional int32 ecBufSize = 14;
+  if (has_ecbufsize()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(14, this->ecbufsize(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -496,6 +629,32 @@ void Package::SerializeWithCachedSizes(
   // optional int32 replicaNo = 9;
   if (has_replicano()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->replicano(), target);
+  }
+  
+  // repeated int32 ecChunkIds = 10;
+  for (int i = 0; i < this->ecchunkids_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteInt32ToArray(10, this->ecchunkids(i), target);
+  }
+  
+  // optional int32 ecCoding = 11;
+  if (has_eccoding()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(11, this->eccoding(), target);
+  }
+  
+  // optional int32 ecK = 12;
+  if (has_eck()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(12, this->eck(), target);
+  }
+  
+  // optional int32 ecM = 13;
+  if (has_ecm()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(13, this->ecm(), target);
+  }
+  
+  // optional int32 ecBufSize = 14;
+  if (has_ecbufsize()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(14, this->ecbufsize(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -565,12 +724,50 @@ int Package::ByteSize() const {
           this->replicano());
     }
     
+    // optional int32 ecCoding = 11;
+    if (has_eccoding()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->eccoding());
+    }
+    
+    // optional int32 ecK = 12;
+    if (has_eck()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->eck());
+    }
+    
+    // optional int32 ecM = 13;
+    if (has_ecm()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->ecm());
+    }
+    
+    // optional int32 ecBufSize = 14;
+    if (has_ecbufsize()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->ecbufsize());
+    }
+    
   }
   // repeated string listItem = 5;
   total_size += 1 * this->listitem_size();
   for (int i = 0; i < this->listitem_size(); i++) {
     total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
       this->listitem(i));
+  }
+  
+  // repeated int32 ecChunkIds = 10;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->ecchunkids_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        Int32Size(this->ecchunkids(i));
+    }
+    total_size += 1 * this->ecchunkids_size() + data_size;
   }
   
   if (!unknown_fields().empty()) {
@@ -599,6 +796,7 @@ void Package::MergeFrom(const ::google::protobuf::Message& from) {
 void Package::MergeFrom(const Package& from) {
   GOOGLE_CHECK_NE(&from, this);
   listitem_.MergeFrom(from.listitem_);
+  ecchunkids_.MergeFrom(from.ecchunkids_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_virtualpath()) {
       set_virtualpath(from.virtualpath());
@@ -625,6 +823,18 @@ void Package::MergeFrom(const Package& from) {
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_replicano()) {
       set_replicano(from.replicano());
+    }
+    if (from.has_eccoding()) {
+      set_eccoding(from.eccoding());
+    }
+    if (from.has_eck()) {
+      set_eck(from.eck());
+    }
+    if (from.has_ecm()) {
+      set_ecm(from.ecm());
+    }
+    if (from.has_ecbufsize()) {
+      set_ecbufsize(from.ecbufsize());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -658,6 +868,11 @@ void Package::Swap(Package* other) {
     std::swap(mode_, other->mode_);
     std::swap(operation_, other->operation_);
     std::swap(replicano_, other->replicano_);
+    ecchunkids_.Swap(&other->ecchunkids_);
+    std::swap(eccoding_, other->eccoding_);
+    std::swap(eck_, other->eck_);
+    std::swap(ecm_, other->ecm_);
+    std::swap(ecbufsize_, other->ecbufsize_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

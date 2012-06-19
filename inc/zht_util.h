@@ -23,8 +23,8 @@
 
 #include "novoht.h"
 
-#include<signal.h>
-# include <errno.h>
+#include <signal.h>
+#include <errno.h>
 #include "net_util.h"
 struct timeval tp;
 using namespace std;

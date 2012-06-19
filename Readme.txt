@@ -9,17 +9,10 @@ Google protocol buffers 2.3.0 or newer
 =============================================
 Compile options
 ---------------------------------------------
-Compile your code in following way or simply update Google Protocol Buffers installing paths in simComp.sh and use the script. 
-Use this if you specify the location of installing Google Protocol Buffers. If not, leave the -I and -L options blank.
-g++ -g -Xlinker -zmuldefs -I/where-you-installed-google-protocol-buffers/include $sourceFile -L/where-you-installed-google-protocol-buffers/lib -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc meta.pb.cc novoht.cxx net_util.cpp zht_util.cpp -o $fileName
-=============================================
-What to compile:
-server_general.cpp //server
-client_general.cpp //client
+To compile type:
+* make
 
-
----------------------------------------------
-
+Note for Compilation: This compile the server in the bin folder. It also compiles the static library zht in the lib folder.
 
 =============================================
 How to use

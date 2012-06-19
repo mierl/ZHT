@@ -1,0 +1,7 @@
+# Ignore gedit temp files
+*.*~
+*.o
+*.a
+benchmark_client
+server_zht
+
