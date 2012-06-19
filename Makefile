@@ -40,6 +40,12 @@ obj/client.o: src/client.cpp
 obj/%.o: src/common/%.cpp obj
 	$(CXX) $(CFLAGS) -c src/common/$*.cpp -o obj/$*.o
 
+gProto: src/misc/meta.proto
+	rm src/common/*.pb.cpp inc/*.pb.h
+	protoc -I=src/misc/ --cpp_out=src/common src/misc/meta.proto
+	mv src/common/*.h inc/
+	rename 's/\.cc/.cpp/' src/common/*.cc
+
 clean:
 	rm -rf obj
 
