@@ -39,11 +39,11 @@ int insertMetadata(string cfgFile, string memberList, vector<string> &pkgList,
 	
 	// Define the package for the file, the chunk ids and more
 	Package package, package_ret;
-	package.set_virtualpath(randomString(lenString)); // as key
+	package.set_virtualpath(randomString(lenString)); // as key TODO
 	package.set_isdir(true);
 	package.set_replicano(5); // original--Note: never let it be negative!!!
 	package.set_operation(3); // 3 for insert, 1 for look up, 2 for remove
-	package.set_realfullpath(path);
+	package.set_realfullpath(localPath);
 	
 	// Assign the chunk ids to the metadata
 	// TODO: Each insertion for just one chunk or all of them?
@@ -55,15 +55,15 @@ int insertMetadata(string cfgFile, string memberList, vector<string> &pkgList,
 	package.set_ecBufSize(bufsize);
 	
 	string str = package.SerializeAsString();
-//		cout << "package size = " << str.size() << endl;
-//		cout<<"Client.cpp:insertMetadata: "<<endl;
-//		cout<<"string: "<<str<<endl;
-//		cout<<"Insert str: "<<str.c_str()<<endl;
-//		cout<<"data(): "<< str.data()<<endl;
+	//cout << "package size = " << str.size() << endl;
+	//cout<<"Client.cpp:insertMetadata: "<<endl;
+	//cout<<"string: "<<str<<endl;
+	//cout<<"Insert str: "<<str.c_str()<<endl;
+	//cout<<"data(): "<< str.data()<<endl;
 
 	pkgList.push_back(str);
 
-//	clientRet = client; //reserve this client object for other benchmark(lookup/remove) to use.
+	//clientRet = client; //reserve this client object for other benchmark(lookup/remove) to use.
 
 	//vector<string> pkgList;
 	/*
@@ -82,11 +82,11 @@ int insertMetadata(string cfgFile, string memberList, vector<string> &pkgList,
 		package.add_listitem("item-----5");
 		package.add_listitem("item-----6");
 		string str = package.SerializeAsString();
-//		cout << "package size = " << str.size() << endl;
-//		cout<<"Client.cpp:insertMetadata: "<<endl;
-//		cout<<"string: "<<str<<endl;
-//		cout<<"Insert str: "<<str.c_str()<<endl;
-//		cout<<"data(): "<< str.data()<<endl;
+		//cout << "package size = " << str.size() << endl;
+		//cout<<"Client.cpp:insertMetadata: "<<endl;
+		//cout<<"string: "<<str<<endl;
+		//cout<<"Insert str: "<<str.c_str()<<endl;
+		//cout<<"data(): "<< str.data()<<endl;
 
 		pkgList.push_back(str);
 	}
@@ -98,15 +98,15 @@ int insertMetadata(string cfgFile, string memberList, vector<string> &pkgList,
 	int errCount = 0;
 	vector<string>::iterator it;
 	int c = 0;
-//	cout << "-----2" << endl;
+	//cout << "-----2" << endl;
 
-//	string sampleString  = *(pkgList.begin());
-//	struct HostEntity aHost = client.str2Host(sampleString);
+	//string sampleString  = *(pkgList.begin());
+	//struct HostEntity aHost = client.str2Host(sampleString);
 	/*
 	 int sock = makeClientSocket("localhost", 50000, 1);
 	 cout<<"client sock = "<< sock<<endl;
 	 reuseSock(sock);
-	 */
+	*/
 
 	for (it = pkgList.begin(); it != pkgList.end(); it++) {
 		//cout <<"insert count "<< c << endl;
@@ -129,7 +129,7 @@ int insertMetadata(string cfgFile, string memberList, vector<string> &pkgList,
 	return 0;
 }
 
-int benmarkTimeAnalize(string cfgFile, string memberList,
+int benchmarkTimeAnalize(string cfgFile, string memberList,
 		vector<string> &pkgList, ZHTClient &clientRet, int numTest,
 		int lenString, string Recordpath) {
 	ZHTClient client;
@@ -140,7 +140,7 @@ int benmarkTimeAnalize(string cfgFile, string memberList,
 	}
 
 	double timeRecord[numTest]; //={0};
-//	bzero(timeRecord, sizeof(timeRecord));
+	//bzero(timeRecord, sizeof(timeRecord));
 	clientRet = client; //reserve this client object for other benchmark(lookup/remove) to use.
 
 	//vector<string> pkgList;
@@ -159,11 +159,11 @@ int benmarkTimeAnalize(string cfgFile, string memberList,
 		package.add_listitem("item-----4");
 		package.add_listitem("item-----5");
 		string str = package.SerializeAsString();
-//		cout << "package size = " << str.size() << endl;
-//		cout<<"Client.cpp:insertMetadata: "<<endl;
-//		cout<<"string: "<<str<<endl;
-//		cout<<"Insert str: "<<str.c_str()<<endl;
-//		cout<<"data(): "<< str.data()<<endl;
+		//cout << "package size = " << str.size() << endl;
+		//cout<<"Client.cpp:insertMetadata: "<<endl;
+		//cout<<"string: "<<str<<endl;
+		//cout<<"Insert str: "<<str.c_str()<<endl;
+		//cout<<"data(): "<< str.data()<<endl;
 
 		pkgList.push_back(str);
 	}
@@ -181,7 +181,7 @@ int benmarkTimeAnalize(string cfgFile, string memberList,
 
 	start = getTime_msec();
 	for (it = pkgList.begin(); it != pkgList.end(); it++) {
-//		cout<<c<<endl;
+		//cout<<c<<endl;
 		c++;
 		double interval = 0;
 		istart = getTime_usec();
@@ -220,7 +220,7 @@ float benchmarkLookup(vector<string> strList, ZHTClient &client) {
 	 string newStr = package.SerializeAsString();
 	 strList.push_back(newStr);
 	 }
-	 */
+	*/
 	double start = 0;
 	double end = 0;
 	start = getTime_msec();
@@ -229,20 +229,20 @@ float benchmarkLookup(vector<string> strList, ZHTClient &client) {
 	int c=0;
 	for (it = strList.begin(); it != strList.end(); it++) {
 		string result;
-//		cout <<"insert count "<< c << endl;
+		//cout <<"insert count "<< c << endl;
 		c++;
 
-//		cout<<"lookup: "<<i<<endl;
-//		cout << "Client: What I want to find: \n";
-//		cout <<"Lookup: "<< (*it).c_str() << endl;
+		//cout<<"lookup: "<<i<<endl;
+		//cout << "Client: What I want to find: \n";
+		//cout <<"Lookup: "<< (*it).c_str() << endl;
 		if (client.lookup((*it), result) < 0) {
 
 			errCount++;
 		} else if (result.empty()) { //empty string
 			errCount++;
 		}
-//		cout << "Client: What I get: ";
-//		cout << result.c_str() << endl;
+		//cout << "Client: What I get: ";
+		//cout << result.c_str() << endl;
 	}
 
 	end = getTime_msec();
@@ -270,13 +270,13 @@ float benchmarkRemove(vector<string> strList, ZHTClient &client) {
 	double end = 0;
 	start = getTime_msec();
 	int errCount = 0;
-int c=0;
+	int c=0;
 	for (it = strList.begin(); it != strList.end(); it++) {
 		string result;
 		c++;
-//		cout <<"Remove count "<< c << endl;
+		//cout <<"Remove count "<< c << endl;
 
-//		cout <<"Remove: "<< (*it).c_str() << endl;
+		//cout <<"Remove: "<< (*it).c_str() << endl;
 		if (client.remove((*it)) < 0) {
 			errCount++;
 		}
@@ -294,50 +294,56 @@ int c=0;
 //This is an example.
 
 int benchmarkALL(int numTest, int strLen) { //103+length
-//	int para = strLen - 128;
+	//int para = strLen - 128;
 	return 0;
 }
+
+string findHost(ZHTClient &client, string path) {
+	HostEntity destination = client.str2Host(path);
+	return destination.host;
+}
+
 int main(int argc, char* argv[]) {
-//	cout << "Usage: ./client <num_operations> <memberList> <configFile>"<< endl;
-/*//	For BG/P
+
+	//cout << "Usage: ./client <num_operations> <memberList> <configFile>"<< endl;
+	/*	For BG/P:
 	const string cmd = "cat /proc/personality.sh | grep BG_PSETORG";
 	string torusID = executeShell(cmd);
 	torusID.resize(torusID.size() - 1);
 	int pid = getpid();
 	unsigned int v = myhash(torusID.c_str(), 1000000) + pid;
-//cout<<"client: pid = "<<pid<<endl;
+	//cout<<"client: pid = "<<pid<<endl;
 	
-//cout<<"Client random n = "<<v<<endl;
+	//cout<<"Client random n = "<<v<<endl;
 	srand(v);
-*/
+	*/
+	
 	char* isTCP = argv[4];
-//	cout<<"Protocol = "<<isTCP<<endl;
+	//cout<<"Protocol = "<<isTCP<<endl;
 	if (!strcmp("TCP", isTCP)) {
 		TCP = true;
-	}else {
+	} else {
 		TCP = false;
 	}
-
-
-
+	
 	int numOper = atoi(argv[1]);
-//cout<<"numOper = "<<numOper<<endl;	
+	//cout<<"numOper = "<<numOper<<endl;	
 	string cfgFile(argv[3]);
-//cout<<"cfgFile = "<<cfgFile<<endl;
+	//cout<<"cfgFile = "<<cfgFile<<endl;
 	string memberList(argv[2]);
-//cout<<"memberList: "<<memberList<<endl;
+	//cout<<"memberList: "<<memberList<<endl;
 	vector<string> pkgList;
 	ZHTClient testClient;
-//	int pid = getpid();
+	//	int pid = getpid();
 	char* tmpStr;
 	stringstream ss; //create a stringstream
-//	ss << pid;
+	//	ss << pid;
 
-//	string recordFile = "record." + ss.str();
-//	benmarkTimeAnalize(cfgFile, memberList, pkgList, testClient, numOper, 15, recordFile);
-//cout<<"start to insert..."<<endl;
+	//	string recordFile = "record." + ss.str();
+	//	benchmarkTimeAnalize(cfgFile, memberList, pkgList, testClient, numOper, 15, recordFile);
+	//cout<<"start to insert..."<<endl;
 	insertMetadata(cfgFile, memberList, pkgList, testClient, numOper, 15); //25fro 128bytes.
-//cout << "Client:main, start lookup \n";
+	//cout << "Client:main, start lookup \n";
 	benchmarkLookup(pkgList, testClient);
 	benchmarkRemove(pkgList, testClient);
 	testClient.tearDownTCP(TCP);
