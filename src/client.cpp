@@ -186,7 +186,7 @@ int ZHTClient::tearDownTCP(bool tcp) {
 	return 0;
 }
 
-//send a plain string to destination, receive return state.
+//send a serialized string to destination, receive return state.
 int ZHTClient::insert(string str) {
 
 	/*	int sock = -1;

@@ -98,7 +98,6 @@ static int create_and_bind(char *port) {
 
 //parse buff and handle it.
 int handleRequest(int sock, void*buff) {
-
 	return 0;
 }
 
