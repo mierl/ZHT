@@ -2,7 +2,6 @@
 # Email:   cdebains@iit.edu
 #
 
-
 CXX=g++
 CFLAGS=-Xlinker -zmuldefs -Llib -L/usr/local/lib -Iinc
 LFLAGS=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc
@@ -12,7 +11,7 @@ LFLAGS+=-lzht
 #OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTS=obj/meta.pb.o obj/net_util.o obj/novoht.o obj/zht_util.o
 
-CFLAGS+=-I/usr/local/include/google/protobuf#your Google Protobuf location here :)
+CFLAGS+=-I$PROTO_HOME/usr/local/include/google/protobuf#your Google Protobuf location here :)
 
 #.PHONY: clean examples
 
