@@ -254,9 +254,11 @@ int ZHTClient::insert(string str) {
 
 //	generalReveiveTCP(sock, (void*) ret_buf, sizeof(int32_t), 0);
 	generalReceive(sock, (void*)ret_buf, 4,recvAddr,0, TCP);
-	int32_t* ret = (int32_t*) ret_buf;
-	if (*ret < 0) {
+	int ret = *(int32_t*) ret_buf;
+
+	if (ret < 0) {
 //		cerr << "zht_util.h: Failed to insert." << endl;
+//		cout << "Insert: ret = "<< *ret <<endl;
 	}
 //cout <<"Returned status: "<< *(int32_t*) ret<<endl;
 //	d3_closeConnection(sock);
@@ -264,7 +266,7 @@ int ZHTClient::insert(string str) {
 
 	//return ret_1;
 //	cout<<"insert got: "<< *ret <<endl;
-	return *ret;
+	return ret;
 }
 /*
  int ZHTClient::insert(string str, int sock) {
@@ -460,7 +462,7 @@ int ZHTClient::remove(string str) {
 
 	//	generalReveiveTCP(sock, (void*) ret_buf, sizeof(int32_t), 0);
 		generalReceive(sock, (void*)ret_buf, sizeof(int32_t),recvAddr,0, TCP);
-
+		int ret_1 = *(int32_t*) ret_buf;
 
 
 
@@ -469,7 +471,7 @@ int ZHTClient::remove(string str) {
 //	int32_t* ret = (int32_t*) malloc(sizeof(int32_t));
 
 //	generalReveiveTCP(sock, (void*) ret, sizeof(int32_t), 0);
-	int ret_1 = *(int32_t*) ret_buf;
+
 //	cout<<"remove got: "<< ret_1 <<endl;
 //cout <<"Returned status: "<< *(int32_t*) ret<<endl;
 //	d3_closeConnection(sock);
@@ -540,6 +542,7 @@ int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
 		string str_ins = *it;
 //cout << "-----1" << endl;
 		int ret = clientRet.insert(str_ins);
+		cout << "Insert: ret = "<< ret <<endl;
 //cout << "-----2" << endl;
 		if (ret < 0) {
 
@@ -705,7 +708,9 @@ int c=0;
 //		cout <<"Remove count "<< c << endl;
 
 //		cout <<"Remove: "<< (*it).c_str() << endl;
-		if (client.remove((*it)) < 0) {
+		int ret = client.remove((*it));
+		cout << "Remove: ret = "<< ret <<endl;
+		if (ret < 0) {
 			errCount++;
 		}
 
@@ -766,6 +771,7 @@ int main(int argc, char* argv[]) {
 //cout<<"start to insert..."<<endl;
 	benchmarkInsert(cfgFile, memberList, pkgList, testClient, numOper, 15); //25fro 128bytes.
 //cout << "Client:main, start lookup \n";
+//	sleep(10);
 	benchmarkLookup(pkgList, testClient);
 	benchmarkRemove(pkgList, testClient);
 	testClient.tearDownTCP(TCP);
