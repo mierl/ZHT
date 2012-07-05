@@ -187,10 +187,11 @@ string HB_lookup(map<string, string> &hmap, Package &package) {
 
 int32_t HB_remove(map<string, string> &hmap, Package &package) {
 	unsigned int r = hmap.erase(package.virtualpath());
-	
+
 	if (r == 0) {
-		
-		cout << "Remove nothing, no match found, key=" <<package.virtualpath()<< endl;
+
+		cout << "Remove nothing, no match found, key=" << package.virtualpath()
+				<< endl;
 		return -1;
 	}
 	return 0;
@@ -211,57 +212,57 @@ pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 int numthreads = 0;
 
 /*
-int socket_replica_old(Package package, struct HostEntity destination) {
-	string str = package.SerializeAsString();
+ int socket_replica_old(Package package, struct HostEntity destination) {
+ string str = package.SerializeAsString();
 
-	int to_sock = socket(PF_INET, SOCK_STREAM, 0); //try change here.................................................
+ int to_sock = socket(PF_INET, SOCK_STREAM, 0); //try change here.................................................
 
-	//socket(nmspace,style,protocol), originally be socket(AF_INET, SOCK_STREAM, 0)
+ //socket(nmspace,style,protocol), originally be socket(AF_INET, SOCK_STREAM, 0)
 
-	struct sockaddr_in dest, recv_addr;
-	memset(&dest, 0, sizeof(struct sockaddr_in)); 
-	struct hostent * hinfo = gethostbyname(destination.host.c_str());
-	if (hinfo == NULL)
-		printf("getbyname failed!\n");
-	dest.sin_family = PF_INET; //storing the server info in sockaddr_in structure
-	dest.sin_addr = *(struct in_addr *) (hinfo->h_addr); //set destination IP number
-	dest.sin_port = htons(destination.port);
+ struct sockaddr_in dest, recv_addr;
+ memset(&dest, 0, sizeof(struct sockaddr_in));
+ struct hostent * hinfo = gethostbyname(destination.host.c_str());
+ if (hinfo == NULL)
+ printf("getbyname failed!\n");
+ dest.sin_family = PF_INET; //storing the server info in sockaddr_in structure
+ dest.sin_addr = *(struct in_addr *) (hinfo->h_addr); //set destination IP number
+ dest.sin_port = htons(destination.port);
 
-	int ret_con = connect(to_sock, (struct sockaddr *) &dest, sizeof(sockaddr));
-	if (ret_con < 0) {
-		cerr << "socket_replica: error on connect(): " << strerror(errno)
-				<< endl;
-		return -1;
-	}
+ int ret_con = connect(to_sock, (struct sockaddr *) &dest, sizeof(sockaddr));
+ if (ret_con < 0) {
+ cerr << "socket_replica: error on connect(): " << strerror(errno)
+ << endl;
+ return -1;
+ }
 
-	int optval = 1;
+ int optval = 1;
 
-	if (setsockopt(to_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)
-			< 0)
-		cerr << "replica: reuse failed." << endl;
-	if (to_sock < 0) {
-		cerr << "socket_replica: error on socket(): " << strerror(errno)
-				<< endl;
-		return -1;
-	}
-	int ret_snd = send(to_sock, (const void*) str.c_str(), str.size(), 0); // may try other flags......................
-	if (ret_snd < 0) {
-		cerr << "socket_replica: error on socket(): " << strerror(errno)
-				<< endl;
-		return -1;
+ if (setsockopt(to_sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)
+ < 0)
+ cerr << "replica: reuse failed." << endl;
+ if (to_sock < 0) {
+ cerr << "socket_replica: error on socket(): " << strerror(errno)
+ << endl;
+ return -1;
+ }
+ int ret_snd = send(to_sock, (const void*) str.c_str(), str.size(), 0); // may try other flags......................
+ if (ret_snd < 0) {
+ cerr << "socket_replica: error on socket(): " << strerror(errno)
+ << endl;
+ return -1;
 
-	}
+ }
 
-	void *buff_return = (void*) malloc(sizeof(int32_t));
-	int r = d3_svr_recv(to_sock, buff_return, sizeof(int32_t), 0, &recv_addr);
-	//connect (int socket, struct sockaddr *addr, size_t length)
-	if (r < 0) {
-		cerr << "socket_replica: got bad news from relica: " << r << endl;
-	}
+ void *buff_return = (void*) malloc(sizeof(int32_t));
+ int r = d3_svr_recv(to_sock, buff_return, sizeof(int32_t), 0, &recv_addr);
+ //connect (int socket, struct sockaddr *addr, size_t length)
+ if (r < 0) {
+ cerr << "socket_replica: got bad news from relica: " << r << endl;
+ }
 
-	close(to_sock);
-}
-*/
+ close(to_sock);
+ }
+ */
 
 int makeConnForReplica(struct HostEntity &dest) {
 	int sock = 0;
@@ -311,34 +312,34 @@ int socket_replica(Package package, struct HostEntity &destination) {
 }
 
 int general_replica(Package package, struct HostEntity &destination) {
-        package.set_replicano(3);
-        string str = package.SerializeAsString();
+	package.set_replicano(3);
+	string str = package.SerializeAsString();
 //      cout << "socket_replica--------1" << endl;
 //      cout << "socket_replica--------before makeConnForReplica sock = "<< destination.sock << endl;
-        int sock = makeConnForReplica(destination); //reusable sockets creation
+	int sock = makeConnForReplica(destination); //reusable sockets creation
 //      cout << "socket_replica--------after makeConnForReplica sock = "<< destination.sock << endl;
 //      int sock = makeClientSocket("localhost", 50009, true);
 
 //      cout << "socket_replica--------2,  sock = " << sock << endl;
 
-        //      generalSend(destination.host, destination.port, sock, str.c_str(), 1);
+	//      generalSend(destination.host, destination.port, sock, str.c_str(), 1);
 //      cout << "socket_replica--------2, sock = " << sock << endl;
 //        generalSendTCP(sock, str.c_str());
-	generalSendTo(destination.host.c_str(), destination.port, sock, str.c_str(), TCP);
+	generalSendTo(destination.host.c_str(), destination.port, sock, str.c_str(),
+			TCP);
 //      cout << "socket_replica--------3" << endl;
-        void *buff_return = (void*) malloc(sizeof(int32_t));
-        //      int r = d3_svr_recv(sock, buff_return, sizeof(int32_t), 0, &recv_addr);
-             // int r = generalReveiveTCP(sock, buff_return, sizeof buff_return, 0);
-		struct sockaddr_in recvAddr;
+	void *buff_return = (void*) malloc(sizeof(int32_t));
+	//      int r = d3_svr_recv(sock, buff_return, sizeof(int32_t), 0, &recv_addr);
+	// int r = generalReveiveTCP(sock, buff_return, sizeof buff_return, 0);
+	struct sockaddr_in recvAddr;
 //		int r =generalReceive(sock, buff_return, sizeof(int32_t), recvAddr, 0, TCP);
-        int r = 0;
+	int r = 0;
 //      cout << "socket_replica--------4" << endl;
-        //connect (int socket, struct sockaddr *addr, size_t length)
-        if (r < 0) {
-                cerr << "general_replica: got bad news from relica: " << r << endl;
-        }
+	//connect (int socket, struct sockaddr *addr, size_t length)
+	if (r < 0) {
+		cerr << "general_replica: got bad news from relica: " << r << endl;
+	}
 }
-
 
 void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 		NoVoHT* pmap) {
@@ -377,17 +378,19 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 
 //		r = generalSendBack(client_sock, (const char*)&operation_status, fromAddr, 0, TCP);
 
-		if(TCP==true){
+		if (TCP == true) {
 			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
-		}else{
-			r= sendto(client_sock, &operation_status, sizeof(int32_t), 0, (struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
+		} else {
+			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
+					(struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
 		}
-
 
 		//cout << "Insert: Server  send acknowledgement to client: sendto r = " <<r<< endl;
 		//cout<<"send back status: "<< *(int*)buff1<<endl;
 		if (r <= 0) {
-			cout << "Insert: Server could not send acknowledgement to client: sendto r = " <<r<< endl;
+			cout
+					<< "Insert: Server could not send acknowledgement to client: sendto r = "
+					<< r << endl;
 		}
 		break;
 	case 1: //lookup
@@ -444,15 +447,17 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 			//r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
 			//r = generalSendBack(client_sock, (const char*) buff1, fromAddr, 0,TCP);
 
-			if(TCP==true){
-						r = send(client_sock, &operation_status, sizeof(int32_t), 0);
-					}else{
-						r= sendto(client_sock, &operation_status, sizeof(int32_t), 0, (struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
-					}
+			if (TCP == true) {
+				r = send(client_sock, &operation_status, sizeof(int32_t), 0);
+			} else {
+				r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
+						(struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
+			}
 
 			if (r <= 0) {
-				cout << "Remove: Server could not send acknowledgement to client, r = "<<r
-						<< endl;
+				cout
+						<< "Remove: Server could not send acknowledgement to client, r = "
+						<< r << endl;
 			}
 //			cout << "Remove succeeded, return " << operation_status << endl;
 		} //end remove if-else
@@ -528,35 +533,36 @@ int main(int argc, char *argv[]) {
 //----------- Settings about ZHT server----------------
 // General version, work for both TCP and UDP.
 //	cout << "Use: hash-phm <port> <neighbor_list_file> <config_file>" << endl;
-if (argc != 5) { //or 3?
-              fprintf(stderr, "Usage: %s [port]\n", argv[0]);
-		cout<<"argc = "<<argc<<endl;
-              exit(EXIT_FAILURE);
-      }
+	if (argc != 5) { //or 3?
+		fprintf(stderr, "Usage: %s [port]\n", argv[0]);
+		cout << "argc = " << argc << endl;
+		exit(EXIT_FAILURE);
+	}
 
 	char* isTCP = argv[4];
 
-        if (!strcmp("TCP", isTCP)) {
-                TCP = true;
+	if (!strcmp("TCP", isTCP)) {
+		TCP = true;
 //cout<<"TCP"<<endl;
-        } else {
-                TCP = false;
+	} else {
+		TCP = false;
 //cout<<"UDP"<<endl;
-        }
+	}
+
 
 	LISTEN_PORT = argv[1];
 	string cfgFile(argv[3]);
 	string randStr = randomString(5);
 //cout<<"1"<<endl;
-/*		for BGP
-	const string cmd = "cat /proc/personality.sh | grep BG_PSETORG";
-        string torusID = executeShell(cmd);
-        torusID.resize(torusID.size()-1);
-        srand( getTime_msec()+ myhash(torusID.c_str(), 10000000) );
-*/
+	/*		for BGP
+	 const string cmd = "cat /proc/personality.sh | grep BG_PSETORG";
+	 string torusID = executeShell(cmd);
+	 torusID.resize(torusID.size()-1);
+	 srand( getTime_msec()+ myhash(torusID.c_str(), 10000000) );
+	 */
 //	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
 //	string fileName = "hashmap.data." + randStr;
-	string fileName ="";
+	string fileName = "";
 	pmap = new NoVoHT(fileName, 100000, 10000, 0.7);
 
 	map<string, string> hashMap;
@@ -574,17 +580,17 @@ if (argc != 5) { //or 3?
 
 //cout<<"4"<<endl;
 
-	 //UDP
+	//UDP
 //-----------------------------------------------------
 //===========================================================
 
 //	string myHost = "localhost";  local desktop
-/* BGP
-	const string cmd_checkIP = "echo $IP";
-	string checkIP = executeShell(cmd_checkIP);
-	string myIP = checkIP;
-	int myIndex = Host2Index(checkIP.c_str());
-*/
+	/* BGP
+	 const string cmd_checkIP = "echo $IP";
+	 string checkIP = executeShell(cmd_checkIP);
+	 string myIP = checkIP;
+	 int myIndex = Host2Index(checkIP.c_str());
+	 */
 	int myIndex = Host2Index("localhost");
 	Replicas[0].host = hostList.at((myIndex + 1) % nHost).host;
 	Replicas[0].port = PORT_FOR_REPLICA;
@@ -718,12 +724,12 @@ if (argc != 5) { //or 3?
 				else if (TCP == false) {
 					sockaddr_in fromAddr;
 					char recvBuff[MAX_MSG_SIZE];
-					int recvSize = udpRecvFrom(events[i].data.fd, recvBuff, MAX_MSG_SIZE,
-							fromAddr, 0);
+					int recvSize = udpRecvFrom(events[i].data.fd, recvBuff,
+							MAX_MSG_SIZE, fromAddr, 0);
 					//cout<<"epool server receive size = "<<recvSize<<endl;
 					dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
 					memset(recvBuff, '\0', sizeof(recvBuff));
-					
+
 				}
 			} else {
 

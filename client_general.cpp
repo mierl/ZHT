@@ -542,7 +542,7 @@ int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
 		string str_ins = *it;
 //cout << "-----1" << endl;
 		int ret = clientRet.insert(str_ins);
-		cout << "Insert: ret = "<< ret <<endl;
+//		cout << "Insert: ret = "<< ret <<endl;
 //cout << "-----2" << endl;
 		if (ret < 0) {
 
