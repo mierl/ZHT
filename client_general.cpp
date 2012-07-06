@@ -709,7 +709,7 @@ int c=0;
 
 //		cout <<"Remove: "<< (*it).c_str() << endl;
 		int ret = client.remove((*it));
-		cout << "Remove: ret = "<< ret <<endl;
+//		cout << "Remove: ret = "<< ret <<endl;
 		if (ret < 0) {
 			errCount++;
 		}
