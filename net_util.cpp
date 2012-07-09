@@ -33,7 +33,7 @@ int makeSvrSocket(int port, bool tcp) { //only for svr
 
 	if (tcp == true) { //make socket
 		svrSock = socket(AF_INET, SOCK_STREAM, 0); /* OS will return a fd for network stream connection*/
-	} else {//UDP
+	} else { //UDP
 
 		svrSock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	}
@@ -148,6 +148,8 @@ int generalSendTo(const char* host, int port, int to_sock, const char* buff,
 	int buff_size = strlen(buff);
 	int sentSize;
 
+//	cout << buff_size << "{" << buff << "}" << endl;
+
 	if (tcp == true) {
 		sentSize = send(to_sock, (const void*) buff, buff_size, 0); // may try other flags......................
 		if (sentSize < 0) {
@@ -169,12 +171,13 @@ int generalSendBack(int to_sock, const char* buff_sendback,
 	if (tcp == true) {
 		sentSize = send(to_sock, (const void*) buff_sendback, buff_size, 0);
 
-	} else {//UDP
+	} else { //UDP
 		sentSize = udpSendBack(to_sock, buff_sendback, sendbackAddr, flag);
 
 	}
 	if (sentSize < 0) {
-		cerr << "net_util: generalSendBack:  error on generalSendBack(): " << strerror(errno) << endl;
+		cerr << "net_util: generalSendBack:  error on generalSendBack(): "
+				<< strerror(errno) << endl;
 		//return -1;
 	}
 	return sentSize;
@@ -245,7 +248,8 @@ int generalSendTCP(int to_sock, const char* buff) {
 	sentSize = send(to_sock, (const void*) buff, buff_size, 0);
 
 	if (sentSize < 0) {
-		cerr << "net_util: error on generalSendTCP: " << strerror(errno) << endl;
+		cerr << "net_util: error on generalSendTCP: " << strerror(errno)
+				<< endl;
 		return -1;
 	}
 

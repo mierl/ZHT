@@ -39,20 +39,28 @@ using namespace std;
 //int NUM_REPLICAS;
 //====================================================================================
 
-
 double getTime_usec() {
+
+	struct timeval tp;
+
 	gettimeofday(&tp, NULL);
 	return static_cast<double>(tp.tv_sec) * 1E6
 			+ static_cast<double>(tp.tv_usec);
 }
 
 double getTime_msec() {
+
+	struct timeval tp;
+
 	gettimeofday(&tp, NULL);
 	return static_cast<double>(tp.tv_sec) * 1E3
 			+ static_cast<double>(tp.tv_usec) / 1E3;
 }
 
 double getTime_sec() {
+
+	struct timeval tp;
+
 	gettimeofday(&tp, NULL);
 	return static_cast<double>(tp.tv_sec)
 			+ static_cast<double>(tp.tv_usec) / 1E6;
@@ -72,17 +80,18 @@ string randomString(int len) {
 
 //execute shell scripts and return results as a string
 string executeShell(string str) {
-    char* cmd = (char*)str.c_str();
+	char* cmd = (char*) str.c_str();
 	FILE* pipe = popen(cmd, "r");
-    if (!pipe) return "ERROR";
-    char buffer[128];
-    string result = "";
-    while(!feof(pipe)) {
-        if(fgets(buffer, 128, pipe) != NULL)
-                result += buffer;
-    }
-    pclose(pipe);
-    return result;
+	if (!pipe)
+		return "ERROR";
+	char buffer[128];
+	string result = "";
+	while (!feof(pipe)) {
+		if (fgets(buffer, 128, pipe) != NULL)
+			result += buffer;
+	}
+	pclose(pipe);
+	return result;
 }
 
 int myhash(const char *str, int mod) { //int type return
@@ -105,7 +114,8 @@ unsigned long long hash_64bit_ring(const char *str) { //unsigned long long: 64 b
 	return hash;
 }
 
-struct HostEntity str2Host(string str, vector<struct HostEntity>memberList, int &index) {
+struct HostEntity str2Host(string str, vector<struct HostEntity> memberList,
+		int &index) {
 	Package pkg;
 	pkg.ParseFromString(str);
 	int index_inner = myhash(pkg.virtualpath().c_str(), memberList.size());
@@ -114,13 +124,13 @@ struct HostEntity str2Host(string str, vector<struct HostEntity>memberList, int 
 	return host;
 }
 
-int str2Sock(string str, vector<struct HostEntity> &memberList){//give socket and update the vector of network entity
+int str2Sock(string str, vector<struct HostEntity> &memberList) { //give socket and update the vector of network entity
 	int sock = 0;
-	int index= -1;
+	int index = -1;
 	struct HostEntity dest = str2Host(str, memberList, index);
 //	cout<<"str2Sock: dest.sock = "<<dest.sock<<endl;
-	if(dest.sock<0){
-		sock = makeClientSocket((char*)dest.host.c_str(), dest.port, true);
+	if (dest.sock < 0) {
+		sock = makeClientSocket((char*) dest.host.c_str(), dest.port, true);
 		reuseSock(sock);
 		dest.sock = sock;
 		memberList.erase(memberList.begin() + index);
@@ -129,15 +139,15 @@ int str2Sock(string str, vector<struct HostEntity> &memberList){//give socket an
 	}
 
 //	cout<<"str2Sock: after update: sock = "<<this->str2Host(str).sock<<endl;
-		return dest.sock;
+	return dest.sock;
 }
 
-int tearDownTCP(vector<struct HostEntity> memberList){
+int tearDownTCP(vector<struct HostEntity> memberList) {
 	int size = memberList.size();
-	for(int i=0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		struct HostEntity dest = memberList.at(i);
 		int sock = dest.sock;
-		if (sock>0){
+		if (sock > 0) {
 			close(sock);
 		}
 	}
@@ -150,34 +160,6 @@ bool myCompare(struct HostEntity i, struct HostEntity j) {
 
 }
 
-int setconfigvariables(string cfgFile) {
-	FILE *fp;
-	char line[100], *key, *svalue;
-	int ivalue;
-
-	fp = fopen(cfgFile.data(), "r");
-	if (fp == NULL) {
-		cout << "Error opening the file." << endl;
-		return -1;
-	}
-	while (fgets(line, 100, fp) != NULL) {
-		key = strtok(line, "=");
-		svalue = strtok(NULL, "=");
-		ivalue = atoi(svalue);
-
-		if ((strcmp(key, "REPLICATION_TYPE")) == 0) {
-			REPLICATION_TYPE = ivalue;
-			//cout<<"REPLICATION_TYPE = "<< REPLICATION_TYPE <<endl;
-		} //other config options follow this way(if).
-
-		if ((strcmp(key, "NUM_REPLICAS")) == 0) {
-			NUM_REPLICAS = ivalue;
-			//cout<<"NUM_REPLICAS = "<< NUM_REPLICAS <<endl;
-		}
-
-	}
-	return 0;
-}
 
 vector<struct HostEntity> getMembership(string fileName) {
 	vector<struct HostEntity> hostList;
@@ -224,8 +206,6 @@ vector<struct HostEntity> getMembership(string fileName) {
 	return hostList;
 }
 
-
-
 int myIndex(vector<struct HostEntity> memberList, struct HostEntity aHost) { //give host position on the list, not consider ringID
 
 	//int pos = std::find(memberList.begin(), memberList.end(), host) - memberList.begin();
@@ -241,40 +221,38 @@ int myIndex(vector<struct HostEntity> memberList, struct HostEntity aHost) { //g
 
 int broadcast_ST(vector<struct HostEntity> memberList, struct HostEntity me,
 		string msg) {
-/*	//First implementation is based on gossip-protocol
-	//how to serialize multiple different objects?
-	//Notice that the first element has a position of 0, not 1.
-	//Problem: the local member list could be out of date, so some of the nodes on list may not exist::handle it later.
-	//Problem: the order of member list could be not certain.
-	//--Member list is determined by list file, so this file itself must be deterministic.
-	//--It shoud be sorted in some way: do this later: assume it is in order already.
-	//n:2n+1, 2n+2. Find my position in the list.
+	/*	//First implementation is based on gossip-protocol
+	 //how to serialize multiple different objects?
+	 //Notice that the first element has a position of 0, not 1.
+	 //Problem: the local member list could be out of date, so some of the nodes on list may not exist::handle it later.
+	 //Problem: the order of member list could be not certain.
+	 //--Member list is determined by list file, so this file itself must be deterministic.
+	 //--It shoud be sorted in some way: do this later: assume it is in order already.
+	 //n:2n+1, 2n+2. Find my position in the list.
 
-	int self = myIndex(memberList, me);
-	HostEntity neighbor1, neighbor2;
+	 int self = myIndex(memberList, me);
+	 HostEntity neighbor1, neighbor2;
 
-	neighbor1 = memberList.at(2 * self + 1);
-	neighbor2 = memberList.at(2 * self + 2);
+	 neighbor1 = memberList.at(2 * self + 1);
+	 neighbor2 = memberList.at(2 * self + 2);
 
-	int sock1 =  d3_makeConnection(neighbor1.host.c_str(), neighbor1.port);
+	 int sock1 =  d3_makeConnection(neighbor1.host.c_str(), neighbor1.port);
 
-//	int ret1 = simpleSend(msg, neighbor1, sock1);
+	 //	int ret1 = simpleSend(msg, neighbor1, sock1);
 
-	int sock2 = d3_makeConnection(neighbor2.host.c_str(), neighbor2.port);
-//	int ret2 = simpleSend(msg, neighbor2, sock2);
-	return 0;*/
+	 int sock2 = d3_makeConnection(neighbor2.host.c_str(), neighbor2.port);
+	 //	int ret2 = simpleSend(msg, neighbor2, sock2);
+	 return 0;*/
 }
 
-
-
 bool areYouAlive(string hostName, int port) { //this one only detect if physical link alive
-/*	int sock = d3_makeConnection(hostName.c_str(), port);
-	if (sock > 0) {
-		d3_closeConnection(sock);
-		return true;
-	} else
-		return false;
-		*/
+	/*	int sock = d3_makeConnection(hostName.c_str(), port);
+	 if (sock > 0) {
+	 d3_closeConnection(sock);
+	 return true;
+	 } else
+	 return false;
+	 */
 }
 /*
  class MsgSys {

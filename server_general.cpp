@@ -37,6 +37,54 @@ struct HostEntity Replicas[MAX_NUM_REPLICA];
 
 bool TCP; // for switch between TCP and UDP
 
+
+/*******************************
+ * zhouxb
+ */
+//================================ Global and constant ===============================
+struct timeval tp;
+int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
+
+int const MAX_MSG_SIZE = 1024; //transferd string maximum size
+
+int REPLICATION_TYPE; //1 for Client-side replication
+
+int NUM_REPLICAS;
+//====================================================================================
+
+int setconfigvariables(string cfgFile) {
+	FILE *fp;
+	char line[100], *key, *svalue;
+	int ivalue;
+
+	fp = fopen(cfgFile.data(), "r");
+	if (fp == NULL) {
+		cout << "Error opening the file." << endl;
+		return -1;
+	}
+	while (fgets(line, 100, fp) != NULL) {
+		key = strtok(line, "=");
+		svalue = strtok(NULL, "=");
+		ivalue = atoi(svalue);
+
+		if ((strcmp(key, "REPLICATION_TYPE")) == 0) {
+			REPLICATION_TYPE = ivalue;
+			//cout<<"REPLICATION_TYPE = "<< REPLICATION_TYPE <<endl;
+		} //other config options follow this way(if).
+
+		if ((strcmp(key, "NUM_REPLICAS")) == 0) {
+			NUM_REPLICAS = ivalue;
+			//cout<<"NUM_REPLICAS = "<< NUM_REPLICAS <<endl;
+		}
+
+	}
+	return 0;
+}
+/*******************************
+ * zhouxb
+ */
+
+
 static int make_socket_non_blocking(int sfd) {
 	int flags, s;
 
@@ -344,6 +392,8 @@ int general_replica(Package package, struct HostEntity &destination) {
 void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 		NoVoHT* pmap) {
 
+//	cout << strlen((char*)buff) << "{" << ((char*)buff) << "}" << endl;
+
 //cout<<"dataService: from port "<<	fromAddr.sin_port<<endl;
 
 	srand(getpid() + clock());
@@ -369,8 +419,8 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	case 3: //insert
 //		cout << "Insert..." << endl;
 	//operation_status = HB_insert(db, package);
-	//operation_status = HB_insert(pmap, package);
-		operation_status = HB_insert(hmap, package);
+	operation_status = HB_insert(pmap, package);
+//		operation_status = HB_insert(hmap, package);
 //cout<<"Inserted: key: "<< package.virtualpath()<<endl;
 //		cout << "insert finished, return: " << operation_status << endl;
 		buff1 = &operation_status;
@@ -402,8 +452,8 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 			//result = HB_lookup(db, package);
 //			cout << "Lookup...2" << endl;
 //cout<<"Will lookup key: "<< package.virtualpath()<<endl;
-			result = HB_lookup(hmap, package);
-			//result = HB_lookup(pmap, package);
+//			result = HB_lookup(hmap, package);
+			result = HB_lookup(pmap, package);
 //			cout << "Lookup...3" << endl;
 			//don't really send result back to client now, do it latter.
 			if (result.compare("Empty") == 0) {
@@ -441,8 +491,8 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 			operation_status = -1;
 		} else {
 			//operation_status = HB_remove(db, package);
-			operation_status = HB_remove(hmap, package);
-			//operation_status = HB_remove(pmap, package);
+//			operation_status = HB_remove(hmap, package);
+			operation_status = HB_remove(pmap, package);
 			buff1 = &operation_status;
 			//r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
 			//r = generalSendBack(client_sock, (const char*) buff1, fromAddr, 0,TCP);
@@ -549,7 +599,6 @@ int main(int argc, char *argv[]) {
 //cout<<"UDP"<<endl;
 	}
 
-
 	LISTEN_PORT = argv[1];
 	string cfgFile(argv[3]);
 	string randStr = randomString(5);
@@ -562,6 +611,7 @@ int main(int argc, char *argv[]) {
 	 */
 //	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
 //	string fileName = "hashmap.data." + randStr;
+//	string fileName = "hashmap.txt";
 	string fileName = "";
 	pmap = new NoVoHT(fileName, 100000, 10000, 0.7);
 
@@ -658,12 +708,18 @@ int main(int argc, char *argv[]) {
 	// Buffer where events are returned
 	events = (epoll_event *) calloc(MAXEVENTS, sizeof event);
 	char buf[MAX_MSG_SIZE];
+
+	int epollCounter = 0;
 //cout<<"I'm a server..."<<endl;
 	// The event loop
 	while (1) {
 		int n, i;
 
 		n = epoll_wait(efd, events, MAXEVENTS, -1);
+
+		epollCounter++;
+		printf("epoll %d times", epollCounter);
+
 		for (i = 0; i < n; i++) {
 			if ((events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP)
 					|| (!(events[i].events & EPOLLIN))) {

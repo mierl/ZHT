@@ -26,18 +26,10 @@
 #include<signal.h>
 # include <errno.h>
 #include "net_util.h"
-struct timeval tp;
+
 using namespace std;
 
-//================================ Global and constant ===============================
-int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
 
-int const MAX_MSG_SIZE = 1024; //transferd string maximum size
-
-int REPLICATION_TYPE; //1 for Client-side replication
-
-int NUM_REPLICAS;
-//====================================================================================
 
 double getTime_usec();
 
@@ -66,8 +58,6 @@ unsigned long long hash_64bit_ring(const char *str);
 int tearDownTCP(vector<struct HostEntity> memberList);
 
 bool myCompare(struct HostEntity i, struct HostEntity j);
-
-int setconfigvariables(string cfgFile);
 
 vector<struct HostEntity> getMembership(string fileName);
 
