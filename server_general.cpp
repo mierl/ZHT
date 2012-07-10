@@ -37,7 +37,6 @@ struct HostEntity Replicas[MAX_NUM_REPLICA];
 
 bool TCP; // for switch between TCP and UDP
 
-
 /*******************************
  * zhouxb
  */
@@ -83,7 +82,6 @@ int setconfigvariables(string cfgFile) {
 /*******************************
  * zhouxb
  */
-
 
 static int make_socket_non_blocking(int sfd) {
 	int flags, s;
@@ -415,19 +413,96 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 //	cout <<"Package content: "<< (char*)buff<<endl;
 
 	switch (package.operation()) {
+	case 1: //lookup
+//		cout << "Lookup..." << endl;
+		if (package.virtualpath().empty()) {
+//			cerr << "Bad key: nothing to find" << endl;
+			operation_status = -1;
+		} else {
+			//result = HB_lookup(db, package);
+//			cout << "Lookup...2" << endl;
+//cout<<"Will lookup key: "<< package.virtualpath()<<endl;
+//			result = HB_lookup(hmap, package);
+			result = HB_lookup(pmap, package);
+//			cout << "Lookup...3" << endl;
+			//don't really send result back to client now, do it latter.
 
-	case 3: //insert
-//		cout << "Insert..." << endl;
-	//operation_status = HB_insert(db, package);
-	operation_status = HB_insert(pmap, package);
-//		operation_status = HB_insert(hmap, package);
-//cout<<"Inserted: key: "<< package.virtualpath()<<endl;
-//		cout << "insert finished, return: " << operation_status << endl;
+			if (result.compare("Empty") == 0) {
+				operation_status = -2;
+			}
+		}
+
+		//find result, send back here
+
+//				cout << "Lookup: Result found, sending back..." << endl;
+//				cout << "What I found on server: \n";
+//				cout << result.c_str() << endl;
+
 		buff1 = &operation_status;
-//		r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
+		generalSendBack(client_sock, result.c_str(), fromAddr, 0, TCP);
 
-//		r = generalSendBack(client_sock, (const char*)&operation_status, fromAddr, 0, TCP);
+		/*
+		 if (TRANS_PROTOCOL == USE_TCP) {
+		 d3_send_data(client_sock, (void*) result.c_str(),
+		 result.length(), 0, &toAddr); //TCP reuse the socket and connection.
 
+		 } else if (TRANS_PROTOCOL == USE_UDP) {
+
+		 d3_send_data(server_sock, (void*) (result.c_str()),
+		 result.length() + 1, 0, &toAddr);
+
+		 }
+		 */
+		//end lookup if-else case
+		break;
+	case 2:
+		//remove
+		//		cout << "Remove..." << endl;
+		//cout << "Package:key "<<package.virtualpath()<<endl;
+		if (package.virtualpath().empty()) {
+			cerr << "Bad key: nothing to remove" << endl;
+			operation_status = -1;
+		} else {
+			//operation_status = HB_remove(db, package);
+			//			operation_status = HB_remove(hmap, package);
+			operation_status = HB_remove(pmap, package);
+			//r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
+			//r = generalSendBack(client_sock, (const char*) buff1, fromAddr, 0,TCP);
+		}
+
+		buff1 = &operation_status;
+		if (TCP == true) {
+			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
+		} else {
+			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
+					(struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
+		}
+
+		if (r <= 0) {
+			cout
+					<< "Remove: Server could not send acknowledgement to client, r = "
+					<< r << endl;
+		}
+		//			cout << "Remove succeeded, return " << operation_status << endl;
+		//end remove if-else
+		break;
+	case 3:
+		//insert
+		if (package.virtualpath().empty()) {
+			operation_status = -1;
+		} else {
+			//		cout << "Insert..." << endl;
+			//operation_status = HB_insert(db, package);
+			operation_status = HB_insert(pmap, package);
+			//		operation_status = HB_insert(hmap, package);
+			//cout<<"Inserted: key: "<< package.virtualpath()<<endl;
+			//		cout << "insert finished, return: " << operation_status << endl;
+			//		r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
+
+			//		r = generalSendBack(client_sock, (const char*)&operation_status, fromAddr, 0, TCP);
+		}
+
+		buff1 = &operation_status;
 		if (TCP == true) {
 			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
 		} else {
@@ -443,75 +518,6 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 					<< r << endl;
 		}
 		break;
-	case 1: //lookup
-//		cout << "Lookup..." << endl;
-		if (package.virtualpath().empty()) {
-//			cerr << "Bad key: nothing to find" << endl;
-			operation_status = -1;
-		} else {
-			//result = HB_lookup(db, package);
-//			cout << "Lookup...2" << endl;
-//cout<<"Will lookup key: "<< package.virtualpath()<<endl;
-//			result = HB_lookup(hmap, package);
-			result = HB_lookup(pmap, package);
-//			cout << "Lookup...3" << endl;
-			//don't really send result back to client now, do it latter.
-			if (result.compare("Empty") == 0) {
-				operation_status = -2;
-				buff1 = &operation_status;
-
-			} else { //find result, send back here
-
-//				cout << "Lookup: Result found, sending back..." << endl;
-//				cout << "What I found on server: \n";
-//				cout << result.c_str() << endl;
-
-				generalSendBack(client_sock, result.c_str(), fromAddr, 0, TCP);
-				/*
-				 if (TRANS_PROTOCOL == USE_TCP) {
-				 d3_send_data(client_sock, (void*) result.c_str(),
-				 result.length(), 0, &toAddr); //TCP reuse the socket and connection.
-
-				 } else if (TRANS_PROTOCOL == USE_UDP) {
-
-				 d3_send_data(server_sock, (void*) (result.c_str()),
-				 result.length() + 1, 0, &toAddr);
-
-				 }
-				 */
-			}
-
-		} //end lookup if-else case
-		break;
-	case 2: //remove
-//		cout << "Remove..." << endl;
-//cout << "Package:key "<<package.virtualpath()<<endl;
-		if (package.virtualpath().empty()) {
-			cerr << "Bad key: nothing to remove" << endl;
-			operation_status = -1;
-		} else {
-			//operation_status = HB_remove(db, package);
-//			operation_status = HB_remove(hmap, package);
-			operation_status = HB_remove(pmap, package);
-			buff1 = &operation_status;
-			//r = d3_send_data(client_sock, buff1, sizeof(int32_t), 0, &toAddr);
-			//r = generalSendBack(client_sock, (const char*) buff1, fromAddr, 0,TCP);
-
-			if (TCP == true) {
-				r = send(client_sock, &operation_status, sizeof(int32_t), 0);
-			} else {
-				r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
-						(struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
-			}
-
-			if (r <= 0) {
-				cout
-						<< "Remove: Server could not send acknowledgement to client, r = "
-						<< r << endl;
-			}
-//			cout << "Remove succeeded, return " << operation_status << endl;
-		} //end remove if-else
-		break;
 	case 99: //shut the server
 //		cout << "Server will be shut shortly." << endl;
 		turn_off = 1; //turn off service.
@@ -522,6 +528,7 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	} //end switch-case
 
 	buff1 = &operation_status;
+
 //	cout << "Before handle Replication " << endl;
 	if (NUM_REPLICAS > 0) { // infinite loop if not limited by replicano, coz it will send the replica to itself infinitely
 		if (package.replicano() == 5) {

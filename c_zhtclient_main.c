@@ -25,8 +25,8 @@ int main(int argc, char **argv) {
 
 	c_zht_init(argv[1], argv[2], useTCP); //neighbor zht.cfg TCP
 
-	const char *key = "";
-	const char *value = "";
+	const char *key = "hello";
+	const char *value = "zht";
 
 	int iret = c_zht_insert2(key, value);
 	fprintf(stderr, "c_zht_insert, return code: %d\n", iret);

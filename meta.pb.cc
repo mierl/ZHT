@@ -82,8 +82,8 @@ void protobuf_AddDesc_meta_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\nmeta.proto\"\250\001\n\007Package\022\023\n\013virtualPath\030"
-    "\001 \001(\t\022\013\n\003num\030\002 \001(\005\022\024\n\014realFullPath\030\003 \001(\t"
-    "\022\r\n\005isDir\030\004 \001(\010\022\020\n\010listItem\030\005 \003(\t\022\020\n\010ope"
+    "\001 \001(\014\022\013\n\003num\030\002 \001(\005\022\024\n\014realFullPath\030\003 \001(\014"
+    "\022\r\n\005isDir\030\004 \001(\010\022\020\n\010listItem\030\005 \003(\014\022\020\n\010ope"
     "nMode\030\006 \001(\005\022\014\n\004mode\030\007 \001(\005\022\021\n\tOperation\030\010"
     " \001(\005\022\021\n\treplicaNo\030\t \001(\005", 183);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
@@ -209,15 +209,12 @@ bool Package::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string virtualPath = 1;
+      // optional bytes virtualPath = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_virtualpath()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->virtualpath().data(), this->virtualpath().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -241,16 +238,13 @@ bool Package::MergePartialFromCodedStream(
         break;
       }
       
-      // optional string realFullPath = 3;
+      // optional bytes realFullPath = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_realFullPath:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_realfullpath()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->realfullpath().data(), this->realfullpath().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -274,16 +268,13 @@ bool Package::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated string listItem = 5;
+      // repeated bytes listItem = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_listItem:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->add_listitem()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->listitem(0).data(), this->listitem(0).length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -374,12 +365,9 @@ bool Package::MergePartialFromCodedStream(
 
 void Package::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // optional string virtualPath = 1;
+  // optional bytes virtualPath = 1;
   if (has_virtualpath()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->virtualpath().data(), this->virtualpath().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
       1, this->virtualpath(), output);
   }
   
@@ -388,12 +376,9 @@ void Package::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->num(), output);
   }
   
-  // optional string realFullPath = 3;
+  // optional bytes realFullPath = 3;
   if (has_realfullpath()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->realfullpath().data(), this->realfullpath().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
       3, this->realfullpath(), output);
   }
   
@@ -402,12 +387,9 @@ void Package::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->isdir(), output);
   }
   
-  // repeated string listItem = 5;
+  // repeated bytes listItem = 5;
   for (int i = 0; i < this->listitem_size(); i++) {
-  ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-    this->listitem(i).data(), this->listitem(i).length(),
-    ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
       5, this->listitem(i), output);
   }
   
@@ -439,13 +421,10 @@ void Package::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Package::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // optional string virtualPath = 1;
+  // optional bytes virtualPath = 1;
   if (has_virtualpath()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->virtualpath().data(), this->virtualpath().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         1, this->virtualpath(), target);
   }
   
@@ -454,13 +433,10 @@ void Package::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->num(), target);
   }
   
-  // optional string realFullPath = 3;
+  // optional bytes realFullPath = 3;
   if (has_realfullpath()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->realfullpath().data(), this->realfullpath().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         3, this->realfullpath(), target);
   }
   
@@ -469,13 +445,10 @@ void Package::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->isdir(), target);
   }
   
-  // repeated string listItem = 5;
+  // repeated bytes listItem = 5;
   for (int i = 0; i < this->listitem_size(); i++) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->listitem(i).data(), this->listitem(i).length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(5, this->listitem(i), target);
+      WriteBytesToArray(5, this->listitem(i), target);
   }
   
   // optional int32 openMode = 6;
@@ -509,10 +482,10 @@ int Package::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // optional string virtualPath = 1;
+    // optional bytes virtualPath = 1;
     if (has_virtualpath()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->virtualpath());
     }
     
@@ -523,10 +496,10 @@ int Package::ByteSize() const {
           this->num());
     }
     
-    // optional string realFullPath = 3;
+    // optional bytes realFullPath = 3;
     if (has_realfullpath()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->realfullpath());
     }
     
@@ -566,10 +539,10 @@ int Package::ByteSize() const {
     }
     
   }
-  // repeated string listItem = 5;
+  // repeated bytes listItem = 5;
   total_size += 1 * this->listitem_size();
   for (int i = 0; i < this->listitem_size(); i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
       this->listitem(i));
   }
   
