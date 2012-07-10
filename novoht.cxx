@@ -117,10 +117,22 @@ int NoVoHT::put(string k, string v){
       return write(add);
    }
    while (cur->next != NULL){
-      if (k.compare(cur->key) == 0) {delete add; map_lock=false; return -1;}
+      if (k.compare(cur->key) == 0) {
+         cur->val = v;
+         mark(cur->pos);
+         delete add;
+         map_lock=false;
+         return write(cur);
+      }
       cur = cur->next;
    }
-   if (k.compare(cur->key) == 0) {delete add; map_lock=false; return -1;}
+   if (k.compare(cur->key) == 0) {
+      cur->val=v;
+      mark(cur->pos);
+      delete add;
+      map_lock=false;
+      return write(cur);
+   }
    cur->next = add;
    numEl++;
    map_lock=false;
@@ -152,7 +164,7 @@ int NoVoHT::remove(string k){
       ret+=mark(toRem);
       delete cur;
       nRem++;
-      if (nRem == magicNumber) ret+=writeFile(); //write and save write success
+      if (nRem == magicNumber) {ret+=writeFile(); nRem = 0;} //write and save write success
       return ret;
    }
    while(cur != NULL){
@@ -164,7 +176,7 @@ int NoVoHT::remove(string k){
          delete r;
          numEl--;
          nRem++;
-         if (nRem == magicNumber) ret+=writeFile();              //mark and sace status code
+         if (nRem == magicNumber) {ret+=writeFile(); nRem = 0;}              //mark and sace status code
          return ret;
       }
       cur = cur->next;
@@ -180,6 +192,7 @@ int NoVoHT::writeFile(){
    write_lock=true;
    int ret =0;
    rewind(dbfile);
+   ftruncate(fileno(dbfile), 0);
    for (int i=0; i<size;i++){
       kvpair *cur = kvpairs[i];
       while (cur != NULL){
@@ -190,7 +203,6 @@ int NoVoHT::writeFile(){
          cur = cur->next;
       }
    }
-   truncate(filename.c_str(), (off_t)SEEK_CUR-SEEK_SET-1);
    write_lock=false;
    return ret;
 }
