@@ -725,7 +725,7 @@ int main(int argc, char *argv[]) {
 		n = epoll_wait(efd, events, MAXEVENTS, -1);
 
 		epollCounter++;
-		printf("epoll %d times", epollCounter);
+//		printf("epoll %d times", epollCounter);
 
 		for (i = 0; i < n; i++) {
 			if ((events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP)
