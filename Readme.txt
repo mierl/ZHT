@@ -11,7 +11,7 @@ Compile options
 
 Simply compile using: make
 
-Note:If you made any edition to the Protocol Buffer Structure, please recompile it using: make gProto
+Note:If you made any edition to the Protocol Buffer Structure, please recompile it before compiling ZHT by using: make gProto
 
 
 =============================================
