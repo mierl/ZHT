@@ -5,7 +5,7 @@
 #include <locale>
 #include <stdio.h>
 #include <iostream>
-#include "novoht.h"
+#include "../../inc/novoht.h"
 
 NoVoHT::NoVoHT(){
    kvpairs = new kvpair*[1000];

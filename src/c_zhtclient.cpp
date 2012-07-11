@@ -1,5 +1,5 @@
-#include "c_zhtclient.h"
-#include "cpp_zhtclient.h"
+#include "../inc/c_zhtclient.h"
+#include "../inc/cpp_zhtclient.h"
 #include <string.h>
 
 ZHTClient zhtClient;

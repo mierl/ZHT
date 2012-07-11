@@ -21,8 +21,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "zht_util.h"
-#include "novoht.h"
+#include "../inc/zht_util.h"
+#include "../inc/novoht.h"
 
 using namespace std;
 #define MAXEVENTS 64
