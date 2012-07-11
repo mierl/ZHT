@@ -250,7 +250,7 @@ template< class Key, class Data, class Sizefn = Countfn< Data > > class LRUCache
 		// Store the index
 		_index.insert(std::make_pair(key, liter));
 		_curr_size += Sizefn()(data);
-		cout<<"now current size = "<<_curr_size<<endl;
+//		cout<<"now current size = "<<_curr_size<<endl;
 		// Check to see if we need to remove an element due to exceeding max_size
 		while (_curr_size > _max_size) {
 			// Remove the last element.
