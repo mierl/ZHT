@@ -61,4 +61,7 @@ clean:
 mrproper: clean
 	rm -f lib/*.a
 	rm -f lib/*.h
-	rm -f bin/*
+	rm -f bin/server_zht
+	rm examples/benchmark_client
+	rm examples/c_zhtclient_main
+	rm examples/testProtocBuf
