@@ -3,6 +3,7 @@
 
 # Libraries
 *.lib
+.a
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -13,7 +14,7 @@
 *.out
 
 # ZHT Specifics Binaries
-server_zht
-benchmark_client
-c_zhtclient_main
-testProtocBuf
+bin/server_zht
+examples/benchmark_client
+examples/c_zhtclient_main
+examples/testProtocBuf
