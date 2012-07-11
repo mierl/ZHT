@@ -6,14 +6,16 @@ CXX=g++
 CC=gcc
 CPPFLAGS=-Xlinker -zmuldefs
 CFLAGS=-Llib -L/usr/local/lib -Iinc
-LFLAGS=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc
-LFLAGS+=-lzht
+LFLAGS=-lzht
+LFLAGS+=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc
+
+PROTOBUF_HOME=/usr/local/include/google/protobuf #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf)
 
 #SOURCES=$(wildcard src/common/*.cpp)
 #OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTS=obj/meta.pb.o obj/net_util.o obj/novoht.o obj/zht_util.o obj/lru_cache.o
 
-CFLAGS+=-I$PROTO_HOME/usr/local/include/google/protobuf#your Google Protobuf location here :)
+CFLAGS+=-I$(PROTOBUF_HOME)
 
 .PHONY: clean examples clients
 
@@ -54,6 +56,9 @@ gProto: src/misc/meta.proto
 	protoc -I=src/misc/ --cpp_out=src/common src/misc/meta.proto
 	mv src/common/*.h inc/
 	rename 's/\.cc/.cpp/' src/common/*.cc
+	
+bin/server_muiltiNovoht:
+	$(CXX) $(CFLAGS) src/server_muiltiNovoht.cpp -o bin/server_muiltiNovoht $(LFLAGS)
 
 clean:
 	rm -rf obj
