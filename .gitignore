@@ -1,0 +1,20 @@
+# Object files
+*.o
+
+# Libraries
+*.lib
+.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+
+# Executables
+*.exe
+*.out
+
+# ZHT Specifics Binaries
+bin/server_zht
+examples/benchmark_client
+examples/c_zhtclient_main
+examples/testProtocBuf

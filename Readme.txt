@@ -8,23 +8,22 @@ Google protocol buffers 2.3.0 or newer
 
 =============================================
 Compile options
----------------------------------------------
-Compile your code in following way or simply update Google Protocol Buffers installing paths in simComp.sh and use the script. 
-Use this if you specify the location of installing Google Protocol Buffers. If not, leave the -I and -L options blank.
-g++ -g -Xlinker -zmuldefs -I/where-you-installed-google-protocol-buffers/include $sourceFile -L/where-you-installed-google-protocol-buffers/lib -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc meta.pb.cc novoht.cxx net_util.cpp zht_util.cpp -o $fileName
-=============================================
-What to compile:
-server_general.cpp //server
-client_general.cpp //client
 
+Simply compile using: make
 
----------------------------------------------
+Note:If you made any edition to the Protocol Buffer Structure, please recompile it before compiling ZHT by using: make gProto
 
 
 =============================================
 How to use
 ---------------------------------------------
 ZHT is designed to manage file system meta data, if you want to use it storing general purpose data, please make sure it will follow the structure of class Package. Now only plain string is supported inside of Package.
+
+To use ZHT you have to run the ZHT Server Daemon. It is located in the bin directory.
+
+You may want to try some examples and benchmarks, the binaries are located in the examples directory along with the source files.
+
+** If you wish to use ZHT Client in your program you need to import the static library (libzht.a) located in the lib directory. Then, you may need to import header files as well (either all the inc folder or the header files located along with the library in the lib directory).
 
 Establish a ZHT
 ---------------------------------------------

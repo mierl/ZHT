@@ -1,5 +1,5 @@
-#include "cpp_zhtclient.h"
-#include "lru_cache.h"
+#include "../inc/cpp_zhtclient.h"
+#include "../inc/lru_cache.h"
 
 
 /*******************************

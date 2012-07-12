@@ -24,8 +24,8 @@
 //#include "lru_cache.h"
 #include<signal.h>
 # include <errno.h>
-#include "net_util.h"
-#include "zht_util.h"
+#include "../../inc/net_util.h"
+#include "../../inc/zht_util.h"
 //struct timeval tp;
 using namespace std;
 
