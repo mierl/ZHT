@@ -13,7 +13,7 @@ fileName=$(echo $sourceFile | awk -F '.' '{print $1}')
 echo $USER_LIB
 echo $USER_INCLUDE
 
-g++ -g -Xlinker -zmuldefs -I$USER_INCLUDE $sourceFile -L$USER_LIB -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc meta.pb.cc novoht.cxx net_util.cpp zht_util.cpp -o $fileName
+g++ -g -Xlinker -zmuldefs -I$USER_INCLUDE $sourceFile -L$USER_LIB -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc meta.pb.cc novoht.cxx net_util.cpp zht_util.cpp cpp_zhtclient.cpp -o $fileName
 
 #lru_cache.cpp 
 # -zmuldefs -lz
