@@ -9,6 +9,8 @@ Google protocol buffers 2.3.0 or newer
 =============================================
 Compile options
 
+Before compiling, please make sure that Google Protocol Buffer is installed in your system and please edit the variable PROTOBUF_HOME in the makefile with your protocol buffer install location. (a configure step should be added in the future)
+
 Simply compile using: make
 
 Note:If you made any edition to the Protocol Buffer Structure, please recompile it before compiling ZHT by using: make gProto
