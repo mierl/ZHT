@@ -73,7 +73,7 @@ ZHT_CPP(extern "C" {)
 	int c_zht_remove2(const char *key);
 
 	/* wrapp C++ ZHTClient::teardown.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed.
+	 * return code: 0 if succeeded, or -1 if failed.
 	 * */
 	int c_zht_teardown();
 
