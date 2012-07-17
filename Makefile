@@ -9,7 +9,7 @@ CFLAGS=-Llib -L/usr/local/lib -Iinc
 LFLAGS=-lzht
 LFLAGS+=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc
 
-PROTOBUF_HOME=/usr/local/include/google/protobuf #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf)
+PROTOBUF_HOME=/home/tony/Installed/built/include/ #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf)
 
 #SOURCES=$(wildcard src/common/*.cpp)
 #OBJECTS=$(SOURCES:.cpp=.o)
