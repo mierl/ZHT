@@ -23,7 +23,6 @@ CFLAGS+=-I$(PROTOBUF_HOME)
 all: library
 	make bin/server_zht
 	make examples
-	make bin/server_muiltiNovoht
 
 library: lib/libzht.a
 	#Note that the header files (.h) are required to be included by a client that would alread have the static library libzht
@@ -58,9 +57,6 @@ gProto: src/misc/meta.proto
 	mv src/common/*.h inc/
 	rename 's/\.cc/.cpp/' src/common/*.cc
 	
-bin/server_muiltiNovoht:
-	$(CXX) $(CFLAGS) src/server_muiltiNovoht.cpp -o bin/server_muiltiNovoht $(LFLAGS)
-
 clean:
 	rm -rf obj
 
