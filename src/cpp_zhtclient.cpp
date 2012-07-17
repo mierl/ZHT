@@ -1,6 +1,5 @@
-#include "../inc/cpp_zhtclient.h"
-#include "../inc/lru_cache.h"
-
+#include "cpp_zhtclient.h"
+#include "lru_cache.h"
 
 /*******************************
  * zhouxb
@@ -47,7 +46,6 @@ int setconfigvariables(string cfgFile) {
 /*******************************
  * zhouxb
  */
-
 
 int UDP_SOCKET = -1;
 int CACHE_SIZE = 1024;
@@ -310,6 +308,10 @@ int ZHTClient::lookup(string str, string &returnStr) {
 	char buff[MAX_MSG_SIZE]; //MAX_MSG_SIZE
 	memset(buff, 0, sizeof(buff));
 	int rcv_size = -1;
+	int status = -1;
+	string sRecv;
+	string sStatus;
+
 	if (sentSize == str.length()) { //this only work for TCP. UDP need to make a new one so accept returns from server.
 //		cout << "before protocol judge" << endl;
 
@@ -339,16 +341,20 @@ int ZHTClient::lookup(string str, string &returnStr) {
 		 }*/
 		if (rcv_size < 0) {
 			cout << "Lookup receive error." << endl;
-			return rcv_size;
 		} else {
-			returnStr.assign(buff);
+			sRecv.assign(buff);
+			returnStr = sRecv.substr(2); //the first two chars means status code, like -1, -2, 0 and so on.
+			sStatus = sRecv.substr(0, 2); //the left is real thing need to be deserilized.
 		}
 
 //		cout << "after protocol judge" << endl;
 	}
 //	d3_closeConnection(sock);
 
-	return rcv_size;
+	if (!sStatus.empty())
+		status = atoi(sStatus.c_str());
+
+	return status;
 }
 /*
  int ZHTClient::lookup(string str, string &returnStr, int to_sock) {
