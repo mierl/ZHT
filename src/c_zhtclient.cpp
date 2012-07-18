@@ -1,5 +1,5 @@
-#include "../inc/c_zhtclient.h"
-#include "../inc/cpp_zhtclient.h"
+#include "c_zhtclient.h"
+#include "cpp_zhtclient.h"
 #include <string.h>
 
 ZHTClient zhtClient;
@@ -93,7 +93,7 @@ int c_zht_lookup(const char *pair, char *result) {
 	return ret;
 }
 
-int c_zht_lookup2(const char *key, char **result) {
+int c_zht_lookup2(const char *key, char *result, size_t *n) {
 
 	string keyStr(key);
 	string resultStr;
@@ -111,15 +111,9 @@ int c_zht_lookup2(const char *key, char **result) {
 
 	Package package2;
 	package2.ParseFromString(resultStr);
-	string str = package2.realfullpath();
-	*result = static_cast<char*>(malloc(sizeof(char) * str.size()));
-	strcpy(*result, str.c_str());
-
-	/*
-	 *result = new char[str.size() + 1];
-	 result[str.size()] = 0;
-	 strcpy(*result, str.c_str());
-	 */
+	string strRealfullpath = package2.realfullpath();
+	strncpy(result, strRealfullpath.c_str(), strRealfullpath.size());
+	*n = strRealfullpath.size();
 
 	return ret;
 }
