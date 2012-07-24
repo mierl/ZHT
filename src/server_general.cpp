@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <sys/epoll.h>
 #include <errno.h>
+#include <stdint.h>
 
 #include <iostream>
 #include <sstream>
@@ -44,7 +45,7 @@ bool TCP; // for switch between TCP and UDP
 struct timeval tp;
 int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
 
-int const MAX_MSG_SIZE = 1024; //transferd string maximum size
+int const MAX_MSG_SIZE = 65535; //transferd string maximum size
 
 int REPLICATION_TYPE; //1 for Client-side replication
 
@@ -399,7 +400,7 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	//cout << "Current service thread ID = " << pthread_self()<< ", dbService() begin..." << endl;
 
 //	char buff[MAX_MSG_SIZE];
-	int32_t operation_status = 0;
+	int32_t operation_status = -99; //
 //	sockaddr_in toAddr;
 	int r;
 	void* buff1;
@@ -430,6 +431,8 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 
 			if (result.compare("Empty") == 0) {
 				operation_status = -2;
+			} else {
+				operation_status = 0;
 			}
 		}
 
@@ -437,8 +440,8 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 		 * pack the status and lookup-result into one string
 		 */
 		buff1 = &operation_status;
-		char statusBuff[2];
-		sprintf(statusBuff, "%02d", operation_status);
+		char statusBuff[3];
+		sprintf(statusBuff, "%03d", operation_status);
 		string sAllInOne;
 		sAllInOne.append(statusBuff);
 		sAllInOne.append(result);
@@ -517,7 +520,15 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	}
 		break;
 	default: {
-		operation_status = -99; //no this operation
+		operation_status = -98; //unrecognized operation
+
+		buff1 = &operation_status;
+		if (TCP == true) {
+			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
+		} else {
+			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
+					(struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
+		}
 	}
 		break;
 	} //end switch-case

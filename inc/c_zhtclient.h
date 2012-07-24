@@ -17,7 +17,6 @@
 # define ZHT_CPP(x)
 #endif
 
-
 #include <stddef.h>
 
 ZHT_CPP(extern "C" {)
@@ -30,7 +29,7 @@ ZHT_CPP(extern "C" {)
 	/* wrapp C++ ZHTClient::insert.
 	 * PAIR is expected to be a serializationg string with protocol-buffer-c-binding representation.
 	 * KEY: empty key not allowed, if empty, return -1, means failed.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed.
+	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed, -98 if unrecognized operation
 	 * Untested, don't invoke it.
 	 * */
 	int c_zht_insert(const char *pair);
@@ -38,14 +37,14 @@ ZHT_CPP(extern "C" {)
 	/* wrapp C++ ZHTClient::insert.
 	 * KEY: empty key not allowed, if empty, return -1, means failed.
 	 * VALUE: empty value ignored.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed.
+	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation
 	 * */
 	int c_zht_insert2(const char *key, const char *value);
 
 	/* wrapp C++ ZHTClient::lookup.
 	 * PAIR is expected to be a serializationg string with protocol-buffer-c-binding representation.
 	 * KEY: empty key not allowed, if empty, return -1, means failed.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed.
+	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation
 	 * Untested, don't invoke it.
 	 * */
 	int c_zht_lookup(const char *pair, char *result);
@@ -54,21 +53,21 @@ ZHT_CPP(extern "C" {)
 	 * KEY: empty key not allowed, if empty, return -1, means failed.
 	 * RESULT: lookup result
 	 * N: actual number of characters read.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed.
+	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation
 	 * */
 	int c_zht_lookup2(const char *key, char *result, size_t *n);
 
 	/* wrapp C++ ZHTClient::remove.
 	 * PAIR is expected to be a serializationg string with protocol-buffer-c-binding representation.
 	 * KEY: empty key not allowed, if empty, return -1, means failed.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed.
+	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation
 	 * Untested, don't invoke it.
 	 * */
 	int c_zht_remove(const char *pair);
 
 	/* wrapp C++ ZHTClient::remove.
 	 * KEY: empty key not allowed, if empty, return -1, means failed.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed.
+	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation
 	 * */
 	int c_zht_remove2(const char *key);
 

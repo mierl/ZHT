@@ -5,7 +5,7 @@
 #include   <string.h>
 #include "c_zhtclient.h"
 
-const int LOOKUP_SIZE = 2048;
+const int LOOKUP_SIZE = 65535;
 
 int main(int argc, char **argv) {
 
@@ -30,6 +30,12 @@ int main(int argc, char **argv) {
 	const char *key = "hello";
 	const char *value = "zht";
 
+	const char *largeKey = "keyofLargeValue";
+	char largeVal[10240] = { '\0' };
+	memset(largeVal, '1', sizeof(largeVal) - 1);
+	key = largeKey;
+	value = largeVal;
+
 	int iret = c_zht_insert2(key, value);
 	fprintf(stderr, "c_zht_insert, return code: %d\n", iret);
 
@@ -38,14 +44,15 @@ int main(int argc, char **argv) {
 	if (result != NULL) {
 		int lret = c_zht_lookup2(key, result, &n);
 		fprintf(stderr, "c_zht_lookup, return code: %d\n", lret);
-		fprintf(stderr, "c_zht_lookup, return value: %lu, %s\n", n, result);
+		fprintf(stderr, "c_zht_lookup, return value: length(%lu), %s\n", n,
+				result);
 	}
+	free(result);
 
 	int rret = c_zht_remove2(key);
 	fprintf(stderr, "c_zht_remove, return code: %d\n", rret);
 
 	c_zht_teardown();
 
-	free(result);
 	return 0;
 }

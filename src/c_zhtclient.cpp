@@ -112,7 +112,7 @@ int c_zht_lookup2(const char *key, char *result, size_t *n) {
 	Package package2;
 	package2.ParseFromString(resultStr);
 	string strRealfullpath = package2.realfullpath();
-	strncpy(result, strRealfullpath.c_str(), strRealfullpath.size());
+	strncpy(result, strRealfullpath.c_str(), strlen(result));
 	*n = strRealfullpath.size();
 
 	return ret;

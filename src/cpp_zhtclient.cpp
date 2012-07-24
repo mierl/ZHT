@@ -1,5 +1,6 @@
 #include "cpp_zhtclient.h"
 #include "lru_cache.h"
+#include <stdint.h>
 
 /*******************************
  * zhouxb
@@ -8,7 +9,7 @@
 struct timeval tp;
 int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
 
-int const MAX_MSG_SIZE = 1024; //transferd string maximum size
+int const MAX_MSG_SIZE = 65535; //transferd string maximum size
 
 int REPLICATION_TYPE; //1 for Client-side replication
 
@@ -343,8 +344,8 @@ int ZHTClient::lookup(string str, string &returnStr) {
 			cout << "Lookup receive error." << endl;
 		} else {
 			sRecv.assign(buff);
-			returnStr = sRecv.substr(2); //the first two chars means status code, like -1, -2, 0 and so on.
-			sStatus = sRecv.substr(0, 2); //the left is real thing need to be deserilized.
+			returnStr = sRecv.substr(3); //the left is real thing need to be deserilized.
+			sStatus = sRecv.substr(0, 3); //the first three chars means status code, like -1, -2, 0, -98, -99 and so on.
 		}
 
 //		cout << "after protocol judge" << endl;
