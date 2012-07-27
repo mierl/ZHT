@@ -123,7 +123,9 @@ int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result, size
 	Package package2;
 	package2.ParseFromString(resultStr);
 	string strRealfullpath = package2.realfullpath();
-	strncpy(result, strRealfullpath.c_str(), strlen(result));
+	const char * buffer = (char *) malloc(strlen(result)*sizeof(char)+1);
+	buffer = strRealfullpath.c_str();
+	strncpy(result, buffer, strlen(buffer));
 	*n = strRealfullpath.size();
 
 	return ret;
