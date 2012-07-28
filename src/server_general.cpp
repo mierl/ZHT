@@ -211,7 +211,8 @@ int32_t HB_insert_cstr(map<char*, char*> &chmap, Package &package){
 
 	pair<map<char*, char*>::iterator, bool> ret;
 	ret = chmap.insert(pair<char*, char*>(key, value));
-
+	free(key);
+	free(value);
 		if (ret.second == false) {
 			return -3;
 		} else
