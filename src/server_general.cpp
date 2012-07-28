@@ -29,6 +29,7 @@ using namespace std;
 #define PORT_FOR_REPLICA 50009
 NoVoHT *pmap; //move to main().
 map<string, string> hmap; //for pure non-persistency
+map<char*, char*> chmap;
 
 char* LISTEN_PORT; // server listen port
 
@@ -196,6 +197,28 @@ int32_t HB_remove(NoVoHT *map, Package &package) {
 	} else
 		return 0; //succeed.
 }
+
+
+int32_t HB_insert_cstr(map<char*, char*> &chmap, Package &package){
+
+	string package_str = package.SerializeAsString();
+
+	char* value = (char*)malloc(package_str.length()*sizeof(char));
+	strcpy(value, package_str.c_str());
+
+	char* key = (char*)malloc(package.virtualpath().length());
+	strcpy(key, package.virtualpath().c_str());
+
+	pair<map<char*, char*>::iterator, bool> ret;
+	ret = chmap.insert(pair<char*, char*>(key, value));
+
+		if (ret.second == false) {
+			return -3;
+		} else
+			return 0;
+
+}
+
 
 int32_t HB_insert(map<string, string> &hmap, Package &package) {
 	//int opt = package.operation();//opt not be used?
@@ -488,6 +511,7 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 		} else {
 			//		cout << "Insert..." << endl;
 			//operation_status = HB_insert(db, package);
+			//operation_status = HB_insert_cstr(chmap, package);
 			operation_status = HB_insert(pmap, package);
 			//		operation_status = HB_insert(hmap, package);
 			//cout<<"Inserted: key: "<< package.virtualpath()<<endl;
