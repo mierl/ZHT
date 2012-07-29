@@ -213,10 +213,10 @@ int32_t HB_insert_cstr(map<char*, char*> &chmap, Package &package){
 	ret = chmap.insert(pair<char*, char*>(key, value));
 	free(key);
 	free(value);
-		if (ret.second == false) {
-			return -3;
-		} else
-			return 0;
+	if (ret.second == false) {
+		return -3;
+	} else
+		return 0;
 
 }
 
