@@ -230,6 +230,11 @@ int ZHTClient::insert(string str) {
 	 reuseSock(sock);
 	 generalSendTCP(sock, str.c_str());
 	 */
+	Package package;
+	package.ParseFromString(str);
+	package.set_operation(3); // 3 for insert, 1 for look up, 2 for remove
+	package.set_replicano(5); //5: original, 3 not original
+	str = package.SerializeAsString();
 
 	int sock = this->str2SockLRU(str, TCP);
 	reuseSock(sock);
