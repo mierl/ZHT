@@ -8,7 +8,7 @@
 const int LOOKUP_SIZE = 65535;
 
 void test_large_keyvalue();
-void test_commone_usecase();
+void test_common_usecase();
 
 int main(int argc, char **argv) {
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-void test_commone_usecase() {
+void test_common_usecase() {
 
 	const char *key = "hello";
 //	const char *key = "nonexistent_key";
