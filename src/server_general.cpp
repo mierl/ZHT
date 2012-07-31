@@ -1,8 +1,6 @@
 /*
- * epoll-example.c
- *
  *  Created on: Mar 29, 2012
- *      Author: tony
+ *      Author: Tonglin Li
  */
 
 #include <stdio.h>
@@ -201,22 +199,34 @@ int32_t HB_remove(NoVoHT *map, Package &package) {
 
 int32_t HB_insert_cstr(map<char*, char*> &chmap, Package &package){
 
-	string package_str = package.SerializeAsString();
+	 string package_str = package.SerializeAsString();
 
 	char* value = (char*)malloc(package_str.length()*sizeof(char));
 	strcpy(value, package_str.c_str());
 
-	char* key = (char*)malloc(package.virtualpath().length());
+	char* key = (char*)malloc(package.virtualpath().length()*sizeof(char));
+//	cout << "package.virtualpath().c_str()="<<package.virtualpath().c_str()<<endl;
 	strcpy(key, package.virtualpath().c_str());
 
-	pair<map<char*, char*>::iterator, bool> ret;
-	ret = chmap.insert(pair<char*, char*>(key, value));
-	free(key);
-	free(value);
-	if (ret.second == false) {
+//	cout <<"after scrcpy, key = "<<key<<", key length = "<< strlen(key) <<endl;
+
+
+//      pair<map<char*, char*>::iterator, bool> ret;
+//      ret = chmap.insert(pair<char*, char*>(key, value));
+//      free(key);
+//      free(value);
+	if (chmap.insert(pair<char*, char*>(key, value)).second == false) {
+		cout << "HB_insert_cstr: insert failed, return -3, element exists, key = "<< key  <<", value = "<< value   <<endl;
+		free(key);
+		free(value);
 		return -3;
-	} else
+	} else{
+		cout <<" HB_insert_cstr: insert succeeded. key = "<< key  <<", value = "<< chmap.find(key)->second<<endl;
+		free(key);
+		free(value);
 		return 0;
+	}
+
 
 }
 
