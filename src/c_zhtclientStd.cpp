@@ -1,5 +1,8 @@
+
 #include "../inc/c_zhtclientStd.h"
 #include "../inc/cpp_zhtclient.h"
+
+
 #include <string.h>
 
 bool TCP = false;
@@ -36,10 +39,11 @@ void test_proto_buffer(const char *key, const char *value) {
 
 }
 
-int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig, const char *zhtConfig, bool tcp) {
+int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig,
+		const char *zhtConfig, bool tcp) {
 
 	ZHTClient * zhtcppClient = new ZHTClient();
-	
+
 	string zhtStr(zhtConfig);
 	string memberStr(memberConfig);
 
@@ -48,7 +52,7 @@ int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig, const char
 
 		return -1;
 	}
-	
+
 	*zhtClient = (ZHTClient_c) zhtcppClient;
 
 	return 0;
@@ -63,7 +67,8 @@ int c_zht_insert_std(ZHTClient_c zhtClient, const char *pair) {
 	return zhtcppClient->insert(str);
 }
 
-int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key, const char *value) {
+int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key,
+		const char *value) {
 
 	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
 
@@ -102,7 +107,8 @@ int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result) {
 	return ret;
 }
 
-int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result, size_t *n) {
+int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result,
+		size_t *n) {
 
 	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
 
@@ -123,10 +129,12 @@ int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result, size
 	Package package2;
 	package2.ParseFromString(resultStr);
 	string strRealfullpath = package2.realfullpath();
-	const char * buffer = (char *) malloc(strlen(result)*sizeof(char)+1);
+	char * buffer = (char *) malloc(strlen(result) * sizeof(char) + 1);
 	buffer = strRealfullpath.c_str();
 	strncpy(result, buffer, strlen(buffer));
 	*n = strRealfullpath.size();
+
+	free(buffer);
 
 	return ret;
 }
