@@ -203,12 +203,12 @@ int handleRequest(int sock, void*buff) {
 
 int32_t HB_insert(NoVoHT *map, Package &package) {
 	//int opt = package.operation();//opt not be used?
-	//string package_str = package.SerializeAsString();
-	char* value = (char*) package.SerializeAsString().c_str();
+	string value = package.SerializeAsString();
+
 	//int ret = db.set(package.virtualpath(), package_str); //virtualpath as key
-	cout << "Insert to pmap...value = " << value << endl;
-//      string key = package.virtualpath();
-	char* key = (char*) package.virtualpath().c_str();
+//	cout << "Insert to pmap...value = " << value << endl;
+	string key = package.virtualpath();
+
 //      cout<<"key:"<<key<<endl;
 
 //      cout<<"value:"<<value<<endl;
@@ -230,26 +230,26 @@ int32_t HB_insert(NoVoHT *map, Package &package) {
 string HB_lookup(NoVoHT *map, Package &package) {
 //      string value;
 //      cout << "lookup in HB_lookup" << endl;
-	char* key = (char*) package.virtualpath().c_str();
-	cout << "key:" << key << endl;
+	string key = package.virtualpath();
+//	cout << "key:" << key << endl;
 	// string *strP = map->get(key); //problem
-	char* result = map->get(key);
+	string *result = map->get(key);
 
-	cout << "lookup result = " << result << endl;
+//	cout << "lookup result = " << (*result) << endl;
 
 	if (result == NULL) {
 		cout << "lookup find nothing." << endl;
 		string nullString = "Empty";
 		return nullString;
 	} else {
-		string retStr(result);
+		string retStr((*result));
 		return retStr;
 	}
 
 }
 
 int32_t HB_remove(NoVoHT *map, Package &package) {
-	char* key = (char*) package.virtualpath().c_str();
+	string key = package.virtualpath();
 	int ret = map->remove(key); // return 0 means correct.
 	if (ret != 0) {
 		cerr << "DB Error: fail to remove :ret= " << ret << endl;
@@ -783,7 +783,7 @@ int main(int argc, char *argv[]) {
 //	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
 //	string fileName = "hashmap.data." + randStr;
 //	string fileName = "hashmap.txt";
-	char* fileName = "";
+	const char* fileName = "";
 	pmap = new NoVoHT(fileName, 100000, 10000, 0.7);
 
 	map<string, string> hashMap;

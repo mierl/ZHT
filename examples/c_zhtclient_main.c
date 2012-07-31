@@ -41,8 +41,8 @@ int main(int argc, char **argv) {
 
 void test_commone_usecase() {
 
-//	const char *key = "hello";
-	const char *key = "nonexistent_key";
+	const char *key = "hello";
+//	const char *key = "nonexistent_key";
 	const char *value = "zht";
 
 	int iret = c_zht_insert2(key, value);

@@ -1,8 +1,10 @@
+/*
+ #include "../inc/c_zhtclientStd.h"
+ #include "../inc/cpp_zhtclient.h"
+ */
 
-#include "../inc/c_zhtclientStd.h"
-#include "../inc/cpp_zhtclient.h"
-
-
+#include "c_zhtclientStd.h"
+#include "cpp_zhtclient.h"
 #include <string.h>
 
 bool TCP = false;
@@ -129,12 +131,13 @@ int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result,
 	Package package2;
 	package2.ParseFromString(resultStr);
 	string strRealfullpath = package2.realfullpath();
-	char * buffer = (char *) malloc(strlen(result) * sizeof(char) + 1);
-	buffer = strRealfullpath.c_str();
-	strncpy(result, buffer, strlen(buffer));
+//	char * buffer = (char *) calloc(strlen(result) + 1, sizeof(char));
+//	buffer = strRealfullpath.c_str();
+
+	strncpy(result, strRealfullpath.c_str(), strlen(strRealfullpath.c_str()));
 	*n = strRealfullpath.size();
 
-	free(buffer);
+//	free(buffer);
 
 	return ret;
 }

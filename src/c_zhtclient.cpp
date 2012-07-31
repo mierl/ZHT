@@ -1,6 +1,6 @@
 
-#include "../inc/c_zhtclient.h"
-#include "../inc/c_zhtclientStd.h"
+#include "c_zhtclient.h"
+#include "c_zhtclientStd.h"
 
 
 
