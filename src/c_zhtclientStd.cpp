@@ -67,12 +67,8 @@ int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result,
 	string resultStr;
 	int ret = zhtcppClient->lookup(sPair, resultStr);
 
-	Package package2;
-	package2.ParseFromString(resultStr);
-	string strRealfullpath = package2.realfullpath();
-
-	strncpy(result, strRealfullpath.c_str(), strlen(strRealfullpath.c_str()));
-	*n = strRealfullpath.size();
+	strncpy(result, resultStr.c_str(), strlen(resultStr.c_str()));
+	*n = resultStr.size();
 
 	return ret;
 }

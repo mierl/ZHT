@@ -34,9 +34,9 @@ int main(int argc, char **argv) {
 
 //	test_large_keyvalue();
 
-	test_common_usecase();
+//	test_common_usecase();
 
-//	test_pass_package();
+	test_pass_package();
 
 	c_zht_teardown();
 
@@ -89,9 +89,6 @@ void test_large_keyvalue() {
 	fprintf(stderr, "c_zht_remove, return code: %d\n", rret);
 }
 
-test_pass_protoc_c() {
-
-}
 void test_pass_package() {
 
 	char *key = "hello";
@@ -107,8 +104,9 @@ void test_pass_package() {
 
 	char *buf; // Buffer to store serialized data
 	unsigned len; // Length of serialized data
+
 	len = package__get_packed_size(&package);
-	buf = (char*) malloc(len);
+	buf = (char*) calloc(len, sizeof(char));
 	package__pack(&package, buf);
 
 	/*
@@ -125,13 +123,31 @@ void test_pass_package() {
 	package.realfullpath = "";
 	package__pack(&package, buf);
 
-	size_t n;
+	size_t ln;
 	char *result = (char*) calloc(LOOKUP_SIZE, sizeof(char));
 	if (result != NULL) {
-		int lret = c_zht_lookup(buf, result, &n);
-		fprintf(stderr, "c_zht_lookup, return code: %d\n", lret);
-		fprintf(stderr, "c_zht_lookup, return value: length(%lu), %s\n", n,
-				result);
+		int lret = c_zht_lookup(buf, result, &ln);
+		fprintf(stderr, "c_zht_lookup, return code(length): %d(%lu)\n", lret,
+				ln);
+
+		if (lret == 0 && ln > 0) {
+			Package *lkPackage;
+			char *lkBuf = (char*) calloc(ln, sizeof(char));
+
+			strncpy(lkBuf, result, ln);
+			lkPackage = package__unpack(NULL, ln, lkBuf);
+
+			if (lkPackage == NULL) {
+				fprintf(stderr, "error unpacking lookup result\n");
+			} else {
+				fprintf(stderr,
+						"c_zht_lookup, return {key}:{value} ==>\n{%s}:{%s}\n",
+						lkPackage->virtualpath, lkPackage->realfullpath);
+			}
+
+			free(lkBuf);
+			package__free_unpacked(lkPackage, NULL);
+		}
 	}
 	free(result);
 
@@ -147,4 +163,3 @@ void test_pass_package() {
 
 	free(buf); // Free the allocated serialized buffer
 }
-
