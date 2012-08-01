@@ -1,8 +1,10 @@
+/*
+ #include "../inc/c_zhtclient.h"
+ #include "../inc/c_zhtclientStd.h"
+ */
 
 #include "c_zhtclient.h"
 #include "c_zhtclientStd.h"
-
-
 
 ZHTClient_c zhtClient;
 
@@ -21,9 +23,9 @@ int c_zht_insert2(const char *key, const char *value) {
 	return c_zht_insert2_std(zhtClient, key, value);
 }
 
-int c_zht_lookup(const char *pair, char *result) {
+int c_zht_lookup(const char *pair, char *result, size_t *n) {
 
-	return c_zht_lookup_std(zhtClient, pair, result);
+	return c_zht_lookup_std(zhtClient, pair, result, n);
 }
 
 int c_zht_lookup2(const char *key, char *result, size_t *n) {

@@ -232,7 +232,13 @@ int ZHTClient::insert(string str) {
 	 */
 	Package package;
 	package.ParseFromString(str);
-	package.set_operation(3); // 3 for insert, 1 for look up, 2 for remove
+
+	if (package.virtualpath().empty()) //empty key not allowed.
+		return -1;
+	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");
+
+	package.set_operation(3); //1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(5); //5: original, 3 not original
 	str = package.SerializeAsString();
 
@@ -261,32 +267,18 @@ int ZHTClient::insert(string str) {
 //	cout<<"insert got: "<< *ret <<endl;
 	return ret;
 }
-/*
- int ZHTClient::insert(string str, int sock) {
-
-
- //cout << "in insert-----1" << endl;
- int r_s = generalSendTCP(sock, str.c_str());
- //	cout << "in insert-----2, ret_send = " << r_s << endl;
- int32_t* ret = (int32_t*) malloc(sizeof(int32_t));
-
- generalReveiveTCP(sock, (void*) ret, sizeof(int32_t), 0);
- //	cout << "in insert-----3" << endl;
- int ret_1 = *(int32_t*) ret;
- //cout <<"Returned status: "<< *(int32_t*) ret<<endl;
- //	d3_closeConnection(sock);
- free(ret);
- //	cout << "in insert-----4" << endl;
- return ret_1;
- //return 0;
- }
- */
 
 int ZHTClient::lookup(string str, string &returnStr) {
 
 	Package package;
 	package.ParseFromString(str);
-	package.set_operation(1); // 3 for insert, 1 for look up, 2 for remove
+
+	if (package.virtualpath().empty()) //empty key not allowed.
+		return -1;
+	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");
+
+	package.set_operation(1); // 1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(3); //5: original, 3 not original
 
 	str = package.SerializeAsString();
@@ -324,27 +316,6 @@ int ZHTClient::lookup(string str, string &returnStr) {
 		rcv_size = generalReceive(sock, (void*) buff, sizeof(buff), recvAddr, 0,
 				TCP);
 
-		/*	if (TRANS_PROTOCOL == USE_TCP) {
-
-		 rcv_size = d3_recv_data(sock, buff, MAX_MSG_SIZE, 0); //MAX_MSG_SIZE
-
-		 } else if (TRANS_PROTOCOL == USE_UDP) {
-		 //int svrPort = dest.port;//surely wrong, it's just the 50000 port
-		 //int svrPort = 50001;
-		 srand(getpid() + clock());
-		 //			int z = rand() % 10000 + 10000;
-		 //			cout<<"Client:lookup: random port: "<<z<<endl;
-		 //			int server_sock = d3_svr_makeSocket(rand() % 10000 + 10000);// use random port to send, and receive lookup result from it too.
-		 //			cout<<"Client:lookup: UDP socket: "<<server_sock<<endl;
-		 sockaddr_in tmp_sockaddr;
-
-		 memset(&tmp_sockaddr, 0, sizeof(sockaddr_in));
-		 //			cout << "lookup: before receive..." << endl;
-		 rcv_size = d3_svr_recv(sock, buff, MAX_MSG_SIZE, 0, &tmp_sockaddr); //receive lookup result
-		 //d3_closeConnection(server_sock);
-		 //			cout << "lookup received " << rcv_size << " bytes." << endl;
-
-		 }*/
 		if (rcv_size < 0) {
 			cout << "Lookup receive error." << endl;
 		} else {
@@ -362,97 +333,20 @@ int ZHTClient::lookup(string str, string &returnStr) {
 
 	return status;
 }
-/*
- int ZHTClient::lookup(string str, string &returnStr, int to_sock) {
 
- Package package;
- package.ParseFromString(str);
- package.set_operation(1); // 3 for insert, 1 for look up, 2 for remove
- package.set_replicano(3); //5: original, 3 not original
-
- str = package.SerializeAsString();
-
- int sock = -1;
- struct HostEntity dest = this->str2Host(str);
- //	cout << "client::lookup is called, now send request..." << endl;
-
- Package pack;
- pack.ParseFromString(str);
- //	cout<<"ZHTClient::lookup: operation = "<<pack.operation()<<endl;
-
- //	int ret = simpleSend(str, dest, sock);
- sock = makeClientSocket(dest.host.c_str(), dest.port, 1);
- //	cout<<"client sock = "<< sock<<endl;
-
- reuseSock(sock);
- int ret = generalSendTCP(sock, str.c_str());
-
- //	cout << "ZHTClient::lookup: simpleSend return = " << ret << endl;
- char buff[MAX_MSG_SIZE]; //MAX_MSG_SIZE
- memset(buff, 0, sizeof(buff));
- int rcv_size = -1;
- if (ret == str.length()) { //this only work for TCP. UDP need to make a new one so accept returns from server.
- //		cout << "before protocol judge" << endl;
-
- if (TRANS_PROTOCOL == USE_TCP) {
-
- rcv_size = d3_recv_data(sock, buff, MAX_MSG_SIZE, 0); //MAX_MSG_SIZE
-
- } else if (TRANS_PROTOCOL == USE_UDP) {
- //int svrPort = dest.port;//surely wrong, it's just the 50000 port
- //int svrPort = 50001;
- //srand(getpid() + clock());
- //			int z = rand() % 10000 + 10000;
- //			cout<<"Client:lookup: random port: "<<z<<endl;
- //			int server_sock = d3_svr_makeSocket(rand() % 10000 + 10000);// use random port to send, and receive lookup result from it too.
- //			cout<<"Client:lookup: UDP socket: "<<server_sock<<endl;
- sockaddr_in tmp_sockaddr;
-
- memset(&tmp_sockaddr, 0, sizeof(sockaddr_in));
- //			cout << "lookup: before receive..." << endl;
- rcv_size = d3_svr_recv(sock, buff, MAX_MSG_SIZE, 0, &tmp_sockaddr); //receive lookup result
- //d3_closeConnection(server_sock);
- //			cout << "lookup received " << rcv_size << " bytes." << endl;
-
- }
- if (rcv_size < 0) {
- cout << "Lookup receive error." << endl;
- return rcv_size;
- } else {
- returnStr.assign(buff);
- }
-
- //		cout << "after protocol judge" << endl;
- }
- d3_closeConnection(sock);
-
- return rcv_size;
- }
- */
 int ZHTClient::remove(string str) {
 
 	Package package;
 	package.ParseFromString(str);
-	package.set_operation(2); // 3 for insert, 1 for look up, 2 for remove
+
+	if (package.virtualpath().empty()) //empty key not allowed.
+		return -1;
+	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");
+
+	package.set_operation(2); //1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(3); //5: original, 3 not original
 	str = package.SerializeAsString();
-
-//	struct HostEntity dest = this->str2Host(str);
-	//int ret = simpleSend(str, dest, sock);
-	/*	sock = makeClientSocket(dest.host.c_str(), dest.port, 1);
-	 reuseSock(sock);
-	 int ret_s = generalSendTCP(sock, str.c_str());
-
-	 int32_t* ret = (int32_t*) malloc(sizeof(int32_t));
-
-	 generalReveiveTCP(sock, (void*) ret, sizeof(int32_t), 0);
-	 int ret_1 = *(int32_t*) ret;
-	 //cout <<"Returned status: "<< *(int32_t*) ret<<endl;
-	 d3_closeConnection(sock);
-	 free(ret);
-
-	 return ret_1;
-	 */
 
 	int sock = this->str2SockLRU(str, TCP);
 	reuseSock(sock);

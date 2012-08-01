@@ -7,7 +7,7 @@ CC=gcc
 CPPFLAGS=-Xlinker -zmuldefs
 CFLAGS=-Llib -L/usr/local/lib -Iinc
 LFLAGS=-lzht
-LFLAGS+=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc
+LFLAGS+=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotobuf-c
 
 PROTOBUF_HOME=/home/tony/Installed/built/include/ #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf)
 

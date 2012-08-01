@@ -88,14 +88,14 @@ class Package : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // optional bytes virtualPath = 1;
+  // optional string virtualPath = 1;
   inline bool has_virtualpath() const;
   inline void clear_virtualpath();
   static const int kVirtualPathFieldNumber = 1;
   inline const ::std::string& virtualpath() const;
   inline void set_virtualpath(const ::std::string& value);
   inline void set_virtualpath(const char* value);
-  inline void set_virtualpath(const void* value, size_t size);
+  inline void set_virtualpath(const char* value, size_t size);
   inline ::std::string* mutable_virtualpath();
   inline ::std::string* release_virtualpath();
   
@@ -106,14 +106,14 @@ class Package : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 num() const;
   inline void set_num(::google::protobuf::int32 value);
   
-  // optional bytes realFullPath = 3;
+  // optional string realFullPath = 3;
   inline bool has_realfullpath() const;
   inline void clear_realfullpath();
   static const int kRealFullPathFieldNumber = 3;
   inline const ::std::string& realfullpath() const;
   inline void set_realfullpath(const ::std::string& value);
   inline void set_realfullpath(const char* value);
-  inline void set_realfullpath(const void* value, size_t size);
+  inline void set_realfullpath(const char* value, size_t size);
   inline ::std::string* mutable_realfullpath();
   inline ::std::string* release_realfullpath();
   
@@ -124,7 +124,7 @@ class Package : public ::google::protobuf::Message {
   inline bool isdir() const;
   inline void set_isdir(bool value);
   
-  // repeated bytes listItem = 5;
+  // repeated string listItem = 5;
   inline int listitem_size() const;
   inline void clear_listitem();
   static const int kListItemFieldNumber = 5;
@@ -132,11 +132,11 @@ class Package : public ::google::protobuf::Message {
   inline ::std::string* mutable_listitem(int index);
   inline void set_listitem(int index, const ::std::string& value);
   inline void set_listitem(int index, const char* value);
-  inline void set_listitem(int index, const void* value, size_t size);
+  inline void set_listitem(int index, const char* value, size_t size);
   inline ::std::string* add_listitem();
   inline void add_listitem(const ::std::string& value);
   inline void add_listitem(const char* value);
-  inline void add_listitem(const void* value, size_t size);
+  inline void add_listitem(const char* value, size_t size);
   inline const ::google::protobuf::RepeatedPtrField< ::std::string>& listitem() const;
   inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_listitem();
   
@@ -216,7 +216,7 @@ class Package : public ::google::protobuf::Message {
 
 // Package
 
-// optional bytes virtualPath = 1;
+// optional string virtualPath = 1;
 inline bool Package::has_virtualpath() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -249,7 +249,7 @@ inline void Package::set_virtualpath(const char* value) {
   }
   virtualpath_->assign(value);
 }
-inline void Package::set_virtualpath(const void* value, size_t size) {
+inline void Package::set_virtualpath(const char* value, size_t size) {
   set_has_virtualpath();
   if (virtualpath_ == &::google::protobuf::internal::kEmptyString) {
     virtualpath_ = new ::std::string;
@@ -296,7 +296,7 @@ inline void Package::set_num(::google::protobuf::int32 value) {
   num_ = value;
 }
 
-// optional bytes realFullPath = 3;
+// optional string realFullPath = 3;
 inline bool Package::has_realfullpath() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -329,7 +329,7 @@ inline void Package::set_realfullpath(const char* value) {
   }
   realfullpath_->assign(value);
 }
-inline void Package::set_realfullpath(const void* value, size_t size) {
+inline void Package::set_realfullpath(const char* value, size_t size) {
   set_has_realfullpath();
   if (realfullpath_ == &::google::protobuf::internal::kEmptyString) {
     realfullpath_ = new ::std::string;
@@ -376,7 +376,7 @@ inline void Package::set_isdir(bool value) {
   isdir_ = value;
 }
 
-// repeated bytes listItem = 5;
+// repeated string listItem = 5;
 inline int Package::listitem_size() const {
   return listitem_.size();
 }
@@ -395,7 +395,7 @@ inline void Package::set_listitem(int index, const ::std::string& value) {
 inline void Package::set_listitem(int index, const char* value) {
   listitem_.Mutable(index)->assign(value);
 }
-inline void Package::set_listitem(int index, const void* value, size_t size) {
+inline void Package::set_listitem(int index, const char* value, size_t size) {
   listitem_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
 }
@@ -408,7 +408,7 @@ inline void Package::add_listitem(const ::std::string& value) {
 inline void Package::add_listitem(const char* value) {
   listitem_.Add()->assign(value);
 }
-inline void Package::add_listitem(const void* value, size_t size) {
+inline void Package::add_listitem(const char* value, size_t size) {
   listitem_.Add()->assign(reinterpret_cast<const char*>(value), size);
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
