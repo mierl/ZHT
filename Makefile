@@ -9,7 +9,7 @@ CFLAGS=-Llib -L/usr/local/lib -Iinc
 LFLAGS=-lzht
 LFLAGS+=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotobuf-c
 
-PROTOBUF_HOME=/usr/local/include/google/protobuf #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf)
+PROTOBUF_HOME=/usr/local/include/google/protobuf #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf) Additional NOTE: This may be useless if you added PROTOBUF to your LD_LIBRARY_PATH
 
 #SOURCES=$(wildcard src/common/*.cpp)
 #OBJECTS=$(SOURCES:.cpp=.o)
@@ -52,6 +52,9 @@ clients: src/cpp_zhtclient.cpp src/c_zhtclient.cpp
 
 obj/%.o: src/common/%.cpp obj
 	$(CXX) $(CPPFLAGS) $(CFLAGS) -c src/common/$*.cpp -o obj/$*.o
+
+obj/meta.pb-c.o: src/common/meta.pb-c.c
+	$(CC) $(CFLAGS) -c src/common/meta.pb-c.c -o obj/meta.pb-c.o
 
 gProto: src/misc/meta.proto
 	rm src/common/*.pb.cpp inc/*.pb.h
