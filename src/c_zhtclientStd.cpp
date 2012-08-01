@@ -1,45 +1,19 @@
-#include "../inc/c_zhtclientStd.h"
-#include "../inc/cpp_zhtclient.h"
+/*
+ #include "../inc/c_zhtclientStd.h"
+ #include "../inc/cpp_zhtclient.h"
+ */
+
+#include "c_zhtclientStd.h"
+#include "cpp_zhtclient.h"
 #include <string.h>
 
 bool TCP = false;
 
-/*
- * to be removed.
- */
-void test_proto_buffer(const char *key, const char *value) {
-	Package package;
-	package.set_virtualpath(key); //as key
-	package.set_isdir(true);
-	package.set_replicano(5);
-	package.set_operation(3); //1 for look up, 2 for remove, 3 for insert
-	package.set_realfullpath(value);
-
-	fprintf(stderr, "package virtualpath is: %s\n",
-			package.virtualpath().c_str());
-
-	const char * realfullpath = package.realfullpath().c_str();
-	fprintf(stderr, "package realfullpath is: %s\n", realfullpath);
-
-	string str = package.SerializeAsString();
-	int len = strlen(str.c_str());
-
-	Package package2;
-	package2.ParseFromString(str);
-	string str2 = package2.SerializeAsString();
-
-	fprintf(stderr, "package2 virtualpath is: %s\n",
-			package2.virtualpath().c_str());
-
-	const char *realfullpath2 = package2.realfullpath().c_str();
-	fprintf(stderr, "package2 realfullpath is: %s\n", realfullpath2);
-
-}
-
-int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig, const char *zhtConfig, bool tcp) {
+int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig,
+		const char *zhtConfig, bool tcp) {
 
 	ZHTClient * zhtcppClient = new ZHTClient();
-	
+
 	string zhtStr(zhtConfig);
 	string memberStr(memberConfig);
 
@@ -48,7 +22,7 @@ int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig, const char
 
 		return -1;
 	}
-	
+
 	*zhtClient = (ZHTClient_c) zhtcppClient;
 
 	return 0;
@@ -63,69 +37,63 @@ int c_zht_insert_std(ZHTClient_c zhtClient, const char *pair) {
 	return zhtcppClient->insert(str);
 }
 
-int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key, const char *value) {
+int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key,
+		const char *value) {
 
 	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
 
-	string keyStr(key);
-	string valueStr(value);
-
-	if (keyStr.empty()) //empty key not allowed.
-		return -1;
+	string sKey(key);
+	string sValue(value);
 
 	Package package;
-	package.set_virtualpath(keyStr); //as key
+	package.set_virtualpath(sKey); //as key
 	package.set_isdir(true);
 	package.set_replicano(5);
 	package.set_operation(3); //1 for look up, 2 for remove, 3 for insert
-	if (!valueStr.empty())
-		package.set_realfullpath(valueStr);
+	if (!sValue.empty())
+		package.set_realfullpath(sValue);
 
 	return zhtcppClient->insert(package.SerializeAsString());
 
 }
 
-int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result) {
+int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result,
+		size_t *n) {
 
-	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
+	ZHTClient *zhtcppClient = (ZHTClient *) zhtClient;
 
-	string pkg(pair);
-	string returnStr;
+	string sPair(pair);
 
-	int ret = zhtcppClient->lookup(pkg, returnStr);
+	string resultStr;
+	int ret = zhtcppClient->lookup(sPair, resultStr);
 
-	char *chars = new char[returnStr.size() + 1];
-	strcpy(chars, returnStr.c_str());
-
-	result = chars;
+	strncpy(result, resultStr.c_str(), strlen(resultStr.c_str()));
+	*n = resultStr.size();
 
 	return ret;
 }
 
-int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result, size_t *n) {
+int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result,
+		size_t *n) {
 
-	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
+	ZHTClient *zhtcppClient = (ZHTClient *) zhtClient;
 
-	string keyStr(key);
-	string resultStr;
-
-	if (keyStr.empty()) //empty key not allowed.
-		return -1;
+	string sKey(key);
 
 	Package package;
-	package.set_virtualpath(keyStr); //as key
+	package.set_virtualpath(sKey); //as key
 	package.set_isdir(true);
 	package.set_replicano(5);
 	package.set_operation(1); //1 for look up, 2 for remove, 3 for insert
 
+	string resultStr;
 	int ret = zhtcppClient->lookup(package.SerializeAsString(), resultStr);
 
 	Package package2;
 	package2.ParseFromString(resultStr);
 	string strRealfullpath = package2.realfullpath();
-	const char * buffer;
-	buffer = strRealfullpath.c_str();
-	strncpy(result, buffer, strlen(buffer));
+
+	strncpy(result, strRealfullpath.c_str(), strlen(strRealfullpath.c_str()));
 	*n = strRealfullpath.size();
 
 	return ret;
@@ -144,13 +112,10 @@ int c_zht_remove2_std(ZHTClient_c zhtClient, const char *key) {
 
 	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
 
-	string keyStr(key);
-
-	if (keyStr.empty()) //empty key not allowed.
-		return -1;
+	string sKey(key);
 
 	Package package;
-	package.set_virtualpath(keyStr);
+	package.set_virtualpath(sKey);
 	package.set_operation(2); //1 for look up, 2 for remove, 3 for insert
 
 	return zhtcppClient->remove(package.SerializeAsString());

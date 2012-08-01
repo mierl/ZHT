@@ -1,13 +1,13 @@
 message Package{
-	//optional string virtualPath = 1;
-	optional bytes virtualPath = 1;
+	optional string virtualPath = 1;
+	//optional bytes virtualPath = 1;
 	optional int32 num = 2;
 	
-	//optional string realFullPath = 3;
-	optional bytes realFullPath = 3;
+	optional string realFullPath = 3;
+	//optional bytes realFullPath = 3;
 	optional bool isDir = 4;
-	//repeated string listItem = 5;
-	repeated bytes listItem = 5;
+	repeated string listItem = 5;
+	//repeated bytes listItem = 5;
 	optional int32 openMode = 6;
 	optional int32 mode = 7;
 

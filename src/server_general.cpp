@@ -21,6 +21,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <map>
 #include "zht_util.h"
 #include "novoht.h"
 
@@ -147,22 +148,77 @@ int handleRequest(int sock, void*buff) {
 
 	return 0;
 }
+/*
+ int32_t HB_insert(NoVoHT *map, Package &package) {
+ //int opt = package.operation();//opt not be used?
+ string package_str = package.SerializeAsString();
+ //int ret = db.set(package.virtualpath(), package_str); //virtualpath as key
+ //	cout<<"Insert to pmap..."<<endl;
+ string key = package.virtualpath();
+ //	cout<<"key:"<<key<<endl;
+ string value = package_str;
+ //	cout<<"value:"<<value<<endl;
+ //	cout<<"Insert: k-v ready. put..."<<endl;
+ int ret = map->put(key, value);
+ //	cout << "end inserting, ret = " << ret << endl;
+
+ if (ret != 0) {
+ return -2;
+ }
+
+ // cout << "String insted: " << package_str << endl;
+
+ else
+ return 0;
+ }
+
+ string HB_lookup(NoVoHT *map, Package &package) {
+ string value;
+ //	cout << "lookup in HB_lookup" << endl;
+ string key = package.virtualpath();
+ //	cout << "key:" << key << endl;
+ string *strP = map->get(key); //problem
+ //	cout << "lookup end." << endl;
+
+ if (strP == NULL) {
+ cout << "lookup find nothing." << endl;
+ string nullString = "Empty";
+ return nullString;
+ }
+ return *strP;
+ }
+
+
+
+ int32_t HB_remove(NoVoHT *map, Package &package) {
+ string key = package.virtualpath();
+ int ret = map->remove(key); // return 0 means correct.
+ if (ret != 0) {
+ cout << "DB Error: fail to remove :ret= " << ret << endl;
+ return -2;
+ } else
+ return 0; //succeed.
+ }
+ */
 
 int32_t HB_insert(NoVoHT *map, Package &package) {
 	//int opt = package.operation();//opt not be used?
-	string package_str = package.SerializeAsString();
+	string value = package.SerializeAsString();
+
 	//int ret = db.set(package.virtualpath(), package_str); //virtualpath as key
-//	cout<<"Insert to pmap..."<<endl;
+//	cout << "Insert to pmap...value = " << value << endl;
 	string key = package.virtualpath();
-//	cout<<"key:"<<key<<endl;
-	string value = package_str;
-//	cout<<"value:"<<value<<endl;
-//	cout<<"Insert: k-v ready. put..."<<endl;
+
+//      cout<<"key:"<<key<<endl;
+
+//      cout<<"value:"<<value<<endl;
+//      cout<<"Insert: k-v ready. put..."<<endl;
 	int ret = map->put(key, value);
-//	cout << "end inserting, ret = " << ret << endl;
+//      cout << "end inserting, ret = " << ret << endl;
 
 	if (ret != 0) {
-		return -2;
+		cerr << "insert error: ret = " << ret << endl;
+		return -3;
 	}
 	/*
 	 cout << "String insted: " << package_str << endl;
@@ -172,29 +228,130 @@ int32_t HB_insert(NoVoHT *map, Package &package) {
 }
 
 string HB_lookup(NoVoHT *map, Package &package) {
-	string value;
-//	cout << "lookup in HB_lookup" << endl;
+//      string value;
+//      cout << "lookup in HB_lookup" << endl;
 	string key = package.virtualpath();
 //	cout << "key:" << key << endl;
-	string *strP = map->get(key); //problem
-//	cout << "lookup end." << endl;
+	// string *strP = map->get(key); //problem
+	string *result = map->get(key);
 
-	if (strP == NULL) {
+//	cout << "lookup result = " << (*result) << endl;
+
+	if (result == NULL) {
 		cout << "lookup find nothing." << endl;
 		string nullString = "Empty";
 		return nullString;
+	} else {
+		string retStr((*result));
+		return retStr;
 	}
-	return *strP;
+
 }
 
 int32_t HB_remove(NoVoHT *map, Package &package) {
 	string key = package.virtualpath();
 	int ret = map->remove(key); // return 0 means correct.
 	if (ret != 0) {
-		cout << "DB Error: fail to remove :ret= " << ret << endl;
+		cerr << "DB Error: fail to remove :ret= " << ret << endl;
 		return -2;
 	} else
 		return 0; //succeed.
+}
+
+/*bool eqstr(char *s1, char *s2) {
+ return strcmp(s1, s2) == 0;
+ }*/
+
+struct charscmp: public std::binary_function<const char*, const char*, bool> {
+	bool operator()(const char* s1, const char* s2) const {
+		return strcmp(s1, s2) < 0;
+	}
+};
+
+typedef map<const char*, const char*, charscmp> MY_MAP;
+typedef pair<const char*, const char*> MY_PAIR;
+static MY_MAP chmap;
+
+int32_t HB_insert_cstr(MY_MAP &chmap, Package &package) {
+
+	string package_str = package.SerializeAsString();
+
+	char* value = (char*) calloc(package_str.length(), sizeof(char));
+	strcpy(value, package_str.c_str());
+
+	char* key = (char*) calloc(package.virtualpath().length(), sizeof(char));
+	strcpy(key, package.virtualpath().c_str());
+
+//	cout <<"after scrcpy, key = "<<key<<", key length = "<< strlen(key) <<endl;
+
+//      pair<map<char*, char*>::iterator, bool> ret;
+//      ret = chmap.insert(pair<char*, char*>(key, value));
+//      free(key);
+//      free(value);
+
+	pair<MY_MAP::iterator, bool> ret;
+	ret = chmap.insert(MY_PAIR(key, value));
+
+	MY_MAP::iterator it;
+	cout << "mymap.size() is " << (int) chmap.size() << endl;
+	cout << "mymap contains:\n";
+	for (it = chmap.begin(); it != chmap.end(); it++)
+		cout << (*it).first << " => " << (*it).second << endl;
+	cout << "########" << endl;
+
+	if (ret.second == false) {
+		cout
+				<< "HB_insert_cstr: insert failed, return -3, element exists, key = "
+				<< key << ", value = " << value << endl;
+
+		cout << "######## done ########" << endl;
+		free(key);
+		free(value);
+		return -3;
+	} else {
+		cout << " HB_insert_cstr: insert succeeded. key = " << key
+				<< ", value = " << chmap.find(key)->second << endl;
+
+		cout << "######## done ########" << endl;
+		free(key);
+		free(value);
+		return 0;
+	}
+
+}
+
+int32_t HB_insert_cstr_(map<char*, char*> &chmap, Package &package) {
+
+	string package_str = package.SerializeAsString();
+
+	char* value = (char*) malloc(package_str.length() * sizeof(char));
+	strcpy(value, package_str.c_str());
+
+	char* key = (char*) malloc(package.virtualpath().length() * sizeof(char));
+//	cout << "package.virtualpath().c_str()="<<package.virtualpath().c_str()<<endl;
+	strcpy(key, package.virtualpath().c_str());
+
+//	cout <<"after scrcpy, key = "<<key<<", key length = "<< strlen(key) <<endl;
+
+//      pair<map<char*, char*>::iterator, bool> ret;
+//      ret = chmap.insert(pair<char*, char*>(key, value));
+//      free(key);
+//      free(value);
+	if (chmap.insert(pair<char*, char*>(key, value)).second == false) {
+		cout
+				<< "HB_insert_cstr: insert failed, return -3, element exists, key = "
+				<< key << ", value = " << value << endl;
+		free(key);
+		free(value);
+		return -3;
+	} else {
+		cout << " HB_insert_cstr: insert succeeded. key = " << key
+				<< ", value = " << chmap.find(key)->second << endl;
+		free(key);
+		free(value);
+		return 0;
+	}
+
 }
 
 int32_t HB_insert(map<string, string> &hmap, Package &package) {
@@ -489,6 +646,7 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 			//		cout << "Insert..." << endl;
 			//operation_status = HB_insert(db, package);
 			operation_status = HB_insert(pmap, package);
+//			operation_status = HB_insert_cstr(chmap, package);
 			//		operation_status = HB_insert(hmap, package);
 			//cout<<"Inserted: key: "<< package.virtualpath()<<endl;
 			//		cout << "insert finished, return: " << operation_status << endl;
@@ -625,7 +783,7 @@ int main(int argc, char *argv[]) {
 //	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
 //	string fileName = "hashmap.data." + randStr;
 //	string fileName = "hashmap.txt";
-	string fileName = "";
+	const char* fileName = "";
 	pmap = new NoVoHT(fileName, 100000, 10000, 0.7);
 
 	map<string, string> hashMap;
