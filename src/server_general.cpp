@@ -500,7 +500,7 @@ int socket_replica(Package package, struct HostEntity &destination) {
 
 	//	generalSend(destination.host, destination.port, sock, str.c_str(), 1);
 //	cout << "socket_replica--------2, sock = " << sock << endl;
-	generalSendTCP(sock, str.c_str());
+	generalSendTCP(sock, str.c_str(), str.size());
 
 //	cout << "socket_replica--------3" << endl;
 	void *buff_return = (void*) malloc(sizeof(int32_t));
@@ -529,7 +529,7 @@ int general_replica(Package package, struct HostEntity &destination) {
 	//      generalSend(destination.host, destination.port, sock, str.c_str(), 1);
 //      cout << "socket_replica--------2, sock = " << sock << endl;
 //        generalSendTCP(sock, str.c_str());
-	generalSendTo(destination.host.c_str(), destination.port, sock, str.c_str(),
+	generalSendTo(destination.host.c_str(), destination.port, sock, str.c_str(), str.size(),
 			TCP);
 //      cout << "socket_replica--------3" << endl;
 	void *buff_return = (void*) malloc(sizeof(int32_t));
@@ -603,7 +603,7 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 		sAllInOne.append(statusBuff);
 		sAllInOne.append(result);
 
-		generalSendBack(client_sock, sAllInOne.c_str(), fromAddr, 0, TCP);
+		generalSendBack(client_sock, sAllInOne.c_str(), sAllInOne.size(), fromAddr, 0, TCP);
 	}
 		break;
 	case 2: {

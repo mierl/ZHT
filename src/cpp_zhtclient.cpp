@@ -248,8 +248,7 @@ int ZHTClient::insert(string str) {
 //	int sentSize = generalSendTCP(sock, str.c_str());
 	struct HostEntity dest = this->str2Host(str);
 	sockaddr_in recvAddr;
-	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(),
-			TCP);
+	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(), str.size(), TCP);
 //	cout <<"Client inseret sent: "<<sentSize<<endl;
 	int32_t* ret_buf = (int32_t*) malloc(sizeof(int32_t));
 
@@ -298,8 +297,7 @@ int ZHTClient::lookup(string str, string &returnStr) {
 	reuseSock(sock);
 //	cout<<"sock = "<<sock<<endl;
 	sockaddr_in recvAddr;
-	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(),
-			TCP);
+	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(), str.size(), TCP);
 //	int ret = generalSendTCP(sock, str.c_str());
 
 //	cout << "ZHTClient::lookup: simpleSend return = " << ret << endl;
@@ -353,8 +351,7 @@ int ZHTClient::remove(string str) {
 //	cout<<"sock = "<<sock<<endl;
 	struct HostEntity dest = this->str2Host(str);
 	sockaddr_in recvAddr;
-	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(),
-			TCP);
+	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(), str.size(), TCP);
 //		cout<<"remove sentSize "<< sentSize <<endl;
 	int32_t* ret_buf = (int32_t*) malloc(sizeof(int32_t));
 
