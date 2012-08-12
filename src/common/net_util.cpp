@@ -143,9 +143,8 @@ int makeClientSocket(const char* host, int port, bool tcp) {
 }
 
 //general send, include TCP & UDP
-int generalSendTo(const char* host, int port, int to_sock, const char* buff,
-		bool tcp) {
-	int buff_size = strlen(buff);
+int generalSendTo(const char* host, int port, int to_sock, const char* buff, int buffsize, bool tcp) {
+	int buff_size = buffsize;
 	int sentSize;
 
 //	cout << buff_size << "{" << buff << "}" << endl;
@@ -158,21 +157,20 @@ int generalSendTo(const char* host, int port, int to_sock, const char* buff,
 			return -1;
 		}
 	} else { //UDP
-		sentSize = udpSendTo(to_sock, host, port, buff);
+		sentSize = udpSendTo(to_sock, host, port, buff, buffsize);
 	}
 	return sentSize;
 }
 
 //send back when you receive something
-int generalSendBack(int to_sock, const char* buff_sendback,
-		struct sockaddr_in sendbackAddr, int flag, bool tcp) {
+int generalSendBack(int to_sock, const char* buff_sendback, int buffsize, struct sockaddr_in sendbackAddr, int flag, bool tcp) {
 	int sentSize = 0;
-	int buff_size = strlen(buff_sendback);
+	int buff_size = buffsize;
 	if (tcp == true) {
 		sentSize = send(to_sock, (const void*) buff_sendback, buff_size, 0);
 
 	} else { //UDP
-		sentSize = udpSendBack(to_sock, buff_sendback, sendbackAddr, flag);
+		sentSize = udpSendBack(to_sock, buff_sendback, buff_size, sendbackAddr, flag);
 
 	}
 	if (sentSize < 0) {
@@ -184,7 +182,7 @@ int generalSendBack(int to_sock, const char* buff_sendback,
 
 }
 
-int generalSendUDP(char* host, int port, int to_sock, char* buff) {
+int generalSendUDP(char* host, int port, int to_sock, char* buff, int buffsize) {
 
 	/*
 	 struct hostent *hp;
@@ -201,7 +199,7 @@ int generalSendUDP(char* host, int port, int to_sock, char* buff) {
 	 int n =sendto(to_sock,buff, strlen(buff),0,(const struct sockaddr *)&server,length);
 	 */
 
-	int buff_size = strlen(buff);
+	int buff_size = buffsize;
 	int sentSize;
 	struct sockaddr_in dest;
 	memset(&dest, 0, sizeof(struct sockaddr_in)); /*zero the struct*/
@@ -241,8 +239,8 @@ int generalReceive(int sock, void* recvBuff, int maxRecvSize,
 
 }
 
-int generalSendTCP(int to_sock, const char* buff) {
-	int buff_size = strlen(buff);
+int generalSendTCP(int to_sock, const char* buff, int buffsize) {
+	int buff_size = buffsize;
 	int sentSize;
 
 	sentSize = send(to_sock, (const void*) buff, buff_size, 0);
@@ -330,7 +328,7 @@ int simpleRecvUDP(int sock, void *buffer, size_t size, int flag,
 }
 
 // toSock can be made by makeClientSock()
-int udpSendTo(int toSock, const char* host, int port, const char* buff) {
+int udpSendTo(int toSock, const char* host, int port, const char* buff, int buffsize) {
 	struct hostent *hp;
 	struct sockaddr_in server;
 	server.sin_family = AF_INET;
@@ -338,7 +336,7 @@ int udpSendTo(int toSock, const char* host, int port, const char* buff) {
 
 	bcopy((char *) hp->h_addr, (char *) &server.sin_addr, hp->h_length);
 	server.sin_port = htons(port);
-	int ret = sendto(toSock, buff, strlen(buff), 0, (struct sockaddr*) &server,
+	int ret = sendto(toSock, buff, buffsize, 0, (struct sockaddr*) &server,
 			sizeof(struct sockaddr));
 	if (ret < 0) {
 		cerr << "net_util.cpp: udpSendTo error: " << strerror(errno) << endl;
@@ -358,10 +356,9 @@ int udpRecvFrom(int sock, void* recvBuff, int maxRecvSize,
 	return ret;
 }
 
-int udpSendBack(int sock, const char* buff_sendback,
-		struct sockaddr_in sendbackAddr, int flag) {
+int udpSendBack(int sock, const char* buff_sendback, int buffsize, struct sockaddr_in sendbackAddr, int flag) {
 
-	int ret = sendto(sock, buff_sendback, strlen(buff_sendback), flag,
+	int ret = sendto(sock, buff_sendback, buffsize, flag,
 			(struct sockaddr *) &sendbackAddr, sizeof(struct sockaddr));
 //	cout<<"UDP sendback: ret =  "<<ret<<endl;
 	if (ret < 0) {
