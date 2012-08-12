@@ -317,7 +317,7 @@ int ZHTClient::lookup(string str, string &returnStr) {
 		if (rcv_size < 0) {
 			cout << "Lookup receive error." << endl;
 		} else {
-			sRecv.assign(buff);
+			sRecv.assign(buff,rcv_size);
 			returnStr = sRecv.substr(3); //the left is real thing need to be deserilized.
 			sStatus = sRecv.substr(0, 3); //the first three chars means status code, like -1, -2, 0, -98, -99 and so on.
 		}
