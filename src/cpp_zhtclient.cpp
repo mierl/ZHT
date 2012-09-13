@@ -168,6 +168,7 @@ int ZHTClient::str2Sock(string str) { //give socket and update the vector of net
 }
 
 //This store limited connections in a LRU cache, one item is one host VS one sock
+/*
 int ZHTClient::str2SockLRU(string str, bool tcp) {
 	struct HostEntity dest = this->str2Host(str);
 	int sock = 0;
@@ -199,8 +200,44 @@ int ZHTClient::str2SockLRU(string str, bool tcp) {
 	}
 
 	return sock;
-}
+}*/
 
+int ZHTClient::str2SockLRU(string str, bool tcp) {
+        struct HostEntity dest = this->str2Host(str);
+        int sock = 0;
+        stringstream ss;
+                   ss << dest.port;
+                   string base(dest.host);
+                   base.append(ss.str()); //cout<<"base: "<< base<<endl;
+        if (tcp == true) {
+                sock = connectionCache.fetch(base, tcp);
+                if (sock <= 0) {
+//                      cout << "host not found in cache, making connection..." << endl;
+                        sock = makeClientSocket(dest.host.c_str(), dest.port, tcp);
+//                      cout << "created sock = " << sock << endl;
+                        if (sock <= 0) {
+                                cerr << "Client insert:making connection failed." << endl;
+                                return -1;
+                        } else {
+                                int tobeRemoved = -1;
+                                connectionCache.insert(base, sock, tobeRemoved);
+                                if (tobeRemoved != -1) {
+//                                      cout << "sock " << tobeRemoved  << ", will be removed, which shouldn't be 0."<< endl;
+                                        close(tobeRemoved);
+                                }
+                        }
+                } //end if sock<0
+        } else { //UDP
+
+                if (UDP_SOCKET <= 0) {
+                        sock = makeClientSocket(dest.host.c_str(), dest.port, TCP);
+                        UDP_SOCKET = sock;
+                } else
+                        sock = UDP_SOCKET;
+        }
+
+        return sock;
+}
 int ZHTClient::tearDownTCP() {
 	if (TCP == true) {
 		int size = this->memberList.size();
