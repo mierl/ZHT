@@ -1,7 +1,7 @@
 #include "cpp_zhtclient.h"
 #include "lru_cache.h"
 #include <stdint.h>
-
+#include <sstream>
 /*******************************
  * zhouxb
  */
