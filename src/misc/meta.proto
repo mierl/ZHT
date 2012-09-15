@@ -1,16 +1,17 @@
 message Package{
 	optional string virtualPath = 1;
-	//optional bytes virtualPath = 1;
 	optional int32 num = 2;
-	
 	optional string realFullPath = 3;
-	//optional bytes realFullPath = 3;
 	optional bool isDir = 4;
 	repeated string listItem = 5;
-	//repeated bytes listItem = 5;
 	optional int32 openMode = 6;
 	optional int32 mode = 7;
 
 	optional int32 Operation = 8; //1 for look up, 2 for remove, 3 for insert	
 	optional int32 replicaNo =9; //nagative number means it's not an original request.
+	
+	optional string opcode  = 10;
+	optional string rcode  = 11;
+	optional uint32 migrateInst = 12;
+	optional uint64 targetZHT = 13;
 }

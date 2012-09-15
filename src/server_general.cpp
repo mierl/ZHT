@@ -1,5 +1,4 @@
 /*
- * epoll-example.c
  *
  *  Created on: Mar 29, 2012
  *      Author: tony
@@ -22,6 +21,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <queue>
 #include "zht_util.h"
 #include "novoht.h"
 
@@ -39,51 +39,31 @@ struct HostEntity Replicas[MAX_NUM_REPLICA];
 
 bool TCP; // for switch between TCP and UDP
 
-/*******************************
- * zhouxb
- */
-//================================ Global and constant ===============================
-struct timeval tp;
-int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
+//For queueing request
+class DataEvent {
+public:
+	int FD;
+	void* buffer;
+	sockaddr_in fromAddr;
 
-int const MAX_MSG_SIZE = 65535; //transferd string maximum size
-
-int REPLICATION_TYPE; //1 for Client-side replication
-
-int NUM_REPLICAS;
-//====================================================================================
-
-int setconfigvariables(string cfgFile) {
-	FILE *fp;
-	char line[100], *key, *svalue;
-	int ivalue;
-
-	fp = fopen(cfgFile.data(), "r");
-	if (fp == NULL) {
-		cout << "Error opening the file." << endl;
-		return -1;
+	DataEvent(int fd, void* buf, sockaddr_in addr) {
+		this->FD = fd;
+		int len = strlen((const char*) buf);
+		this->buffer = malloc((len + 1) * sizeof(char));
+		memcpy(this->buffer, buf, len + 1);
+		this->fromAddr = addr;
 	}
-	while (fgets(line, 100, fp) != NULL) {
-		key = strtok(line, "=");
-		svalue = strtok(NULL, "=");
-		ivalue = atoi(svalue);
-
-		if ((strcmp(key, "REPLICATION_TYPE")) == 0) {
-			REPLICATION_TYPE = ivalue;
-			//cout<<"REPLICATION_TYPE = "<< REPLICATION_TYPE <<endl;
-		} //other config options follow this way(if).
-
-		if ((strcmp(key, "NUM_REPLICAS")) == 0) {
-			NUM_REPLICAS = ivalue;
-			//cout<<"NUM_REPLICAS = "<< NUM_REPLICAS <<endl;
-		}
-
+	;
+	~DataEvent() {
+		//free(this->buffer);
 	}
-	return 0;
-}
-/*******************************
- * zhouxb
- */
+	;
+};
+
+struct threadArg {
+	NoVoHT* novoht;
+	queue<DataEvent>* myQueue;
+};
 
 static int make_socket_non_blocking(int sfd) {
 	int flags, s;
@@ -529,8 +509,8 @@ int general_replica(Package package, struct HostEntity &destination) {
 	//      generalSend(destination.host, destination.port, sock, str.c_str(), 1);
 //      cout << "socket_replica--------2, sock = " << sock << endl;
 //        generalSendTCP(sock, str.c_str());
-	generalSendTo(destination.host.c_str(), destination.port, sock, str.c_str(), str.size(),
-			TCP);
+	generalSendTo(destination.host.c_str(), destination.port, sock, str.c_str(),
+			str.size(), TCP);
 //      cout << "socket_replica--------3" << endl;
 	void *buff_return = (void*) malloc(sizeof(int32_t));
 	//      int r = d3_svr_recv(sock, buff_return, sizeof(int32_t), 0, &recv_addr);
@@ -545,6 +525,8 @@ int general_replica(Package package, struct HostEntity &destination) {
 	}
 }
 
+bool thread_run = 0;
+
 void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 		NoVoHT* pmap) {
 
@@ -556,14 +538,14 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	//srand(kyotocabinet::getpid() + clock());
 	//cout << "Current service thread ID = " << pthread_self()<< ", dbService() begin..." << endl;
 
-//	char buff[MAX_MSG_SIZE];
+//	char buff[Env::MAX_MSG_SIZE];
 	int32_t operation_status = -99; //
 //	sockaddr_in toAddr;
 	int r;
 	void* buff1;
 
 	Package package;
-	package.ParseFromArray(buff, MAX_MSG_SIZE);
+	package.ParseFromArray(buff, Env::MAX_MSG_SIZE);
 	string result;
 //	cout << endl << endl << "in dbService: received replicano = "<< package.replicano() << endl;
 
@@ -603,7 +585,8 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 		sAllInOne.append(statusBuff);
 		sAllInOne.append(result);
 
-		generalSendBack(client_sock, sAllInOne.c_str(), sAllInOne.size(), fromAddr, 0, TCP);
+		generalSendBack(client_sock, sAllInOne.c_str(), sAllInOne.size(),
+				fromAddr, 0, TCP);
 	}
 		break;
 	case 2: {
@@ -694,11 +677,11 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	buff1 = &operation_status;
 
 //	cout << "Before handle Replication " << endl;
-	if (NUM_REPLICAS > 0) { // infinite loop if not limited by replicano, coz it will send the replica to itself infinitely
+	if (Env::NUM_REPLICAS > 0) { // infinite loop if not limited by replicano, coz it will send the replica to itself infinitely
 		if (package.replicano() == 5) {
 			if (package.operation() == 3 || package.operation() == 2) {
 
-				int i = NUM_REPLICAS;
+				int i = Env::NUM_REPLICAS;
 				unsigned int n;
 				//			package.set_replicano(3);
 				while (i > 0) { //change from numReplica to i
@@ -717,6 +700,19 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	}
 
 } //end function
+
+void* dataServiceThread(void* argument) {
+	struct threadArg* myArgu = (struct threadArg*) argument;
+
+	while (thread_run) {
+		if (!myArgu->myQueue->empty()) {
+			DataEvent data = myArgu->myQueue->front();
+			dataService(data.FD, data.buffer, data.fromAddr, myArgu->novoht);
+			myArgu->myQueue->pop();
+		}
+	}
+
+}
 
 int __main(int argc, char *argv[]) {
 	cout << "hello!" << endl;
@@ -740,12 +736,11 @@ int Host2Index(const char* hostName) {
 	}
 
 	return i;
-	/*
-	 Replicas[0].host = hostList.at(i).host;
-	 Replicas[0].port = PORT_FOR_REPLICA;
-	 Replicas[1].host = hostList.at(i+1).host;
-	 Replicas[1].port = PORT_FOR_REPLICA;
-	 */
+
+	Replicas[0].host = hostList.at(i).host;
+	Replicas[0].port = PORT_FOR_REPLICA;
+	Replicas[1].host = hostList.at(i + 1).host;
+	Replicas[1].port = PORT_FOR_REPLICA;
 
 }
 
@@ -794,7 +789,7 @@ int main(int argc, char *argv[]) {
 	nHost = hostList.size();
 //cout<<"3"<<endl;
 	Host2Index("localhost");
-	if (setconfigvariables(cfgFile) != 0) {
+	if (Env::setconfigvariables(cfgFile) != 0) {
 		cout << "Server: Not able to read configuration file." << endl;
 		exit(1);
 	}
@@ -878,11 +873,20 @@ int main(int argc, char *argv[]) {
 //	system("echo $IP >> /intrepid-fs0/users/tonglin/persistent/Register_$NNODE"); for BGP
 	// Buffer where events are returned
 	events = (epoll_event *) calloc(MAXEVENTS, sizeof event);
-	char buf[MAX_MSG_SIZE];
+	char buf[Env::MAX_MSG_SIZE];
 
 	int epollCounter = 0;
 //cout<<"I'm a server..."<<endl;
 	// The event loop
+
+	queue<DataEvent> dataQueue;
+	pthread_t idThread;
+	thread_run = 1;
+	threadArg argu;
+	argu.myQueue = &dataQueue;
+	argu.novoht = pmap;
+	int r = pthread_create(&idThread, NULL, dataServiceThread, (void*) &argu);
+
 	while (1) {
 		int n, i;
 
@@ -944,19 +948,24 @@ int main(int argc, char *argv[]) {
 							perror("epoll_ctl");
 							abort();
 						}
+
+						/*		printf(
+						 "new connection socket fd {%d} on socket fd {%d}\n",
+						 infd, listener);*/
 					} //end while
 					continue;
 
 				} //end if(TCP==true)
 				else if (TCP == false) {
 					sockaddr_in fromAddr;
-					char recvBuff[MAX_MSG_SIZE];
+					char recvBuff[Env::MAX_MSG_SIZE];
 					int recvSize = udpRecvFrom(events[i].data.fd, recvBuff,
-							MAX_MSG_SIZE, fromAddr, 0);
+							Env::MAX_MSG_SIZE, fromAddr, 0);
 					//cout<<"epool server receive size = "<<recvSize<<endl;
-					dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
+					DataEvent data(events[i].data.fd, recvBuff, fromAddr);
+					dataQueue.push(data);
+					//dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
 					memset(recvBuff, '\0', sizeof(recvBuff));
-
 				}
 			} else {
 
@@ -969,8 +978,8 @@ int main(int argc, char *argv[]) {
 
 					while (1) {
 						ssize_t count;
-//					char buf[MAX_MSG_SIZE];
-						//char* buf = (char*)malloc(MAX_MSG_SIZE*sizeof(char));
+//					char buf[Env::MAX_MSG_SIZE];
+						//char* buf = (char*)malloc(Env::MAX_MSG_SIZE*sizeof(char));
 
 						//count = read(events[i].data.fd, buf, sizeof buf);
 						count = generalReveiveTCP(events[i].data.fd, buf,
@@ -1001,7 +1010,13 @@ int main(int argc, char *argv[]) {
 						else { //count > 0
 //						cout<<"Receive string..."<<endl;
 							sockaddr_in fromAddr; // no use for TCP, just to fill the parameter
-							dataService(events[i].data.fd, buf, fromAddr, pmap);
+							fromAddr.sin_port = 0;
+							fromAddr.sin_addr.s_addr = 0;
+
+							DataEvent data(events[i].data.fd, buf, fromAddr);
+							dataQueue.push(data);
+
+							//dataService(events[i].data.fd, buf, fromAddr, pmap);
 							memset(buf, '\0', sizeof(buf));
 //						free(buf);
 
@@ -1014,10 +1029,12 @@ int main(int argc, char *argv[]) {
 					}
 
 					if (done) {
-//					printf("Closed connection on descriptor %d\n",events[i].data.fd);
 
 						// Closing the descriptor will make epoll remove it from the set of descriptors which are monitored.
 						close(events[i].data.fd);
+						/*
+						 printf("Closed connection on descriptor %d\n",
+						 events[i].data.fd);*/
 					}
 
 				} //if TCP == true

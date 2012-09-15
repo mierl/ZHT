@@ -1,5 +1,3 @@
-//#include <kchashdb.h>
-//#include <kcprotodb.h>
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -7,8 +5,6 @@
 #include <fstream>
 
 #include <algorithm>
-//#include "d3_transport.h"
-//#include "meta.pb.h"
 #include <signal.h>
 #include <sys/time.h>
 #include <stdlib.h>
@@ -16,17 +12,12 @@
 #include <list>
 #include <vector>
 #include <netdb.h>
-//#include "zht_util.h" //zhouxb
-//raman-client-replication-s
-//#include "d3_sys_globals.h"
 #include <pthread.h>
 #include <error.h>
-#include "lru_cache.h"
 
-#include "cpp_zhtclient.h" //zhouxb
+#include "cpp_zhtclient.h"
 using namespace std;
 
-//int NUM_REPLICAS = 0;
 struct thread_data {
 	vector<struct HostEntity> hostList;
 	list<string> packageList;
@@ -36,39 +27,11 @@ list<string> myPackagelist;
 bool TCP;
 int UDP_SOCKET = -1;
 int CACHE_SIZE = 1024;
-LRUCache<string, int> connectionCache(CACHE_SIZE); //initialized here.
 
 void sig_pipe(int signum) {
 	printf("SIGPIPE Caught!\n");
 	signal(SIGPIPE, sig_pipe);
 }
-
-/*
-
- //zhouxb
-
- class ZHTClient {
- public:
- int REPLICATION_TYPE; //serverside or client side. -1:error
- int NUM_REPLICAS; //-1:error
- int protocolType; //1:1TCP; 2:UDP; 3.... Reserved.  -1:error
- vector<struct HostEntity> memberList;
- ZHTClient();
-
- int initialize(string configFilePath, string memberListFilePath);
- struct HostEntity str2Host(string str);
- struct HostEntity str2Host(string str, int &index);
- int str2Sock(string str);
- int str2SockLRU(string str, bool tcp);
- int insert(string str); //following functions should only know string, address where to can be calculated.
- int insert(string str, int sock); // only for test
- int lookup(string str, string &returnStr);
- int lookup(string str, string &returnStr, int sock); // only for test
- int remove(string str);
- int tearDownTCP(bool tcp); //only for TCP
-
- };
- */
 
 int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
 		ZHTClient &clientRet, int numTest, int lenString) {
@@ -356,8 +319,11 @@ int main(int argc, char* argv[]) {
 //	string recordFile = "record." + ss.str();
 //	benmarkTimeAnalize(cfgFile, memberList, pkgList, testClient, numOper, 15, recordFile);
 //cout<<"start to insert..."<<endl;
+
 	benchmarkInsert(cfgFile, memberList, pkgList, testClient, numOper, 15); //25fro 128bytes.
-//cout << "Client:main, start lookup \n";
+
+	//cout << "Client:main, start lookup \n";
+
 	benchmarkLookup(pkgList, testClient);
 	benchmarkRemove(pkgList, testClient);
 //	testClient.tearDownTCP(TCP);

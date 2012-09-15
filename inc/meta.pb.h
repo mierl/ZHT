@@ -168,6 +168,42 @@ class Package : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 replicano() const;
   inline void set_replicano(::google::protobuf::int32 value);
   
+  // optional string opcode = 10;
+  inline bool has_opcode() const;
+  inline void clear_opcode();
+  static const int kOpcodeFieldNumber = 10;
+  inline const ::std::string& opcode() const;
+  inline void set_opcode(const ::std::string& value);
+  inline void set_opcode(const char* value);
+  inline void set_opcode(const char* value, size_t size);
+  inline ::std::string* mutable_opcode();
+  inline ::std::string* release_opcode();
+  
+  // optional string rcode = 11;
+  inline bool has_rcode() const;
+  inline void clear_rcode();
+  static const int kRcodeFieldNumber = 11;
+  inline const ::std::string& rcode() const;
+  inline void set_rcode(const ::std::string& value);
+  inline void set_rcode(const char* value);
+  inline void set_rcode(const char* value, size_t size);
+  inline ::std::string* mutable_rcode();
+  inline ::std::string* release_rcode();
+  
+  // optional uint32 migrateInst = 12;
+  inline bool has_migrateinst() const;
+  inline void clear_migrateinst();
+  static const int kMigrateInstFieldNumber = 12;
+  inline ::google::protobuf::uint32 migrateinst() const;
+  inline void set_migrateinst(::google::protobuf::uint32 value);
+  
+  // optional uint64 targetZHT = 13;
+  inline bool has_targetzht() const;
+  inline void clear_targetzht();
+  static const int kTargetZHTFieldNumber = 13;
+  inline ::google::protobuf::uint64 targetzht() const;
+  inline void set_targetzht(::google::protobuf::uint64 value);
+  
   // @@protoc_insertion_point(class_scope:Package)
  private:
   inline void set_has_virtualpath();
@@ -186,6 +222,14 @@ class Package : public ::google::protobuf::Message {
   inline void clear_has_operation();
   inline void set_has_replicano();
   inline void clear_has_replicano();
+  inline void set_has_opcode();
+  inline void clear_has_opcode();
+  inline void set_has_rcode();
+  inline void clear_has_rcode();
+  inline void set_has_migrateinst();
+  inline void clear_has_migrateinst();
+  inline void set_has_targetzht();
+  inline void clear_has_targetzht();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -198,9 +242,13 @@ class Package : public ::google::protobuf::Message {
   ::google::protobuf::int32 mode_;
   ::google::protobuf::int32 operation_;
   ::google::protobuf::int32 replicano_;
+  ::std::string* opcode_;
+  ::std::string* rcode_;
+  ::google::protobuf::uint64 targetzht_;
+  ::google::protobuf::uint32 migrateinst_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
   
   friend void  protobuf_AddDesc_meta_2eproto();
   friend void protobuf_AssignDesc_meta_2eproto();
@@ -506,6 +554,166 @@ inline ::google::protobuf::int32 Package::replicano() const {
 inline void Package::set_replicano(::google::protobuf::int32 value) {
   set_has_replicano();
   replicano_ = value;
+}
+
+// optional string opcode = 10;
+inline bool Package::has_opcode() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Package::set_has_opcode() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Package::clear_has_opcode() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Package::clear_opcode() {
+  if (opcode_ != &::google::protobuf::internal::kEmptyString) {
+    opcode_->clear();
+  }
+  clear_has_opcode();
+}
+inline const ::std::string& Package::opcode() const {
+  return *opcode_;
+}
+inline void Package::set_opcode(const ::std::string& value) {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::kEmptyString) {
+    opcode_ = new ::std::string;
+  }
+  opcode_->assign(value);
+}
+inline void Package::set_opcode(const char* value) {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::kEmptyString) {
+    opcode_ = new ::std::string;
+  }
+  opcode_->assign(value);
+}
+inline void Package::set_opcode(const char* value, size_t size) {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::kEmptyString) {
+    opcode_ = new ::std::string;
+  }
+  opcode_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Package::mutable_opcode() {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::kEmptyString) {
+    opcode_ = new ::std::string;
+  }
+  return opcode_;
+}
+inline ::std::string* Package::release_opcode() {
+  clear_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = opcode_;
+    opcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string rcode = 11;
+inline bool Package::has_rcode() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void Package::set_has_rcode() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void Package::clear_has_rcode() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void Package::clear_rcode() {
+  if (rcode_ != &::google::protobuf::internal::kEmptyString) {
+    rcode_->clear();
+  }
+  clear_has_rcode();
+}
+inline const ::std::string& Package::rcode() const {
+  return *rcode_;
+}
+inline void Package::set_rcode(const ::std::string& value) {
+  set_has_rcode();
+  if (rcode_ == &::google::protobuf::internal::kEmptyString) {
+    rcode_ = new ::std::string;
+  }
+  rcode_->assign(value);
+}
+inline void Package::set_rcode(const char* value) {
+  set_has_rcode();
+  if (rcode_ == &::google::protobuf::internal::kEmptyString) {
+    rcode_ = new ::std::string;
+  }
+  rcode_->assign(value);
+}
+inline void Package::set_rcode(const char* value, size_t size) {
+  set_has_rcode();
+  if (rcode_ == &::google::protobuf::internal::kEmptyString) {
+    rcode_ = new ::std::string;
+  }
+  rcode_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Package::mutable_rcode() {
+  set_has_rcode();
+  if (rcode_ == &::google::protobuf::internal::kEmptyString) {
+    rcode_ = new ::std::string;
+  }
+  return rcode_;
+}
+inline ::std::string* Package::release_rcode() {
+  clear_has_rcode();
+  if (rcode_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = rcode_;
+    rcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional uint32 migrateInst = 12;
+inline bool Package::has_migrateinst() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void Package::set_has_migrateinst() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void Package::clear_has_migrateinst() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void Package::clear_migrateinst() {
+  migrateinst_ = 0u;
+  clear_has_migrateinst();
+}
+inline ::google::protobuf::uint32 Package::migrateinst() const {
+  return migrateinst_;
+}
+inline void Package::set_migrateinst(::google::protobuf::uint32 value) {
+  set_has_migrateinst();
+  migrateinst_ = value;
+}
+
+// optional uint64 targetZHT = 13;
+inline bool Package::has_targetzht() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void Package::set_has_targetzht() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void Package::clear_has_targetzht() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void Package::clear_targetzht() {
+  targetzht_ = GOOGLE_ULONGLONG(0);
+  clear_has_targetzht();
+}
+inline ::google::protobuf::uint64 Package::targetzht() const {
+  return targetzht_;
+}
+inline void Package::set_targetzht(::google::protobuf::uint64 value) {
+  set_has_targetzht();
+  targetzht_ = value;
 }
 
 

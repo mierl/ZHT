@@ -35,10 +35,16 @@ struct  _Package
   int32_t operation;
   protobuf_c_boolean has_replicano;
   int32_t replicano;
+  char *opcode;
+  char *rcode;
+  protobuf_c_boolean has_migrateinst;
+  uint32_t migrateinst;
+  protobuf_c_boolean has_targetzht;
+  uint64_t targetzht;
 };
 #define PACKAGE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&package__descriptor) \
-    , NULL, 0,0, NULL, 0,0, 0,NULL, 0,0, 0,0, 0,0, 0,0 }
+    , NULL, 0,0, NULL, 0,0, 0,NULL, 0,0, 0,0, 0,0, 0,0, NULL, NULL, 0,0, 0,0 }
 
 
 /* Package methods */

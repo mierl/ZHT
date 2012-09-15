@@ -1,62 +1,20 @@
 #include "cpp_zhtclient.h"
-#include "lru_cache.h"
 #include <stdint.h>
 #include <sstream>
-/*******************************
- * zhouxb
- */
-//================================ Global and constant ===============================
-struct timeval tp;
-int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
 
-int const MAX_MSG_SIZE = 65535; //transferd string maximum size
-
-int REPLICATION_TYPE; //1 for Client-side replication
-
-int NUM_REPLICAS;
-//====================================================================================
-
-int setconfigvariables(string cfgFile) {
-	FILE *fp;
-	char line[100], *key, *svalue;
-	int ivalue;
-
-	fp = fopen(cfgFile.data(), "r");
-	if (fp == NULL) {
-		cout << "Error opening the file." << endl;
-		return -1;
-	}
-	while (fgets(line, 100, fp) != NULL) {
-		key = strtok(line, "=");
-		svalue = strtok(NULL, "=");
-		ivalue = atoi(svalue);
-
-		if ((strcmp(key, "REPLICATION_TYPE")) == 0) {
-			REPLICATION_TYPE = ivalue;
-			//cout<<"REPLICATION_TYPE = "<< REPLICATION_TYPE <<endl;
-		} //other config options follow this way(if).
-
-		if ((strcmp(key, "NUM_REPLICAS")) == 0) {
-			NUM_REPLICAS = ivalue;
-			//cout<<"NUM_REPLICAS = "<< NUM_REPLICAS <<endl;
-		}
-
-	}
-	return 0;
-}
-/*******************************
- * zhouxb
- */
-
-int UDP_SOCKET = -1;
-int CACHE_SIZE = 1024;
-LRUCache<string, int> connectionCache(CACHE_SIZE); //initialized here.
+int ZHTClient::UDP_SOCKET = -1;
+int ZHTClient::CACHE_SIZE = 1024;
+LRUCache<string, int> ZHTClient::CONNECTION_CACHE = LRUCache<string, int>(
+		ZHTClient::CACHE_SIZE);
 
 ZHTClient::ZHTClient() { // default all invalid value, so the client must be initialized to set the variables.
 	//Since constructor can't return anything, we must have an initialization function that can return possible error message.
 	this->NUM_REPLICAS = -1;
 	this->REPLICATION_TYPE = -1;
 	this->protocolType = -1;
+}
+
+ZHTClient::~ZHTClient() {
 }
 
 int ZHTClient::initialize(string configFilePath, string memberListFilePath,
@@ -168,12 +126,18 @@ int ZHTClient::str2Sock(string str) { //give socket and update the vector of net
 }
 
 //This store limited connections in a LRU cache, one item is one host VS one sock
-/*
 int ZHTClient::str2SockLRU(string str, bool tcp) {
 	struct HostEntity dest = this->str2Host(str);
+
+	stringstream ss;
+	ss << dest.host;
+	ss << ":";
+	ss << dest.port;
+	string key = ss.str();
+
 	int sock = 0;
 	if (tcp == true) {
-		sock = connectionCache.fetch(dest.host, tcp);
+		sock = CONNECTION_CACHE.fetch(key, tcp);
 		if (sock <= 0) {
 //			cout << "host not found in cache, making connection..." << endl;
 			sock = makeClientSocket(dest.host.c_str(), dest.port, tcp);
@@ -183,7 +147,7 @@ int ZHTClient::str2SockLRU(string str, bool tcp) {
 				return -1;
 			} else {
 				int tobeRemoved = -1;
-				connectionCache.insert(dest.host, sock, tobeRemoved);
+				CONNECTION_CACHE.insert(key, sock, tobeRemoved);
 				if (tobeRemoved != -1) {
 //					cout << "sock " << tobeRemoved	<< ", will be removed, which shouldn't be 0."<< endl;
 					close(tobeRemoved);
@@ -200,44 +164,8 @@ int ZHTClient::str2SockLRU(string str, bool tcp) {
 	}
 
 	return sock;
-}*/
-
-int ZHTClient::str2SockLRU(string str, bool tcp) {
-        struct HostEntity dest = this->str2Host(str);
-        int sock = 0;
-        stringstream ss;
-                   ss << dest.port;
-                   string base(dest.host);
-                   base.append(ss.str()); //cout<<"base: "<< base<<endl;
-        if (tcp == true) {
-                sock = connectionCache.fetch(base, tcp);
-                if (sock <= 0) {
-//                      cout << "host not found in cache, making connection..." << endl;
-                        sock = makeClientSocket(dest.host.c_str(), dest.port, tcp);
-//                      cout << "created sock = " << sock << endl;
-                        if (sock <= 0) {
-                                cerr << "Client insert:making connection failed." << endl;
-                                return -1;
-                        } else {
-                                int tobeRemoved = -1;
-                                connectionCache.insert(base, sock, tobeRemoved);
-                                if (tobeRemoved != -1) {
-//                                      cout << "sock " << tobeRemoved  << ", will be removed, which shouldn't be 0."<< endl;
-                                        close(tobeRemoved);
-                                }
-                        }
-                } //end if sock<0
-        } else { //UDP
-
-                if (UDP_SOCKET <= 0) {
-                        sock = makeClientSocket(dest.host.c_str(), dest.port, TCP);
-                        UDP_SOCKET = sock;
-                } else
-                        sock = UDP_SOCKET;
-        }
-
-        return sock;
 }
+
 int ZHTClient::tearDownTCP() {
 	if (TCP == true) {
 		int size = this->memberList.size();
@@ -285,7 +213,8 @@ int ZHTClient::insert(string str) {
 //	int sentSize = generalSendTCP(sock, str.c_str());
 	struct HostEntity dest = this->str2Host(str);
 	sockaddr_in recvAddr;
-	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(), str.size(), TCP);
+	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(),
+			str.size(), TCP);
 //	cout <<"Client inseret sent: "<<sentSize<<endl;
 	int32_t* ret_buf = (int32_t*) malloc(sizeof(int32_t));
 
@@ -334,11 +263,12 @@ int ZHTClient::lookup(string str, string &returnStr) {
 	reuseSock(sock);
 //	cout<<"sock = "<<sock<<endl;
 	sockaddr_in recvAddr;
-	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(), str.size(), TCP);
+	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(),
+			str.size(), TCP);
 //	int ret = generalSendTCP(sock, str.c_str());
 
 //	cout << "ZHTClient::lookup: simpleSend return = " << ret << endl;
-	char buff[MAX_MSG_SIZE]; //MAX_MSG_SIZE
+	char buff[Env::MAX_MSG_SIZE]; //Env::MAX_MSG_SIZE
 	memset(buff, 0, sizeof(buff));
 	int rcv_size = -1;
 	int status = -1;
@@ -354,9 +284,9 @@ int ZHTClient::lookup(string str, string &returnStr) {
 		if (rcv_size < 0) {
 			cout << "Lookup receive error." << endl;
 		} else {
-			sRecv.assign(buff,rcv_size);
+			sRecv.assign(buff);
 			returnStr = sRecv.substr(3); //the left is real thing need to be deserilized.
-			sStatus = sRecv.substr(0, 3); //the first three chars means status code, like -1, -2, 0, -98, -99 and so on.
+			sStatus = sRecv.substr(0, 3); //the first three chars means status code, like 001, 002, -98, -99 and so on.
 		}
 
 //		cout << "after protocol judge" << endl;
@@ -388,7 +318,8 @@ int ZHTClient::remove(string str) {
 //	cout<<"sock = "<<sock<<endl;
 	struct HostEntity dest = this->str2Host(str);
 	sockaddr_in recvAddr;
-	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(), str.size(), TCP);
+	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(),
+			str.size(), TCP);
 //		cout<<"remove sentSize "<< sentSize <<endl;
 	int32_t* ret_buf = (int32_t*) malloc(sizeof(int32_t));
 

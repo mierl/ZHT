@@ -29,7 +29,20 @@
 
 using namespace std;
 
+class Env {
+public:
+	Env();
+	virtual ~Env();
 
+	static int setconfigvariables(string cfgFile);
+
+public:
+	static const int MAX_MSG_SIZE; //transferd string maximum size
+
+	static int REPLICATION_TYPE; //1 for Client-side replication
+
+	static int NUM_REPLICAS;
+};
 
 double getTime_usec();
 
@@ -41,7 +54,7 @@ string randomString(int len);
 
 struct HostEntity {
 	struct sockaddr_in si;
-	int sock;//for used by client/server replicas only
+	int sock; //for used by client/server replicas only
 	string host;
 	int port;
 	bool valid;
@@ -60,6 +73,8 @@ int tearDownTCP(vector<struct HostEntity> memberList);
 bool myCompare(struct HostEntity i, struct HostEntity j);
 
 vector<struct HostEntity> getMembership(string fileName);
+
+HostEntity getHostEntity(const string& host, const int& port);
 
 int myIndex(vector<struct HostEntity> memberList, struct HostEntity aHost);
 

@@ -24,20 +24,49 @@
 //#include "lru_cache.h"
 #include<signal.h>
 # include <errno.h>
-#include "../../inc/net_util.h"
-#include "../../inc/zht_util.h"
+#include "net_util.h"
+#include "zht_util.h"
 //struct timeval tp;
 using namespace std;
 
-//================================ Global and constant ===============================
-//int MAX_FILE_SIZE = 10000; //1GB, too big, use dynamic memory malloc.
+const int Env::MAX_MSG_SIZE = 65535; //transferd string maximum size
 
-//int const MAX_MSG_SIZE = 1024; //transferd string maximum size
+int Env::REPLICATION_TYPE = 0; //1 for Client-side replication
 
-//int REPLICATION_TYPE; //1 for Client-side replication
+int Env::NUM_REPLICAS = 0;
 
-//int NUM_REPLICAS;
-//====================================================================================
+Env::Env() {
+}
+
+Env::~Env() {
+}
+
+int Env::setconfigvariables(string cfgFile) {
+	FILE *fp;
+	char line[100], *key, *svalue;
+	int ivalue;
+
+	fp = fopen(cfgFile.data(), "r");
+	if (fp == NULL) {
+		cout << "Error opening the file." << endl;
+		return -1;
+	}
+	while (fgets(line, 100, fp) != NULL) {
+		key = strtok(line, "=");
+		svalue = strtok(NULL, "=");
+		ivalue = atoi(svalue);
+
+		if ((strcmp(key, "REPLICATION_TYPE")) == 0) {
+			REPLICATION_TYPE = ivalue;
+		} //other config options follow this way(if).
+
+		if ((strcmp(key, "NUM_REPLICAS")) == 0) {
+			NUM_REPLICAS = ivalue;
+		}
+
+	}
+	return 0;
+}
 
 double getTime_usec() {
 
@@ -160,49 +189,63 @@ bool myCompare(struct HostEntity i, struct HostEntity j) {
 
 }
 
+HostEntity getHostEntity(const string& host, const int& port) {
 
-vector<struct HostEntity> getMembership(string fileName) {
-	vector<struct HostEntity> hostList;
-	ifstream in(fileName.c_str(), ios::in);
-	string host;
-	int port;
 	HostEntity aHost;
+
 	struct sockaddr_in si_other;
 	hostent *record;
 	in_addr *address;
 	string ip_address;
+
+	record = gethostbyname(host.c_str());
+	address = (in_addr *) record->h_addr;
+	ip_address = inet_ntoa(*address);
+
+	memset((char *) &si_other, 0, sizeof(si_other));
+	si_other.sin_family = AF_INET;
+	si_other.sin_port = htons(port);
+	if (inet_aton(ip_address.c_str(), &si_other.sin_addr) == 0) {
+		fprintf(stderr, "inet_aton() failed\n");
+	}
+
+	aHost.si = si_other;
+	aHost.host = host;
+	aHost.port = port;
+	aHost.valid = true;
+	aHost.sock = -1;
+
+	return aHost;
+}
+
+vector<struct HostEntity> getMembership(string fileName) {
+
+	vector<struct HostEntity> hostList;
+
+	ifstream in(fileName.c_str(), ios::in);
 	if (!in.is_open()) {
 		cout << "Membership File read failed." << endl;
 		return hostList;
 	}
-	if (!in.eof()) {
-		in >> host >> port;
-	}
-	record = gethostbyname(host.c_str());
-	address = (in_addr *) record->h_addr;
-	ip_address = inet_ntoa(*address);
+
 	while (!in.eof()) {
-//		int s, i, slen = sizeof(si_other);
-		memset((char *) &si_other, 0, sizeof(si_other));
-		si_other.sin_family = AF_INET;
-		si_other.sin_port = htons(port);
-		if (inet_aton(ip_address.c_str(), &si_other.sin_addr) == 0) {
-			fprintf(stderr, "inet_aton() failed\n");
-		}
-		aHost.si = si_other;
-		aHost.host = host;
-		aHost.port = port;
-		aHost.valid = true;
-		aHost.sock = -1;
-		hostList.push_back(aHost);
+
+		string host;
+		int port;
+
 		in >> host >> port;
-		record = gethostbyname(host.c_str());
-		address = (in_addr *) record->h_addr;
-		ip_address = inet_ntoa(*address);
+
+		if (!host.empty())
+			hostList.push_back(getHostEntity(host, port));
+		else
+			break;
 	}
+
 	in.close();
+
 	cout << "finished reading membership info, " << hostList.size() << " nodes"
 			<< endl;
+
 	return hostList;
 }
 
