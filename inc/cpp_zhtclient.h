@@ -16,12 +16,14 @@ public:
 	vector<struct HostEntity> memberList;
 
 	int initialize(string configFilePath, string memberListFilePath, bool tcp);
+	int initialize(string configFilePath, string memberListFilePath, bool tcp, int cache_size);
 	struct HostEntity str2Host(string str);
 	struct HostEntity str2Host(string str, int &index);
 	int str2Sock(string str);
 	int str2SockLRU(string str, bool tcp);
 	int insert(string str); //following functions should only know string, address where to can be calculated.
 	int insert(string str, int sock); // only for test
+	int append(string str); //operation num = 4
 	int lookup(string str, string &returnStr);
 	int lookup(string str, string &returnStr, int sock); // only for test
 	int remove(string str);

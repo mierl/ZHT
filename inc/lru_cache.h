@@ -254,7 +254,7 @@ template< class Key, class Data, class Sizefn = Countfn< Data > > class LRUCache
 		// Check to see if we need to remove an element due to exceeding max_size
 		while (_curr_size > _max_size) {
 			// Remove the last element.
-			cout<<"LRC_cache: hit the max_size "<<_max_size<<", now current size = "<<_curr_size<<endl;
+	//		cout<<"LRC_cache: hit the max_size "<<_max_size<<", now current size = "<<_curr_size<<endl;
 			liter = _list.end();
 			--liter;
 			removed_data = liter->second;

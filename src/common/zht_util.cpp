@@ -243,8 +243,7 @@ vector<struct HostEntity> getMembership(string fileName) {
 
 	in.close();
 
-	cout << "finished reading membership info, " << hostList.size() << " nodes"
-			<< endl;
+//	cout << "finished reading membership info, " << hostList.size() << " nodes"<< endl;
 
 	return hostList;
 }
