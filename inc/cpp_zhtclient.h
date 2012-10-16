@@ -24,6 +24,7 @@ public:
 	int insert(string str, int sock); // only for test
 	int lookup(string str, string &returnStr);
 	int lookup(string str, string &returnStr, int sock); // only for test
+	int append(string str); //operation num = 4
 	int remove(string str);
 	int tearDownTCP(); //only for TCP
 

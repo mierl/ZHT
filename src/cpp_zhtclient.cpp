@@ -157,10 +157,13 @@ int ZHTClient::str2SockLRU(string str, bool tcp) {
 	} else { //UDP
 
 		if (UDP_SOCKET <= 0) {
+
 			sock = makeClientSocket(dest.host.c_str(), dest.port, TCP);
 			UDP_SOCKET = sock;
-		} else
+		} else {
+
 			sock = UDP_SOCKET;
+		}
 	}
 
 	return sock;
@@ -297,6 +300,46 @@ int ZHTClient::lookup(string str, string &returnStr) {
 		status = atoi(sStatus.c_str());
 
 	return status;
+}
+
+int ZHTClient::append(string str) {
+
+	Package package;
+	package.ParseFromString(str);
+
+	if (package.virtualpath().empty()) //empty key not allowed.
+		return -1;
+	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");
+
+	package.set_operation(4); //1 for look up, 2 for remove, 3 for insert, 4 for append
+	package.set_replicano(5); //5: original, 3 not original
+	str = package.SerializeAsString();
+
+	int sock = this->str2SockLRU(str, TCP);
+	reuseSock(sock);
+//      cout<<"sock = "<<sock<<endl;
+//      int sentSize = generalSendTCP(sock, str.c_str());
+	struct HostEntity dest = this->str2Host(str);
+	sockaddr_in recvAddr;
+	int sentSize = generalSendTo(dest.host.data(), dest.port, sock, str.c_str(),
+			str.size(), TCP);
+//      cout <<"Client inseret sent: "<<sentSize<<endl;
+	int32_t* ret_buf = (int32_t*) malloc(sizeof(int32_t));
+
+//      generalReveiveTCP(sock, (void*) ret_buf, sizeof(int32_t), 0);
+	generalReceive(sock, (void*) ret_buf, 4, recvAddr, 0, TCP);
+	int ret = *(int32_t*) ret_buf;
+	if (ret < 0) {
+//              cerr << "zht_util.h: Failed to insert." << endl;
+	}
+//cout <<"Returned status: "<< *(int32_t*) ret<<endl;
+//      d3_closeConnection(sock);
+	free(ret_buf);
+
+	//return ret_1;
+//      cout<<"insert got: "<< *ret <<endl;
+	return ret;
 }
 
 int ZHTClient::remove(string str) {

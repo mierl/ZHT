@@ -28,35 +28,6 @@ int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig,
 	return 0;
 }
 
-int c_zht_insert_std(ZHTClient_c zhtClient, const char *pair) {
-
-	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
-
-	string str(pair);
-
-	return zhtcppClient->insert(str);
-}
-
-int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key,
-		const char *value) {
-
-	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
-
-	string sKey(key);
-	string sValue(value);
-
-	Package package;
-	package.set_virtualpath(sKey); //as key
-	package.set_isdir(true);
-	package.set_replicano(5);
-	package.set_operation(3); //1 for look up, 2 for remove, 3 for insert
-	if (!sValue.empty())
-		package.set_realfullpath(sValue);
-
-	return zhtcppClient->insert(package.SerializeAsString());
-
-}
-
 int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result,
 		size_t *n) {
 
@@ -84,7 +55,7 @@ int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result,
 	package.set_virtualpath(sKey); //as key
 	package.set_isdir(true);
 	package.set_replicano(5);
-	package.set_operation(1); //1 for look up, 2 for remove, 3 for insert
+	package.set_operation(1); //1 for look up, 2 for remove, 3 for insert, 4 append
 
 	string resultStr;
 	int ret = zhtcppClient->lookup(package.SerializeAsString(), resultStr);
@@ -116,9 +87,66 @@ int c_zht_remove2_std(ZHTClient_c zhtClient, const char *key) {
 
 	Package package;
 	package.set_virtualpath(sKey);
-	package.set_operation(2); //1 for look up, 2 for remove, 3 for insert
+	package.set_operation(2); //1 for look up, 2 for remove, 3 for insert, 4 append
 
 	return zhtcppClient->remove(package.SerializeAsString());
+}
+
+int c_zht_insert_std(ZHTClient_c zhtClient, const char *pair) {
+
+	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
+
+	string str(pair);
+
+	return zhtcppClient->insert(str);
+}
+
+int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key,
+		const char *value) {
+
+	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
+
+	string sKey(key);
+	string sValue(value);
+
+	Package package;
+	package.set_virtualpath(sKey); //as key
+	package.set_isdir(true);
+	package.set_replicano(5);
+	package.set_operation(3); //1 for look up, 2 for remove, 3 for insert, 4 append
+	if (!sValue.empty())
+		package.set_realfullpath(sValue);
+
+	return zhtcppClient->insert(package.SerializeAsString());
+}
+
+int c_zht_append_std(ZHTClient_c zhtClient, const char *pair) {
+
+	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
+
+	string str(pair);
+
+	return zhtcppClient->append(str);
+}
+
+int c_zht_append2_std(ZHTClient_c zhtClient, const char *key,
+		const char *value) {
+
+	ZHTClient * zhtcppClient = (ZHTClient *) zhtClient;
+
+	string sKey(key);
+	string sValue(value);
+
+	Package package;
+	package.set_virtualpath(sKey); //as key
+	package.set_isdir(true);
+	package.set_replicano(5);
+	package.set_operation(4); //1 for look up, 2 for remove, 3 for insert, 4 append
+	if (!sValue.empty())
+		package.set_realfullpath(sValue);
+
+	return zhtcppClient->append(package.SerializeAsString());
+
 }
 
 int c_zht_teardown_std(ZHTClient_c zhtClient) {

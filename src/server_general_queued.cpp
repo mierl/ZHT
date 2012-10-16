@@ -942,7 +942,7 @@ int main(int argc, char *argv[]) {
 	threadArg argu;
 	argu.myQueue = &dataQueue;
 	argu.novoht = pmap;
-//	int r = pthread_create(&idThread, NULL, dataServiceThread, (void*) &argu);
+	int r = pthread_create(&idThread, NULL, dataServiceThread, (void*) &argu);
 
 	while (1) {
 		int n, i;
@@ -1019,13 +1019,9 @@ int main(int argc, char *argv[]) {
 					int recvSize = udpRecvFrom(events[i].data.fd, recvBuff,
 							Env::MAX_MSG_SIZE, fromAddr, 0);
 					//cout<<"epool server receive size = "<<recvSize<<endl;
-					//Queued version
-					/*
 					DataEvent data(events[i].data.fd, recvBuff, fromAddr);
 					dataQueue.push(data);
-					*/
-
-					dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
+					//dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
 					memset(recvBuff, '\0', sizeof(recvBuff));
 				}
 			} else {
@@ -1074,11 +1070,10 @@ int main(int argc, char *argv[]) {
 							fromAddr.sin_port = 0;
 							fromAddr.sin_addr.s_addr = 0;
 
-							/* 	//Queued version
 							DataEvent data(events[i].data.fd, buf, fromAddr);
 							dataQueue.push(data);
-							*/
-							dataService(events[i].data.fd, buf, fromAddr, pmap);
+
+							//dataService(events[i].data.fd, buf, fromAddr, pmap);
 							memset(buf, '\0', sizeof(buf));
 //						free(buf);
 

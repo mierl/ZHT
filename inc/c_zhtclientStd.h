@@ -29,20 +29,6 @@ ZHT_CPP(extern "C" {)
 	int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig,
 			const char *zhtConfig, bool tcp);
 
-	/* wrapp C++ ZHTClient::insert.
-	 * PAIR is expected to be a serialization string with protocol-buffer-c-binding representation.
-	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed, -98 if unrecognized operation.
-	 * */
-	int c_zht_insert_std(ZHTClient_c zhtClient, const char *pair);
-
-	/* wrapp C++ ZHTClient::insert.
-	 * KEY: empty key not allowed, if empty, return -1, means failed.
-	 * VALUE: empty value ignored.
-	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation.
-	 * */
-	int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key,
-			const char *value);
-
 	/* wrapp C++ ZHTClient::lookup.
 	 * PAIR is expected to be a serialization string with protocol-buffer-c-binding representation.
 	 * RESULT: lookup result
@@ -72,6 +58,34 @@ ZHT_CPP(extern "C" {)
 	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation.
 	 * */
 	int c_zht_remove2_std(ZHTClient_c zhtClient, const char *key);
+
+	/* wrapp C++ ZHTClient::insert.
+	 * PAIR is expected to be a serialization string with protocol-buffer-c-binding representation.
+	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed, -98 if unrecognized operation.
+	 * */
+	int c_zht_insert_std(ZHTClient_c zhtClient, const char *pair);
+
+	/* wrapp C++ ZHTClient::insert.
+	 * KEY: empty key not allowed, if empty, return -1, means failed.
+	 * VALUE: empty value ignored.
+	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation.
+	 * */
+	int c_zht_insert2_std(ZHTClient_c zhtClient, const char *key,
+			const char *value);
+
+	/* wrapp C++ ZHTClient::append.
+	 * PAIR is expected to be a serialization string with protocol-buffer-c-binding representation.
+	 * return code: 0 if succeeded, or -1 if empty key, or -2 if failed, -98 if unrecognized operation.
+	 * */
+	int c_zht_append_std(ZHTClient_c zhtClient, const char *pair);
+
+	/* wrapp C++ ZHTClient::append.
+	 * KEY: empty key not allowed, if empty, return -1, means failed.
+	 * VALUE: empty value ignored.
+	 * return code: 0 if succeeded, or -1 if empty key, or , -98 if unrecognized operation.
+	 * */
+	int c_zht_append2_std(ZHTClient_c zhtClient, const char *key,
+			const char *value);
 
 	/* wrapp C++ ZHTClient::teardown.
 	 * return code: 0 if succeeded, or -1 if failed.
