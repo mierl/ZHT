@@ -29,7 +29,7 @@ void protobuf_AssignDesc_meta_2eproto() {
       "meta.proto");
   GOOGLE_CHECK(file != NULL);
   Package_descriptor_ = file->message_type(0);
-  static const int Package_offsets_[13] = {
+  static const int Package_offsets_[22] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, virtualpath_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, num_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, realfullpath_),
@@ -42,7 +42,16 @@ void protobuf_AssignDesc_meta_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, opcode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, rcode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, migrateinst_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, uprange_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, sourcezht_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, targetzht_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, rfname_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, lfname_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, migringpos_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, gmembership_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, isfwdmsg_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, asneighbor_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, wifecode_),
   };
   Package_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -85,13 +94,17 @@ void protobuf_AddDesc_meta_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\nmeta.proto\"\357\001\n\007Package\022\023\n\013virtualPath\030"
+    "\n\nmeta.proto\"\224\003\n\007Package\022\023\n\013virtualPath\030"
     "\001 \001(\t\022\013\n\003num\030\002 \001(\005\022\024\n\014realFullPath\030\003 \001(\t"
     "\022\r\n\005isDir\030\004 \001(\010\022\020\n\010listItem\030\005 \003(\t\022\020\n\010ope"
     "nMode\030\006 \001(\005\022\014\n\004mode\030\007 \001(\005\022\021\n\tOperation\030\010"
     " \001(\005\022\021\n\treplicaNo\030\t \001(\005\022\016\n\006opcode\030\n \001(\t\022"
-    "\r\n\005rcode\030\013 \001(\t\022\023\n\013migrateInst\030\014 \001(\r\022\021\n\tt"
-    "argetZHT\030\r \001(\004", 254);
+    "\r\n\005rcode\030\013 \001(\t\022\023\n\013migrateInst\030\014 \001(\r\022\017\n\007u"
+    "prange\030\r \001(\010\022\021\n\tsourceZHT\030\016 \001(\t\022\021\n\ttarge"
+    "tZHT\030\017 \001(\t\022\016\n\006rfname\030\020 \001(\t\022\016\n\006lfname\030\021 \001"
+    "(\t\022\022\n\nmigringpos\030\022 \003(\004\022\023\n\013gmembership\030\023 "
+    "\001(\t\022\020\n\010isfwdmsg\030\024 \001(\010\022\022\n\nasneighbor\030\025 \001("
+    "\t\022\020\n\010wifecode\030\026 \001(\t", 419);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "meta.proto", &protobuf_RegisterTypes);
   Package::default_instance_ = new Package();
@@ -122,7 +135,16 @@ const int Package::kReplicaNoFieldNumber;
 const int Package::kOpcodeFieldNumber;
 const int Package::kRcodeFieldNumber;
 const int Package::kMigrateInstFieldNumber;
+const int Package::kUprangeFieldNumber;
+const int Package::kSourceZHTFieldNumber;
 const int Package::kTargetZHTFieldNumber;
+const int Package::kRfnameFieldNumber;
+const int Package::kLfnameFieldNumber;
+const int Package::kMigringposFieldNumber;
+const int Package::kGmembershipFieldNumber;
+const int Package::kIsfwdmsgFieldNumber;
+const int Package::kAsneighborFieldNumber;
+const int Package::kWifecodeFieldNumber;
 #endif  // !_MSC_VER
 
 Package::Package()
@@ -152,7 +174,15 @@ void Package::SharedCtor() {
   opcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   rcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   migrateinst_ = 0u;
-  targetzht_ = GOOGLE_ULONGLONG(0);
+  uprange_ = false;
+  sourcezht_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  targetzht_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  rfname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  lfname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  gmembership_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  isfwdmsg_ = false;
+  asneighbor_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  wifecode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -172,6 +202,27 @@ void Package::SharedDtor() {
   }
   if (rcode_ != &::google::protobuf::internal::kEmptyString) {
     delete rcode_;
+  }
+  if (sourcezht_ != &::google::protobuf::internal::kEmptyString) {
+    delete sourcezht_;
+  }
+  if (targetzht_ != &::google::protobuf::internal::kEmptyString) {
+    delete targetzht_;
+  }
+  if (rfname_ != &::google::protobuf::internal::kEmptyString) {
+    delete rfname_;
+  }
+  if (lfname_ != &::google::protobuf::internal::kEmptyString) {
+    delete lfname_;
+  }
+  if (gmembership_ != &::google::protobuf::internal::kEmptyString) {
+    delete gmembership_;
+  }
+  if (asneighbor_ != &::google::protobuf::internal::kEmptyString) {
+    delete asneighbor_;
+  }
+  if (wifecode_ != &::google::protobuf::internal::kEmptyString) {
+    delete wifecode_;
   }
   if (this != default_instance_) {
   }
@@ -228,9 +279,48 @@ void Package::Clear() {
       }
     }
     migrateinst_ = 0u;
-    targetzht_ = GOOGLE_ULONGLONG(0);
+    uprange_ = false;
+    if (has_sourcezht()) {
+      if (sourcezht_ != &::google::protobuf::internal::kEmptyString) {
+        sourcezht_->clear();
+      }
+    }
+    if (has_targetzht()) {
+      if (targetzht_ != &::google::protobuf::internal::kEmptyString) {
+        targetzht_->clear();
+      }
+    }
+    if (has_rfname()) {
+      if (rfname_ != &::google::protobuf::internal::kEmptyString) {
+        rfname_->clear();
+      }
+    }
+  }
+  if (_has_bits_[16 / 32] & (0xffu << (16 % 32))) {
+    if (has_lfname()) {
+      if (lfname_ != &::google::protobuf::internal::kEmptyString) {
+        lfname_->clear();
+      }
+    }
+    if (has_gmembership()) {
+      if (gmembership_ != &::google::protobuf::internal::kEmptyString) {
+        gmembership_->clear();
+      }
+    }
+    isfwdmsg_ = false;
+    if (has_asneighbor()) {
+      if (asneighbor_ != &::google::protobuf::internal::kEmptyString) {
+        asneighbor_->clear();
+      }
+    }
+    if (has_wifecode()) {
+      if (wifecode_ != &::google::protobuf::internal::kEmptyString) {
+        wifecode_->clear();
+      }
+    }
   }
   listitem_.Clear();
+  migringpos_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -434,19 +524,176 @@ bool Package::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(104)) goto parse_targetZHT;
+        if (input->ExpectTag(104)) goto parse_uprange;
         break;
       }
       
-      // optional uint64 targetZHT = 13;
+      // optional bool uprange = 13;
       case 13: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_targetZHT:
+         parse_uprange:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &uprange_)));
+          set_has_uprange();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(114)) goto parse_sourceZHT;
+        break;
+      }
+      
+      // optional string sourceZHT = 14;
+      case 14: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_sourceZHT:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_sourcezht()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->sourcezht().data(), this->sourcezht().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(122)) goto parse_targetZHT;
+        break;
+      }
+      
+      // optional string targetZHT = 15;
+      case 15: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_targetZHT:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_targetzht()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->targetzht().data(), this->targetzht().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(130)) goto parse_rfname;
+        break;
+      }
+      
+      // optional string rfname = 16;
+      case 16: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_rfname:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_rfname()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->rfname().data(), this->rfname().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(138)) goto parse_lfname;
+        break;
+      }
+      
+      // optional string lfname = 17;
+      case 17: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_lfname:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_lfname()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->lfname().data(), this->lfname().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(144)) goto parse_migringpos;
+        break;
+      }
+      
+      // repeated uint64 migringpos = 18;
+      case 18: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_migringpos:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &targetzht_)));
-          set_has_targetzht();
+                 2, 144, input, this->mutable_migringpos())));
+        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
+                   == ::google::protobuf::internal::WireFormatLite::
+                      WIRETYPE_LENGTH_DELIMITED) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_migringpos())));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(144)) goto parse_migringpos;
+        if (input->ExpectTag(154)) goto parse_gmembership;
+        break;
+      }
+      
+      // optional string gmembership = 19;
+      case 19: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_gmembership:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_gmembership()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->gmembership().data(), this->gmembership().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(160)) goto parse_isfwdmsg;
+        break;
+      }
+      
+      // optional bool isfwdmsg = 20;
+      case 20: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_isfwdmsg:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &isfwdmsg_)));
+          set_has_isfwdmsg();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(170)) goto parse_asneighbor;
+        break;
+      }
+      
+      // optional string asneighbor = 21;
+      case 21: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_asneighbor:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_asneighbor()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->asneighbor().data(), this->asneighbor().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(178)) goto parse_wifecode;
+        break;
+      }
+      
+      // optional string wifecode = 22;
+      case 22: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_wifecode:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_wifecode()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->wifecode().data(), this->wifecode().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -552,9 +799,83 @@ void Package::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(12, this->migrateinst(), output);
   }
   
-  // optional uint64 targetZHT = 13;
+  // optional bool uprange = 13;
+  if (has_uprange()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(13, this->uprange(), output);
+  }
+  
+  // optional string sourceZHT = 14;
+  if (has_sourcezht()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->sourcezht().data(), this->sourcezht().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      14, this->sourcezht(), output);
+  }
+  
+  // optional string targetZHT = 15;
   if (has_targetzht()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(13, this->targetzht(), output);
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->targetzht().data(), this->targetzht().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      15, this->targetzht(), output);
+  }
+  
+  // optional string rfname = 16;
+  if (has_rfname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->rfname().data(), this->rfname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      16, this->rfname(), output);
+  }
+  
+  // optional string lfname = 17;
+  if (has_lfname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->lfname().data(), this->lfname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      17, this->lfname(), output);
+  }
+  
+  // repeated uint64 migringpos = 18;
+  for (int i = 0; i < this->migringpos_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(
+      18, this->migringpos(i), output);
+  }
+  
+  // optional string gmembership = 19;
+  if (has_gmembership()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->gmembership().data(), this->gmembership().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      19, this->gmembership(), output);
+  }
+  
+  // optional bool isfwdmsg = 20;
+  if (has_isfwdmsg()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(20, this->isfwdmsg(), output);
+  }
+  
+  // optional string asneighbor = 21;
+  if (has_asneighbor()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->asneighbor().data(), this->asneighbor().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      21, this->asneighbor(), output);
+  }
+  
+  // optional string wifecode = 22;
+  if (has_wifecode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->wifecode().data(), this->wifecode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      22, this->wifecode(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -649,9 +970,90 @@ void Package::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(12, this->migrateinst(), target);
   }
   
-  // optional uint64 targetZHT = 13;
+  // optional bool uprange = 13;
+  if (has_uprange()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(13, this->uprange(), target);
+  }
+  
+  // optional string sourceZHT = 14;
+  if (has_sourcezht()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->sourcezht().data(), this->sourcezht().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        14, this->sourcezht(), target);
+  }
+  
+  // optional string targetZHT = 15;
   if (has_targetzht()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(13, this->targetzht(), target);
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->targetzht().data(), this->targetzht().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        15, this->targetzht(), target);
+  }
+  
+  // optional string rfname = 16;
+  if (has_rfname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->rfname().data(), this->rfname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        16, this->rfname(), target);
+  }
+  
+  // optional string lfname = 17;
+  if (has_lfname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->lfname().data(), this->lfname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        17, this->lfname(), target);
+  }
+  
+  // repeated uint64 migringpos = 18;
+  for (int i = 0; i < this->migringpos_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt64ToArray(18, this->migringpos(i), target);
+  }
+  
+  // optional string gmembership = 19;
+  if (has_gmembership()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->gmembership().data(), this->gmembership().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        19, this->gmembership(), target);
+  }
+  
+  // optional bool isfwdmsg = 20;
+  if (has_isfwdmsg()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(20, this->isfwdmsg(), target);
+  }
+  
+  // optional string asneighbor = 21;
+  if (has_asneighbor()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->asneighbor().data(), this->asneighbor().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        21, this->asneighbor(), target);
+  }
+  
+  // optional string wifecode = 22;
+  if (has_wifecode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->wifecode().data(), this->wifecode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        22, this->wifecode(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -742,11 +1144,65 @@ int Package::ByteSize() const {
           this->migrateinst());
     }
     
-    // optional uint64 targetZHT = 13;
+    // optional bool uprange = 13;
+    if (has_uprange()) {
+      total_size += 1 + 1;
+    }
+    
+    // optional string sourceZHT = 14;
+    if (has_sourcezht()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->sourcezht());
+    }
+    
+    // optional string targetZHT = 15;
     if (has_targetzht()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        ::google::protobuf::internal::WireFormatLite::StringSize(
           this->targetzht());
+    }
+    
+    // optional string rfname = 16;
+    if (has_rfname()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->rfname());
+    }
+    
+  }
+  if (_has_bits_[16 / 32] & (0xffu << (16 % 32))) {
+    // optional string lfname = 17;
+    if (has_lfname()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->lfname());
+    }
+    
+    // optional string gmembership = 19;
+    if (has_gmembership()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->gmembership());
+    }
+    
+    // optional bool isfwdmsg = 20;
+    if (has_isfwdmsg()) {
+      total_size += 2 + 1;
+    }
+    
+    // optional string asneighbor = 21;
+    if (has_asneighbor()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->asneighbor());
+    }
+    
+    // optional string wifecode = 22;
+    if (has_wifecode()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->wifecode());
     }
     
   }
@@ -755,6 +1211,16 @@ int Package::ByteSize() const {
   for (int i = 0; i < this->listitem_size(); i++) {
     total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
       this->listitem(i));
+  }
+  
+  // repeated uint64 migringpos = 18;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->migringpos_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt64Size(this->migringpos(i));
+    }
+    total_size += 2 * this->migringpos_size() + data_size;
   }
   
   if (!unknown_fields().empty()) {
@@ -783,6 +1249,7 @@ void Package::MergeFrom(const ::google::protobuf::Message& from) {
 void Package::MergeFrom(const Package& from) {
   GOOGLE_CHECK_NE(&from, this);
   listitem_.MergeFrom(from.listitem_);
+  migringpos_.MergeFrom(from.migringpos_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_virtualpath()) {
       set_virtualpath(from.virtualpath());
@@ -819,8 +1286,34 @@ void Package::MergeFrom(const Package& from) {
     if (from.has_migrateinst()) {
       set_migrateinst(from.migrateinst());
     }
+    if (from.has_uprange()) {
+      set_uprange(from.uprange());
+    }
+    if (from.has_sourcezht()) {
+      set_sourcezht(from.sourcezht());
+    }
     if (from.has_targetzht()) {
       set_targetzht(from.targetzht());
+    }
+    if (from.has_rfname()) {
+      set_rfname(from.rfname());
+    }
+  }
+  if (from._has_bits_[16 / 32] & (0xffu << (16 % 32))) {
+    if (from.has_lfname()) {
+      set_lfname(from.lfname());
+    }
+    if (from.has_gmembership()) {
+      set_gmembership(from.gmembership());
+    }
+    if (from.has_isfwdmsg()) {
+      set_isfwdmsg(from.isfwdmsg());
+    }
+    if (from.has_asneighbor()) {
+      set_asneighbor(from.asneighbor());
+    }
+    if (from.has_wifecode()) {
+      set_wifecode(from.wifecode());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -857,7 +1350,16 @@ void Package::Swap(Package* other) {
     std::swap(opcode_, other->opcode_);
     std::swap(rcode_, other->rcode_);
     std::swap(migrateinst_, other->migrateinst_);
+    std::swap(uprange_, other->uprange_);
+    std::swap(sourcezht_, other->sourcezht_);
     std::swap(targetzht_, other->targetzht_);
+    std::swap(rfname_, other->rfname_);
+    std::swap(lfname_, other->lfname_);
+    migringpos_.Swap(&other->migringpos_);
+    std::swap(gmembership_, other->gmembership_);
+    std::swap(isfwdmsg_, other->isfwdmsg_);
+    std::swap(asneighbor_, other->asneighbor_);
+    std::swap(wifecode_, other->wifecode_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

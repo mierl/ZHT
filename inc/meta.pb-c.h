@@ -39,12 +39,23 @@ struct  _Package
   char *rcode;
   protobuf_c_boolean has_migrateinst;
   uint32_t migrateinst;
-  protobuf_c_boolean has_targetzht;
-  uint64_t targetzht;
+  protobuf_c_boolean has_uprange;
+  protobuf_c_boolean uprange;
+  char *sourcezht;
+  char *targetzht;
+  char *rfname;
+  char *lfname;
+  size_t n_migringpos;
+  uint64_t *migringpos;
+  char *gmembership;
+  protobuf_c_boolean has_isfwdmsg;
+  protobuf_c_boolean isfwdmsg;
+  char *asneighbor;
+  char *wifecode;
 };
 #define PACKAGE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&package__descriptor) \
-    , NULL, 0,0, NULL, 0,0, 0,NULL, 0,0, 0,0, 0,0, 0,0, NULL, NULL, 0,0, 0,0 }
+    , NULL, 0,0, NULL, 0,0, 0,NULL, 0,0, 0,0, 0,0, 0,0, NULL, NULL, 0,0, 0,0, NULL, NULL, NULL, NULL, 0,NULL, NULL, 0,0, NULL, NULL }
 
 
 /* Package methods */
