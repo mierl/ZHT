@@ -81,6 +81,7 @@ NoVoHT::NoVoHT(const string& f, const int& s, const int& m) {
 	dbfile = fopen(f.c_str(), "r+");
 	if (!dbfile)
 		dbfile = fopen(f.c_str(), "w+");
+	//setbuf(dbfile, NULL);
 	readFile();
 	oldpairs = NULL;
 }
@@ -246,6 +247,8 @@ int NoVoHT::append(string k, string aval) {
 	if (k.compare(cur->key) == 0) {
 		fpos_t toRem = cur->pos;
 		cur->val += ":" + aval;
+		if (!dbfile)
+			return 0;
 		fseek(dbfile, -1, SEEK_END);
 		if (((unsigned int) ftell(dbfile) - cur->val.size() - cur->key.size()
 				+ aval.size()) == (unsigned int) (cur->pos.__pos)) {
@@ -261,6 +264,8 @@ int NoVoHT::append(string k, string aval) {
 		else if (k.compare(cur->next->key) == 0) {
 			fpos_t toRem = cur->next->pos;
 			cur->next->val += ":" + aval;
+			if (!dbfile)
+				return 0;
 			fseek(dbfile, -1, SEEK_END);
 			if (((unsigned int) ftell(dbfile) - cur->val.size()
 					- cur->key.size() + aval.size())
@@ -299,8 +304,12 @@ int NoVoHT::writeFile() {
 	dbfile = fopen(".novoht.swp", "w+");
 	nRem = 0;
 	int rc = pthread_create(&writeThread, NULL, rewriteCaller, this);
-	if (rc)
+	if (rc) {
 		printf("Thread not created");
+		fclose(dbfile);
+		dbfile = swapFile;
+		rewriting = false;
+	}
 	return rc;
 }
 

@@ -6,6 +6,7 @@
 #include "c_zhtclientStd.h"
 #include "cpp_zhtclient.h"
 #include <string.h>
+using namespace std;
 
 bool TCP = false;
 
@@ -38,8 +39,32 @@ int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result,
 	string resultStr;
 	int ret = zhtcppClient->lookup(sPair, resultStr);
 
-	strncpy(result, resultStr.c_str(), strlen(resultStr.c_str()));
-	*n = resultStr.size();
+	/*
+	 * hello,zht:hello,zht ==> hello,zht:zht
+	 * */
+	string store;
+	char * pch;
+	pch = strtok((char*) resultStr.c_str(), ":");
+	Package package2;
+
+	while (pch != NULL) {
+
+		package2.ParseFromString(resultStr);
+		string strRealfullpath = package2.realfullpath();
+
+		store.append(strRealfullpath);
+		store.append(":");
+
+		pch = strtok(NULL, ":");
+	}
+
+	size_t found = store.find_last_of(":");
+	store = store.substr(0, found);
+	package2.set_realfullpath(store);
+
+	store = package2.SerializeAsString();
+	strncpy(result, store.c_str(), strlen(store.c_str()));
+	*n = store.size();
 
 	return ret;
 }
@@ -60,12 +85,30 @@ int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result,
 	string resultStr;
 	int ret = zhtcppClient->lookup(package.SerializeAsString(), resultStr);
 
+	/*
+	 * hello,zht:hello,zht ==> hello,zht:zht
+	 * */
+	string store;
+	char * pch;
+	pch = strtok((char*) resultStr.c_str(), ":");
 	Package package2;
-	package2.ParseFromString(resultStr);
-	string strRealfullpath = package2.realfullpath();
 
-	strncpy(result, strRealfullpath.c_str(), strlen(strRealfullpath.c_str()));
-	*n = strRealfullpath.size();
+	while (pch != NULL) {
+
+		package2.ParseFromString(resultStr);
+		string strRealfullpath = package2.realfullpath();
+
+		store.append(strRealfullpath);
+		store.append(":");
+
+		pch = strtok(NULL, ":");
+	}
+
+	size_t found = store.find_last_of(":");
+	store = store.substr(0, found);
+
+	strncpy(result, store.c_str(), strlen(store.c_str()));
+	*n = store.size();
 
 	return ret;
 }

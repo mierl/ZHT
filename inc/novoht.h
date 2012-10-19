@@ -206,6 +206,11 @@ public:
 	int getCap() const {
 		return size;
 	}
+
+	bool isRewriting() const;
+
+	int flushDbfile();
+
 	key_iterator keyIterator();
 	val_iterator valIterator();
 	pair_iterator pairIterator();
@@ -213,9 +218,6 @@ public:
 		((NoVoHT*) map)->rewriteFile(NULL);
 		return NULL;
 	}
-
-	bool isRewriting() const;
-	int flushDbfile();
 };
 
 unsigned long long hash(string k);

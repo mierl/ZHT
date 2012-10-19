@@ -207,22 +207,20 @@ int32_t HB_insert(NoVoHT *map, Package &package) {
 		return 0;
 }
 
-int32_t HB_append(NoVoHT *map, Package &package){
-        string value = package.SerializeAsString();
+int32_t HB_append(NoVoHT *map, Package &package) {
+	string value = package.SerializeAsString();
 //      cout << "Insert to pmap...value = " << value << endl;
-        string key = package.virtualpath();
+	string key = package.virtualpath();
 //      cout<<"key:"<<key<<endl;
 //      cout<<"value:"<<value<<endl;
-        int ret = map->append(key, value);
+	int ret = map->append(key, value);
 //      cout << "end inserting, ret = " << ret << endl;
-        if (ret != 0) {
-                cerr << "Append error: ret = " << ret << endl;
-                return -4;
-        }
-        else
-                return 0;
+	if (ret != 0) {
+		cerr << "Append error: ret = " << ret << endl;
+		return -4;
+	} else
+		return 0;
 }
-
 
 string HB_lookup(NoVoHT *map, Package &package) {
 //      string value;
@@ -371,7 +369,6 @@ int32_t HB_insert(map<string, string> &hmap, Package &package) {
 	} else
 		return 0;
 }
-
 
 string HB_lookup(map<string, string> &hmap, Package &package) {
 	string value;
@@ -608,33 +605,6 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	}
 		break;
 
-
-	case 4: {
-                if (package.virtualpath().empty()) {
-                        operation_status = -1;
-                } else {
-                                     // cout << "Server: append..." << endl;
-                        //operation_status = HB_insert(db, package);
-                        operation_status = HB_append(pmap, package);
-//                      cout << "Server: append ret = "<< operation_status <<endl;
-                        //cout<<"Inserted: key: "<< package.virtualpath()<<endl;
-                        //              cout << "insert finished, return: " << operation_status << endl;
-                }
-                buff1 = &operation_status;
-                if (TCP == true) {
-                        r = send(client_sock, &operation_status, sizeof(int32_t), 0);
-                } else {
-                        r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
-                                        (struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
-                }
-
-                if (r <= 0) {
-                        cout  << "Append: Server could not send acknowledgement to client: sendto r = " << r << endl;
-                } 
-
-        }
-		break;
-	
 	case 2: {
 		//remove
 		//		cout << "Remove..." << endl;
@@ -699,6 +669,33 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 					<< "Insert: Server could not send acknowledgement to client: sendto r = "
 					<< r << endl;
 		}
+	}
+		break;
+	case 4: {
+		if (package.virtualpath().empty()) {
+			operation_status = -1;
+		} else {
+			// cout << "Server: append..." << endl;
+			//operation_status = HB_insert(db, package);
+			operation_status = HB_append(pmap, package);
+			//                      cout << "Server: append ret = "<< operation_status <<endl;
+			//cout<<"Inserted: key: "<< package.virtualpath()<<endl;
+			//              cout << "insert finished, return: " << operation_status << endl;
+		}
+		buff1 = &operation_status;
+		if (TCP == true) {
+			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
+		} else {
+			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
+					(struct sockaddr *) &fromAddr, sizeof(struct sockaddr));
+		}
+
+		if (r <= 0) {
+			cout
+					<< "Append: Server could not send acknowledgement to client: sendto r = "
+					<< r << endl;
+		}
+
 	}
 		break;
 	case 99: { //shut the server
@@ -795,17 +792,13 @@ int main(int argc, char *argv[]) {
 //----------- Settings about ZHT server----------------
 // General version, work for both TCP and UDP.
 //	cout << "Use: hash-phm <port> <neighbor_list_file> <config_file>" << endl;
-	if (argc != 6) { //or 3?
+	if (argc != 5) { //or 3?
 		fprintf(stderr, "Usage: %s [port]\n", argv[0]);
 		cout << "argc = " << argc << endl;
 		exit(EXIT_FAILURE);
 	}
 
-	LISTEN_PORT = argv[1];
-	string membershipFile(argv[2]);
-        string cfgFile(argv[3]);
 	char* isTCP = argv[4];
-        char* userName = argv[5];
 
 	if (!strcmp("TCP", isTCP)) {
 		TCP = true;
@@ -815,17 +808,16 @@ int main(int argc, char *argv[]) {
 //cout<<"UDP"<<endl;
 	}
 
+	LISTEN_PORT = argv[1];
+	string cfgFile(argv[3]);
 	string randStr = randomString(5);
 //cout<<"1"<<endl;
-/*
-//			for BGP
+	/*		for BGP
 	 const string cmd = "cat /proc/personality.sh | grep BG_PSETORG";
 	 string torusID = executeShell(cmd);
 	 torusID.resize(torusID.size()-1);
 	 srand( getTime_msec()+ myhash(torusID.c_str(), 10000000) );
-*/
-
-
+	 */
 //	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
 //	string fileName = "hashmap.data." + randStr;
 //	string fileName = "hashmap.txt";
@@ -835,6 +827,7 @@ int main(int argc, char *argv[]) {
 	map<string, string> hashMap;
 	hmap = hashMap;
 //cout<<"2"<<endl;
+	string membershipFile(argv[2]);
 	hostList = getMembership(membershipFile);
 	nHost = hostList.size();
 //cout<<"3"<<endl;
@@ -919,15 +912,8 @@ int main(int argc, char *argv[]) {
 		perror("epoll_ctl");
 		abort();
 	}
-
-
-/*	//For BGP
-	string cmd_2 = string("echo $IP >> /intrepid-fs0/users/") +string(userName) + string("/persistent/Register_$NNODE");
-	//      system("echo $IP >> /intrepid-fs0/users/tonglin/persistent/Register_$NNODE"); for BGP
-        system(cmd_2.c_str());
-*/
-
-//	cout <<"Server started"<<endl;
+//cout<<"about to write Register_$NNODE"<<endl;	
+//	system("echo $IP >> /intrepid-fs0/users/tonglin/persistent/Register_$NNODE"); for BGP
 	// Buffer where events are returned
 	events = (epoll_event *) calloc(MAXEVENTS, sizeof event);
 	char buf[Env::MAX_MSG_SIZE];
@@ -942,7 +928,7 @@ int main(int argc, char *argv[]) {
 	threadArg argu;
 	argu.myQueue = &dataQueue;
 	argu.novoht = pmap;
-//	int r = pthread_create(&idThread, NULL, dataServiceThread, (void*) &argu);
+	int r = pthread_create(&idThread, NULL, dataServiceThread, (void*) &argu);
 
 	while (1) {
 		int n, i;
@@ -1019,13 +1005,9 @@ int main(int argc, char *argv[]) {
 					int recvSize = udpRecvFrom(events[i].data.fd, recvBuff,
 							Env::MAX_MSG_SIZE, fromAddr, 0);
 					//cout<<"epool server receive size = "<<recvSize<<endl;
-					//Queued version
-					/*
 					DataEvent data(events[i].data.fd, recvBuff, fromAddr);
 					dataQueue.push(data);
-					*/
-
-					dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
+					//dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
 					memset(recvBuff, '\0', sizeof(recvBuff));
 				}
 			} else {
@@ -1074,11 +1056,10 @@ int main(int argc, char *argv[]) {
 							fromAddr.sin_port = 0;
 							fromAddr.sin_addr.s_addr = 0;
 
-							/* 	//Queued version
 							DataEvent data(events[i].data.fd, buf, fromAddr);
 							dataQueue.push(data);
-							*/
-							dataService(events[i].data.fd, buf, fromAddr, pmap);
+
+							//dataService(events[i].data.fd, buf, fromAddr, pmap);
 							memset(buf, '\0', sizeof(buf));
 //						free(buf);
 
