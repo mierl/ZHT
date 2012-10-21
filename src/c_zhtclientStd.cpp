@@ -49,7 +49,7 @@ int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result,
 
 	while (pch != NULL) {
 
-		package2.ParseFromString(resultStr);
+		package2.ParseFromString(pch);
 		string strRealfullpath = package2.realfullpath();
 
 		store.append(strRealfullpath);

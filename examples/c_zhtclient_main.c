@@ -253,7 +253,9 @@ void test_pass_package() {
 	 * */
 	memset(buf, 0, len);
 	package.operation = 4; //1 for look up, 2 for remove, 3 for insert, 4 for append
-	package.realfullpath = value;
+//	package.realfullpath = value;
+	char *dfz_value = "dfz_test_append";
+	package.realfullpath = dfz_value;
 	len = package__get_packed_size(&package);
 	buf = (char*) calloc(len, sizeof(char));
 	package__pack(&package, buf);
