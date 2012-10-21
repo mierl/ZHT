@@ -71,7 +71,7 @@ int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
 	int c = 0;
 //	cout << "-----2" << endl;
 	for (it = pkgList.begin(); it != pkgList.end(); it++) {
-	//	cerr <<"insert count "<< c << endl;
+		//	cerr <<"insert count "<< c << endl;
 		c++;
 		string str_ins = *it;
 //cout << "-----1" << endl;
@@ -83,7 +83,8 @@ int benchmarkInsert(string cfgFile, string memberList, vector<string> &pkgList,
 	}
 //close(sock);
 	end = getTime_msec();
-	cout << "Inserted " << numTest - errCount << " packages out of " << numTest << ", cost " << end - start << " ms" << endl;
+	cout << "Inserted " << numTest - errCount << " packages out of " << numTest
+			<< ", cost " << end - start << " ms" << endl;
 	return 0;
 }
 
@@ -92,53 +93,54 @@ int benchmarkAppend(ZHTClient &client, int numTest, int lenString) {
 //	cout << "start to append"<<endl;
 //      if (clientRet.initialize(cfgFile, memberList) != 0) { //zhouxb
 	vector<string> pkgList_append;
-        for (int i = 0; i < numTest; i++) {
-                Package package, package_ret;
-                package.set_virtualpath(randomString(lenString).append("-append")); //as key
-                package.set_isdir(true);
-                package.set_replicano(5); //orginal--Note: never let it be nagative!!!
-                package.set_operation(4); // 3 for insert, 1 for look up, 2 for remove
-                package.set_realfullpath(
-                                "Some-Real-longer-longer-and-longer-Paths--------");
-                package.add_listitem("item-----2");
-                package.add_listitem("item-----3");
-                package.add_listitem("item-----4");
-                package.add_listitem("item-----5");
-                package.add_listitem("item-----6");
-                string str = package.SerializeAsString();
+	for (int i = 0; i < numTest; i++) {
+		Package package, package_ret;
+		package.set_virtualpath(randomString(lenString).append("-append")); //as key
+		package.set_isdir(true);
+		package.set_replicano(5); //orginal--Note: never let it be nagative!!!
+		package.set_operation(4); // 3 for insert, 1 for look up, 2 for remove
+		package.set_realfullpath(
+				"Some-Real-longer-longer-and-longer-Paths--------");
+		package.add_listitem("item-----2");
+		package.add_listitem("item-----3");
+		package.add_listitem("item-----4");
+		package.add_listitem("item-----5");
+		package.add_listitem("item-----6");
+		string str = package.SerializeAsString();
 //              cout << "package size = " << str.size() << endl;
 //              cout<<"Client.cpp:benchmarkInsert: "<<endl;
 //              cout<<"string: "<<str<<endl;
 //              cout<<"Insert str: "<<str.c_str()<<endl;
 //              cout<<"data(): "<< str.data()<<endl;
-                pkgList_append.push_back(str);
-        }
-        double start = 0;
-        double end = 0;
-        start = getTime_msec();
-        int errCount = 0;
-        vector<string>::iterator it;
-        int c = 0;
+		pkgList_append.push_back(str);
+	}
+	double start = 0;
+	double end = 0;
+	start = getTime_msec();
+	int errCount = 0;
+	vector<string>::iterator it;
+	int c = 0;
 //cout << "-----0" << endl;
-        for (it = pkgList_append.begin(); it != pkgList_append.end(); it++) {
-        //      cerr <<"insert count "<< c << endl;
-                c++;
-                string str_ins = *it;
+	for (it = pkgList_append.begin(); it != pkgList_append.end(); it++) {
+		//      cerr <<"insert count "<< c << endl;
+		c++;
+		string str_ins = *it;
 //cout << "-----1:about to append" << endl;
 //	sleep(1);
-                int ret = client.append(str_ins);
-		if(ret !=0) cout << "client: append ret = "<< ret<<endl;
+		int ret = client.append(str_ins);
+		if (ret != 0)
+			cout << "client: append ret = " << ret << endl;
 //cout << "-----2" << endl;
-                if (ret < 0) {
-                        errCount++;
-                }
-        }
+		if (ret < 0) {
+			errCount++;
+		}
+	}
 //close(sock);
-        end = getTime_msec();
-        cout << "Appended " << numTest - errCount << " packages out of " << numTest << ", cost " << end - start << " ms" << endl;
-        return 0;
+	end = getTime_msec();
+	cout << "Appended " << numTest - errCount << " packages out of " << numTest
+			<< ", cost " << end - start << " ms" << endl;
+	return 0;
 }
-
 
 int benmarkTimeAnalize(string cfgFile, string memberList,
 		vector<string> &pkgList, ZHTClient &clientRet, int numTest,
@@ -298,7 +300,7 @@ int benchmarkALL(int numTest, int strLen) { //103+length
 }
 int main(int argc, char* argv[]) {
 //	cout << "Usage: ./client <num_operations> <memberList> <configFile>"<< endl;
-/*	//	For BGP
+	/*	//	For BGP
 	 const string cmd = "cat /proc/personality.sh | grep BG_PSETORG";
 	 string torusID = executeShell(cmd);
 	 torusID.resize(torusID.size() - 1);
@@ -308,11 +310,11 @@ int main(int argc, char* argv[]) {
 
 	 //cout<<"Client random n = "<<v<<endl;
 	 srand(v);
-*/	
-	srand(getpid()+ getTime_usec());
+	 */
+	srand(getpid() + getTime_usec());
 	char* isTCP = argv[4];
 //	cout<<"Protocol = "<<isTCP<<endl;
-	if (!strcmp("TCP", isTCP)) {
+	if (strcmp("TCP", isTCP) == 0) {
 		TCP = true;
 	} else {
 		TCP = false;
@@ -341,7 +343,7 @@ int main(int argc, char* argv[]) {
 
 	benchmarkLookup(pkgList, testClient);
 	//sleep(2);
-	benchmarkAppend(testClient,numOper, 15);
+	benchmarkAppend(testClient, numOper, 15);
 	benchmarkRemove(pkgList, testClient);
 //	testClient.tearDownTCP(TCP);
 //	testClient.tearDownTCP(); //zhouxb
