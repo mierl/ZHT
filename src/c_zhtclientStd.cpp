@@ -43,8 +43,8 @@ int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result,
 	 * hello,zht:hello,zht ==> hello,zht:zht
 	 * */
 	string store;
-	char * pch;
-	pch = strtok((char*) resultStr.c_str(), ":");
+	char * pch, *sp;
+	pch = strtok_r((char*) resultStr.c_str(), ":", &sp);
 	Package package2;
 
 	while (pch != NULL) {
@@ -55,7 +55,7 @@ int c_zht_lookup_std(ZHTClient_c zhtClient, const char *pair, char *result,
 		store.append(strRealfullpath);
 		store.append(":");
 
-		pch = strtok(NULL, ":");
+		pch = strtok_r(NULL, ":", &sp);
 	}
 
 	size_t found = store.find_last_of(":");
@@ -89,19 +89,19 @@ int c_zht_lookup2_std(ZHTClient_c zhtClient, const char *key, char *result,
 	 * hello,zht:hello,zht ==> hello,zht:zht
 	 * */
 	string store;
-	char * pch;
-	pch = strtok((char*) resultStr.c_str(), ":");
+	char * pch, *sp;
+	pch = strtok_r((char*) resultStr.c_str(), ":", &sp);
 	Package package2;
 
 	while (pch != NULL) {
 
-		package2.ParseFromString(resultStr);
+		package2.ParseFromString(pch);
 		string strRealfullpath = package2.realfullpath();
 
 		store.append(strRealfullpath);
 		store.append(":");
 
-		pch = strtok(NULL, ":");
+		pch = strtok_r(NULL, ":", &sp);
 	}
 
 	size_t found = store.find_last_of(":");

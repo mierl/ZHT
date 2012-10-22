@@ -203,8 +203,8 @@ int ZHTClient::insert(string str) {
 
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
-	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");
+	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");*/
 
 	package.set_operation(3); //1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(5); //5: original, 3 not original
@@ -243,8 +243,8 @@ int ZHTClient::lookup(string str, string &returnStr) {
 
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
-	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");
+	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");*/
 
 	package.set_operation(1); // 1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(3); //5: original, 3 not original
@@ -309,8 +309,8 @@ int ZHTClient::append(string str) {
 
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
-	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");
+	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");*/
 
 	package.set_operation(4); //1 for look up, 2 for remove, 3 for insert, 4 for append
 	package.set_replicano(5); //5: original, 3 not original
@@ -349,8 +349,8 @@ int ZHTClient::remove(string str) {
 
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
-	if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");
+	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
+		package.set_realfullpath(" ");*/
 
 	package.set_operation(2); //1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(3); //5: original, 3 not original
