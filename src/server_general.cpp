@@ -39,25 +39,29 @@ struct HostEntity Replicas[MAX_NUM_REPLICA];
 
 bool TCP; // for switch between TCP and UDP
 
+BdRecvBase *pbrb;
+
 //For queueing request
 class DataEvent {
 public:
 	int FD;
 	void* buffer;
+	size_t bufsize;
 	sockaddr_in fromAddr;
 
-	DataEvent(int fd, void* buf, sockaddr_in addr) {
+	DataEvent(int fd, void* buf, size_t bufsize, sockaddr_in addr) {
 		this->FD = fd;
 		int len = strlen((const char*) buf);
 		this->buffer = malloc((len + 1) * sizeof(char));
 		memcpy(this->buffer, buf, len + 1);
+
+		this->bufsize = bufsize;
 		this->fromAddr = addr;
 	}
 	;
 	~DataEvent() {
 		//free(this->buffer);
 	}
-	;
 };
 
 struct threadArg {
@@ -542,8 +546,8 @@ int general_replica(Package package, struct HostEntity &destination) {
 
 bool thread_run = 0;
 
-void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
-		NoVoHT* pmap) {
+void dataService(int client_sock, void* buff, size_t bufsize,
+		sockaddr_in fromAddr, NoVoHT* pmap) {
 
 //	cout << strlen((char*)buff) << "{" << ((char*)buff) << "}" << endl;
 
@@ -560,7 +564,16 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 	void* buff1;
 
 	Package package;
-	package.ParseFromArray(buff, Env::MAX_MSG_SIZE);
+//	package.ParseFromArray(buff, Env::MAX_MSG_SIZE);
+	package.ParseFromArray(buff, bufsize);
+
+	if (!package.opcode().compare("ack")) {
+
+		cout << "ack message" << endl;
+		enqueueAck(package);
+		return;
+	}
+
 	string result;
 //	cout << endl << endl << "in dbService: received replicano = "<< package.replicano() << endl;
 
@@ -732,10 +745,6 @@ void dataService(int client_sock, void* buff, sockaddr_in fromAddr,
 					n = n % hostList.size();
 					struct HostEntity destination = hostList.at(n);
 					general_replica(package, Replicas[i - 1]);
-					//				cout << "Replica remove: sent to " << destination.port 	<< " and before send replicano() = "<< package.replicano() << endl;
-
-//				cout << "Replication: i = " << i << endl;
-					//numReplica--;
 					i--;
 				}
 			}
@@ -750,30 +759,27 @@ void* dataServiceThread(void* argument) {
 	while (thread_run) {
 		if (!myArgu->myQueue->empty()) {
 			DataEvent data = myArgu->myQueue->front();
-			dataService(data.FD, data.buffer, data.fromAddr, myArgu->novoht);
+			dataService(data.FD, data.buffer, data.bufsize, data.fromAddr,
+					myArgu->novoht);
 			myArgu->myQueue->pop();
 		}
 	}
 
 }
 
-int __main(int argc, char *argv[]) {
-	cout << "hello!" << endl;
-	return 0;
-}
-
 int Host2Index(const char* hostName) {
+
 	int listSize = hostList.size();
 	HostEntity host;
 	int i = 0;
 	for (i = 0; i < listSize; i++) {
 		host = hostList.at(i);
-//		cout<<"i = "<<i<<", port= "<< host.port<<endl;
+
 		if (!strcmp(host.host.c_str(), hostName)) {
 			break;
 		}
 	}
-//	cout<<"my index: "<<i<<endl;
+
 	if (i == listSize) {
 		return -1;
 	}
@@ -789,9 +795,6 @@ int Host2Index(const char* hostName) {
 
 int main(int argc, char *argv[]) {
 
-//----------- Settings about ZHT server----------------
-// General version, work for both TCP and UDP.
-//	cout << "Use: hash-phm <port> <neighbor_list_file> <config_file>" << endl;
 	if (argc != 5) { //or 3?
 		fprintf(stderr, "Usage: %s [port]\n", argv[0]);
 		cout << "argc = " << argc << endl;
@@ -802,54 +805,30 @@ int main(int argc, char *argv[]) {
 
 	if (!strcmp("TCP", isTCP)) {
 		TCP = true;
-//cout<<"TCP"<<endl;
 	} else {
 		TCP = false;
-//cout<<"UDP"<<endl;
 	}
 
 	LISTEN_PORT = argv[1];
 	string cfgFile(argv[3]);
 	string randStr = randomString(5);
-//cout<<"1"<<endl;
-	/*		for BGP
-	 const string cmd = "cat /proc/personality.sh | grep BG_PSETORG";
-	 string torusID = executeShell(cmd);
-	 torusID.resize(torusID.size()-1);
-	 srand( getTime_msec()+ myhash(torusID.c_str(), 10000000) );
-	 */
-//	string fileName = "hashmap.data"; //= "hashmap.data."+randStr;
-//	string fileName = "hashmap.data." + randStr;
-//	string fileName = "hashmap.txt";
+
 	const char* fileName = "";
 	pmap = new NoVoHT(fileName, 100000, 10000, 0.7);
 
 	map<string, string> hashMap;
 	hmap = hashMap;
-//cout<<"2"<<endl;
+
 	string membershipFile(argv[2]);
 	hostList = getMembership(membershipFile);
 	nHost = hostList.size();
-//cout<<"3"<<endl;
+
 	Host2Index("localhost");
 	if (Env::setconfigvariables(cfgFile) != 0) {
 		cout << "Server: Not able to read configuration file." << endl;
 		exit(1);
 	}
 
-//cout<<"4"<<endl;
-
-	//UDP
-//-----------------------------------------------------
-//===========================================================
-
-//	string myHost = "localhost";  local desktop
-	/* BGP
-	 const string cmd_checkIP = "echo $IP";
-	 string checkIP = executeShell(cmd_checkIP);
-	 string myIP = checkIP;
-	 int myIndex = Host2Index(checkIP.c_str());
-	 */
 	int myIndex = Host2Index("localhost");
 	Replicas[0].host = hostList.at((myIndex + 1) % nHost).host;
 	Replicas[0].port = PORT_FOR_REPLICA;
@@ -859,27 +838,11 @@ int main(int argc, char *argv[]) {
 	Replicas[1].port = PORT_FOR_REPLICA;
 	Replicas[1].sock = -1;
 
-	/*
-	 Replicas[0].host = "localhost";
-	 Replicas[0].port = 50009;
-	 Replicas[0].sock = -1;
-
-	 Replicas[1].host = "localhost";
-	 Replicas[1].port = 50010;
-	 Replicas[1].sock = -1;
-	 */
-//===========================================================
 	int listener, s;
 	int efd;
 	struct epoll_event event;
 	struct epoll_event *events;
-//cout<<"5"<<endl;
-//	if (argc != 5) { //or 3?
-//		fprintf(stderr, "Usage: %s [port]\n", argv[0]);
-//		exit(EXIT_FAILURE);
-//	}
-//cout<<"6"<<endl;
-	//listener = create_and_bind(LISTEN_PORT);
+
 	listener = makeSvrSocket(atoi(LISTEN_PORT), TCP);
 	if (listener == -1)
 		abort();
@@ -897,9 +860,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	reuseSock(listener);
-//cout<<"7"<<endl;
+
 	efd = epoll_create(1); // epoll_create(int size): Nowadays, size is unused
-//	efd = epoll_create(0); //for BGP only
+
 	if (efd == -1) {
 		perror("epoll_create");
 		abort();
@@ -912,15 +875,11 @@ int main(int argc, char *argv[]) {
 		perror("epoll_ctl");
 		abort();
 	}
-//cout<<"about to write Register_$NNODE"<<endl;	
-//	system("echo $IP >> /intrepid-fs0/users/tonglin/persistent/Register_$NNODE"); for BGP
-	// Buffer where events are returned
+
 	events = (epoll_event *) calloc(MAXEVENTS, sizeof event);
-	char buf[Env::MAX_MSG_SIZE];
+//	char buf[Env::MAX_MSG_SIZE];
 
 	int epollCounter = 0;
-//cout<<"I'm a server..."<<endl;
-	// The event loop
 
 	queue<DataEvent> dataQueue;
 	pthread_t idThread;
@@ -929,6 +888,8 @@ int main(int argc, char *argv[]) {
 	argu.myQueue = &dataQueue;
 	argu.novoht = pmap;
 	int r = pthread_create(&idThread, NULL, dataServiceThread, (void*) &argu);
+
+	pbrb = new BdRecvFromClient();
 
 	while (1) {
 		int n, i;
@@ -945,9 +906,7 @@ int main(int argc, char *argv[]) {
 				fprintf(stderr, "epoll error\n");
 				close(events[i].data.fd);
 				continue;
-			}
-
-			else if (listener == events[i].data.fd) { //TCP has new connection:  here UDP should take over
+			} else if (listener == events[i].data.fd) { //TCP has new connection:  here UDP should take over
 				// We have a notification on the listening socket, which means one or more incoming connections.
 				if (TCP == true) {
 					while (1) {
@@ -991,21 +950,19 @@ int main(int argc, char *argv[]) {
 							perror("epoll_ctl");
 							abort();
 						}
-
-						/*		printf(
-						 "new connection socket fd {%d} on socket fd {%d}\n",
-						 infd, listener);*/
 					} //end while
 					continue;
 
 				} //end if(TCP==true)
 				else if (TCP == false) {
+
 					sockaddr_in fromAddr;
 					char recvBuff[Env::MAX_MSG_SIZE];
 					int recvSize = udpRecvFrom(events[i].data.fd, recvBuff,
-							Env::MAX_MSG_SIZE, fromAddr, 0);
-					//cout<<"epool server receive size = "<<recvSize<<endl;
-					DataEvent data(events[i].data.fd, recvBuff, fromAddr);
+							sizeof(recvBuff), fromAddr, 0);
+
+					DataEvent data(events[i].data.fd, recvBuff,
+							sizeof(recvBuff), fromAddr);
 					dataQueue.push(data);
 					//dataService(events[i].data.fd, recvBuff, fromAddr, pmap);
 					memset(recvBuff, '\0', sizeof(recvBuff));
@@ -1020,55 +977,60 @@ int main(int argc, char *argv[]) {
 					int done = 0;
 
 					while (1) {
-						ssize_t count;
-//					char buf[Env::MAX_MSG_SIZE];
-						//char* buf = (char*)malloc(Env::MAX_MSG_SIZE*sizeof(char));
 
-						//count = read(events[i].data.fd, buf, sizeof buf);
-						count = generalReveiveTCP(events[i].data.fd, buf,
-								sizeof buf, 0);
-//					cout << "Received raw message: " << buf << endl;
+						ssize_t count;
+						int sfd = events[i].data.fd;
+
+						char buf[Env::BUF_SIZE];
+						memset(buf, '\0', sizeof(buf));
+
+						count = generalReveiveTCP(sfd, buf, Env::BUF_SIZE, 0);
+
 						if (count == -1) {
+
 							// If errno == EAGAIN, that means we have read all data. So go back to the main loop.
 							if (errno != EAGAIN) {
+
 								perror("read");
 								done = 1;
 							}
+
 							break;
+
 						} else if (count == 0) {
+
 							// End of file. The remote has closed the connection.
-//						cout<<"Received 0 byte."<<endl;
 							done = 1;
 							break;
+
+						} else { //count > 0
+
+							bool ready = false;
+							string bd = pbrb->getBdStr(sfd, buf, count, ready);
+
+							if (ready) {
+
+								sockaddr_in fromAddr; // no use for TCP, just to fill the parameter
+								fromAddr.sin_port = 0;
+								fromAddr.sin_addr.s_addr = 0;
+
+								DataEvent data(sfd, (char*) bd.c_str(),
+										bd.size(), fromAddr);
+//								DataEvent data(events[i].data.fd, buf, fromAddr);
+								dataQueue.push(data);
+							}
+
+							/*sockaddr_in fromAddr; // no use for TCP, just to fill the parameter
+							 fromAddr.sin_port = 0;
+							 fromAddr.sin_addr.s_addr = 0;
+
+							 DataEvent data(events[i].data.fd, buf, sizeof(buf),
+							 fromAddr);
+							 dataQueue.push(data);*/
+							//dataService(events[i].data.fd, buf, fromAddr, pmap);//
 						}
 
-						// Write the buffer to standard output
-						//s = write(1, buf, count);
-//--------------------------------------------------------------------------------------------------------
-						//handle data
-						//parameters: struct threaddata, include:
-						//		int socket;
-						//		NoVoHT *p_pmap;
-						//		char receivedData[];//or char* something?
-						else { //count > 0
-//						cout<<"Receive string..."<<endl;
-							sockaddr_in fromAddr; // no use for TCP, just to fill the parameter
-							fromAddr.sin_port = 0;
-							fromAddr.sin_addr.s_addr = 0;
-
-							DataEvent data(events[i].data.fd, buf, fromAddr);
-							dataQueue.push(data);
-
-							//dataService(events[i].data.fd, buf, fromAddr, pmap);
-							memset(buf, '\0', sizeof(buf));
-//						free(buf);
-
-						}
-
-//--------------------------------------------------------------------------------------------------------
-						//cout << "Client said: " << buf << endl;
-						//send(events[i].data.fd, buf, sizeof buf, 0);
-						//if (s == -1) {perror("write");abort();}
+						memset(buf, '\0', sizeof(buf));
 					}
 
 					if (done) {
@@ -1089,6 +1051,9 @@ int main(int argc, char *argv[]) {
 	free(events);
 
 	close(listener);
+
+	delete pbrb;
+	pbrb = NULL;
 
 	return EXIT_SUCCESS;
 }

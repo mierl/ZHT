@@ -49,7 +49,7 @@ void   package__free_unpacked
   PROTOBUF_C_ASSERT (message->base.descriptor == &package__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
-static const ProtobufCFieldDescriptor package__field_descriptors[22] =
+static const ProtobufCFieldDescriptor package__field_descriptors[23] =
 {
   {
     "virtualPath",
@@ -315,9 +315,22 @@ static const ProtobufCFieldDescriptor package__field_descriptors[22] =
     0,            /* packed */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "ackid",
+    23,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT64,
+    PROTOBUF_C_OFFSETOF(Package, has_ackid),
+    PROTOBUF_C_OFFSETOF(Package, ackid),
+    NULL,
+    NULL,
+    0,            /* packed */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned package__field_indices_by_name[] = {
   7,   /* field[7] = Operation */
+  22,   /* field[22] = ackid */
   20,   /* field[20] = asneighbor */
   18,   /* field[18] = gmembership */
   3,   /* field[3] = isDir */
@@ -343,7 +356,7 @@ static const unsigned package__field_indices_by_name[] = {
 static const ProtobufCIntRange package__number_ranges[1 + 1] =
 {
   { 1, 0 },
-  { 0, 22 }
+  { 0, 23 }
 };
 const ProtobufCMessageDescriptor package__descriptor =
 {
@@ -353,7 +366,7 @@ const ProtobufCMessageDescriptor package__descriptor =
   "Package",
   "",
   sizeof(Package),
-  22,
+  23,
   package__field_descriptors,
   package__field_indices_by_name,
   1,  package__number_ranges,

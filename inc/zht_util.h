@@ -37,7 +37,11 @@ public:
 	static int setconfigvariables(string cfgFile);
 
 public:
-	static const int MAX_MSG_SIZE; //transferd string maximum size
+	static const int MAX_MSG_SIZE; //max size of a message in each transfer
+
+	static const uint BUF_SIZE; //size of blob transfered from client to server each time
+
+	static const int TOTAL_MSG_SIZE; //total size of a message transfered
 
 	static int REPLICATION_TYPE; //1 for Client-side replication
 
@@ -66,6 +70,8 @@ string executeShell(string str);
 
 int myhash(const char *str, int mod);
 
+uint64_t genHash(const char *pc);
+
 unsigned long long hash_64bit_ring(const char *str);
 
 int tearDownTCP(vector<struct HostEntity> memberList);
@@ -77,5 +83,16 @@ vector<struct HostEntity> getMembership(string fileName);
 HostEntity getHostEntity(const string& host, const int& port);
 
 int myIndex(vector<struct HostEntity> memberList, struct HostEntity aHost);
+
+class IdHelper {
+public:
+	IdHelper();
+	virtual ~IdHelper();
+
+	static uint64_t genId();
+
+public:
+	static const uint ID_LEN;
+};
 
 #endif /* ZHT_UTIL_H_ */

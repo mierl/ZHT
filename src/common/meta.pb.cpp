@@ -29,7 +29,7 @@ void protobuf_AssignDesc_meta_2eproto() {
       "meta.proto");
   GOOGLE_CHECK(file != NULL);
   Package_descriptor_ = file->message_type(0);
-  static const int Package_offsets_[22] = {
+  static const int Package_offsets_[23] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, virtualpath_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, num_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, realfullpath_),
@@ -52,6 +52,7 @@ void protobuf_AssignDesc_meta_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, isfwdmsg_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, asneighbor_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, wifecode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Package, ackid_),
   };
   Package_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -94,7 +95,7 @@ void protobuf_AddDesc_meta_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\nmeta.proto\"\224\003\n\007Package\022\023\n\013virtualPath\030"
+    "\n\nmeta.proto\"\243\003\n\007Package\022\023\n\013virtualPath\030"
     "\001 \001(\t\022\013\n\003num\030\002 \001(\005\022\024\n\014realFullPath\030\003 \001(\t"
     "\022\r\n\005isDir\030\004 \001(\010\022\020\n\010listItem\030\005 \003(\t\022\020\n\010ope"
     "nMode\030\006 \001(\005\022\014\n\004mode\030\007 \001(\005\022\021\n\tOperation\030\010"
@@ -104,7 +105,7 @@ void protobuf_AddDesc_meta_2eproto() {
     "tZHT\030\017 \001(\t\022\016\n\006rfname\030\020 \001(\t\022\016\n\006lfname\030\021 \001"
     "(\t\022\022\n\nmigringpos\030\022 \003(\004\022\023\n\013gmembership\030\023 "
     "\001(\t\022\020\n\010isfwdmsg\030\024 \001(\010\022\022\n\nasneighbor\030\025 \001("
-    "\t\022\020\n\010wifecode\030\026 \001(\t", 419);
+    "\t\022\020\n\010wifecode\030\026 \001(\t\022\r\n\005ackid\030\027 \001(\004", 434);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "meta.proto", &protobuf_RegisterTypes);
   Package::default_instance_ = new Package();
@@ -145,6 +146,7 @@ const int Package::kGmembershipFieldNumber;
 const int Package::kIsfwdmsgFieldNumber;
 const int Package::kAsneighborFieldNumber;
 const int Package::kWifecodeFieldNumber;
+const int Package::kAckidFieldNumber;
 #endif  // !_MSC_VER
 
 Package::Package()
@@ -183,6 +185,7 @@ void Package::SharedCtor() {
   isfwdmsg_ = false;
   asneighbor_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   wifecode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  ackid_ = GOOGLE_ULONGLONG(0);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -318,6 +321,7 @@ void Package::Clear() {
         wifecode_->clear();
       }
     }
+    ackid_ = GOOGLE_ULONGLONG(0);
   }
   listitem_.Clear();
   migringpos_.Clear();
@@ -697,6 +701,22 @@ bool Package::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(184)) goto parse_ackid;
+        break;
+      }
+      
+      // optional uint64 ackid = 23;
+      case 23: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ackid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &ackid_)));
+          set_has_ackid();
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -878,6 +898,11 @@ void Package::SerializeWithCachedSizes(
       22, this->wifecode(), output);
   }
   
+  // optional uint64 ackid = 23;
+  if (has_ackid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(23, this->ackid(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1056,6 +1081,11 @@ void Package::SerializeWithCachedSizes(
         22, this->wifecode(), target);
   }
   
+  // optional uint64 ackid = 23;
+  if (has_ackid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(23, this->ackid(), target);
+  }
+  
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -1205,6 +1235,13 @@ int Package::ByteSize() const {
           this->wifecode());
     }
     
+    // optional uint64 ackid = 23;
+    if (has_ackid()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+          this->ackid());
+    }
+    
   }
   // repeated string listItem = 5;
   total_size += 1 * this->listitem_size();
@@ -1315,6 +1352,9 @@ void Package::MergeFrom(const Package& from) {
     if (from.has_wifecode()) {
       set_wifecode(from.wifecode());
     }
+    if (from.has_ackid()) {
+      set_ackid(from.ackid());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -1360,6 +1400,7 @@ void Package::Swap(Package* other) {
     std::swap(isfwdmsg_, other->isfwdmsg_);
     std::swap(asneighbor_, other->asneighbor_);
     std::swap(wifecode_, other->wifecode_);
+    std::swap(ackid_, other->ackid_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

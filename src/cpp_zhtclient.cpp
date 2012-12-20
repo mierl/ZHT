@@ -204,7 +204,7 @@ int ZHTClient::insert(string str) {
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
 	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");*/
+	 package.set_realfullpath(" ");*/
 
 	package.set_operation(3); //1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(5); //5: original, 3 not original
@@ -244,7 +244,7 @@ int ZHTClient::lookup(string str, string &returnStr) {
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
 	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");*/
+	 package.set_realfullpath(" ");*/
 
 	package.set_operation(1); // 1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(3); //5: original, 3 not original
@@ -271,25 +271,24 @@ int ZHTClient::lookup(string str, string &returnStr) {
 //	int ret = generalSendTCP(sock, str.c_str());
 
 //	cout << "ZHTClient::lookup: simpleSend return = " << ret << endl;
-	char buff[Env::MAX_MSG_SIZE]; //Env::MAX_MSG_SIZE
-	memset(buff, 0, sizeof(buff));
+//	char *buf = (char*) calloc(Env::TOTAL_MSG_SIZE, sizeof(char));
+
 	int rcv_size = -1;
 	int status = -1;
-	string sRecv;
+	string srecv;
 	string sStatus;
 
 	if (sentSize == str.length()) { //this only work for TCP. UDP need to make a new one so accept returns from server.
 //		cout << "before protocol judge" << endl;
 
-		rcv_size = generalReceive(sock, (void*) buff, sizeof(buff), recvAddr, 0,
+		rcv_size = loopedReceive(sock, srecv, recvAddr, 0,
 				TCP);
 
 		if (rcv_size < 0) {
 			cout << "Lookup receive error." << endl;
 		} else {
-			sRecv.assign(buff);
-			returnStr = sRecv.substr(3); //the left is real thing need to be deserilized.
-			sStatus = sRecv.substr(0, 3); //the first three chars means status code, like 001, 002, -98, -99 and so on.
+			returnStr = srecv.substr(3); //the left is real thing need to be deserilized.
+			sStatus = srecv.substr(0, 3); //the first three chars means status code, like 001, 002, -98, -99 and so on.
 		}
 
 //		cout << "after protocol judge" << endl;
@@ -310,7 +309,7 @@ int ZHTClient::append(string str) {
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
 	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");*/
+	 package.set_realfullpath(" ");*/
 
 	package.set_operation(4); //1 for look up, 2 for remove, 3 for insert, 4 for append
 	package.set_replicano(5); //5: original, 3 not original
@@ -350,7 +349,7 @@ int ZHTClient::remove(string str) {
 	if (package.virtualpath().empty()) //empty key not allowed.
 		return -1;
 	/*if (package.realfullpath().empty()) //coup, to fix ridiculous bug of protobuf!
-		package.set_realfullpath(" ");*/
+	 package.set_realfullpath(" ");*/
 
 	package.set_operation(2); //1 for look up, 2 for remove, 3 for insert
 	package.set_replicano(3); //5: original, 3 not original

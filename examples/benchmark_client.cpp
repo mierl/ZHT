@@ -129,11 +129,11 @@ int benchmarkAppend(ZHTClient &client, int numTest, int lenString) {
 //	sleep(1);
 		int ret = client.append(str_ins);
 		if (ret != 0)
-			cout << "client: append ret = " << ret << endl;
+//			cout << "client: append ret = " << ret << endl;
 //cout << "-----2" << endl;
-		if (ret < 0) {
-			errCount++;
-		}
+			if (ret < 0) {
+				errCount++;
+			}
 	}
 //close(sock);
 	end = getTime_msec();

@@ -29,7 +29,12 @@
 //struct timeval tp;
 using namespace std;
 
-const int Env::MAX_MSG_SIZE = 65535; //transferd string maximum size
+//const int Env::MAX_MSG_SIZE = 1024 * 2; //max size of a message in each transfer
+const int Env::MAX_MSG_SIZE = 65535; //max size of a message in each transfer
+
+const uint Env::BUF_SIZE = 512 + 38;
+
+const int Env::TOTAL_MSG_SIZE = 1024 * 1024 * 10; //total size of a message transfered, 10M
 
 int Env::REPLICATION_TYPE = 0; //1 for Client-side replication
 
@@ -68,6 +73,19 @@ int Env::setconfigvariables(string cfgFile) {
 	return 0;
 }
 
+const uint IdHelper::ID_LEN = 20;
+
+IdHelper::IdHelper() {
+}
+
+IdHelper::~IdHelper() {
+}
+
+uint64_t IdHelper::genId() {
+
+	return genHash(randomString(62).c_str());
+}
+
 double getTime_usec() {
 
 	struct timeval tp;
@@ -104,6 +122,7 @@ string randomString(int len) {
 	for (int i = 0; i < len; ++i) {
 		s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 	}
+
 	return s;
 }
 
@@ -124,13 +143,21 @@ string executeShell(string str) {
 }
 
 int myhash(const char *str, int mod) { //int type return
-	unsigned long hash = 0;
-	int c;
 
-	while (c = *str++) {
+	return genHash(str) % mod;
+}
+
+uint64_t genHash(const char *pc) {
+
+	uint64_t hash = 0;
+	uint64_t c; //int c;
+
+	while (c = (*pc++)) {
 		hash = c + (hash << 6) + (hash << 16) - hash;
 	}
-	return hash % mod;
+
+	return hash;
+
 }
 
 unsigned long long hash_64bit_ring(const char *str) { //unsigned long long: 64 bit
@@ -235,7 +262,7 @@ vector<struct HostEntity> getMembership(string fileName) {
 
 		in >> host >> port;
 
-		if (!host.empty())
+		if (!host.empty() && host.substr(0, 1) != "#") //starts with #, means comment
 			hostList.push_back(getHostEntity(host, port));
 		else
 			break;
@@ -243,7 +270,8 @@ vector<struct HostEntity> getMembership(string fileName) {
 
 	in.close();
 
-//	cout << "finished reading membership info, " << hostList.size() << " nodes"<< endl;
+	cout << "finished reading membership info, " << hostList.size() << " nodes"
+			<< endl;
 
 	return hostList;
 }

@@ -52,10 +52,12 @@ struct  _Package
   protobuf_c_boolean isfwdmsg;
   char *asneighbor;
   char *wifecode;
+  protobuf_c_boolean has_ackid;
+  uint64_t ackid;
 };
 #define PACKAGE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&package__descriptor) \
-    , NULL, 0,0, NULL, 0,0, 0,NULL, 0,0, 0,0, 0,0, 0,0, NULL, NULL, 0,0, 0,0, NULL, NULL, NULL, NULL, 0,NULL, NULL, 0,0, NULL, NULL }
+    , NULL, 0,0, NULL, 0,0, 0,NULL, 0,0, 0,0, 0,0, 0,0, NULL, NULL, 0,0, 0,0, NULL, NULL, NULL, NULL, 0,NULL, NULL, 0,0, NULL, NULL, 0,0 }
 
 
 /* Package methods */

@@ -23,4 +23,6 @@ message Package{
 	optional bool isfwdmsg = 20; //shows if the msg is forward while migrating
 	optional string asneighbor = 21; //infomation of ZHTNode as a neighbor
 	optional string wifecode = 22; //auxiliary code to say the meaning of opcode
+	
+	optional uint64 ackid = 23; //auxiliary code to say the meaning of opcode
 }

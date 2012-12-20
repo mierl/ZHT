@@ -300,6 +300,13 @@ class Package : public ::google::protobuf::Message {
   inline ::std::string* mutable_wifecode();
   inline ::std::string* release_wifecode();
   
+  // optional uint64 ackid = 23;
+  inline bool has_ackid() const;
+  inline void clear_ackid();
+  static const int kAckidFieldNumber = 23;
+  inline ::google::protobuf::uint64 ackid() const;
+  inline void set_ackid(::google::protobuf::uint64 value);
+  
   // @@protoc_insertion_point(class_scope:Package)
  private:
   inline void set_has_virtualpath();
@@ -342,6 +349,8 @@ class Package : public ::google::protobuf::Message {
   inline void clear_has_asneighbor();
   inline void set_has_wifecode();
   inline void clear_has_wifecode();
+  inline void set_has_ackid();
+  inline void clear_has_ackid();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -364,12 +373,13 @@ class Package : public ::google::protobuf::Message {
   ::std::string* gmembership_;
   ::std::string* asneighbor_;
   ::std::string* wifecode_;
+  ::google::protobuf::uint64 ackid_;
   bool isdir_;
   bool uprange_;
   bool isfwdmsg_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(22 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(23 + 31) / 32];
   
   friend void  protobuf_AddDesc_meta_2eproto();
   friend void protobuf_AssignDesc_meta_2eproto();
@@ -1288,6 +1298,28 @@ inline ::std::string* Package::release_wifecode() {
     wifecode_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
+}
+
+// optional uint64 ackid = 23;
+inline bool Package::has_ackid() const {
+  return (_has_bits_[0] & 0x00400000u) != 0;
+}
+inline void Package::set_has_ackid() {
+  _has_bits_[0] |= 0x00400000u;
+}
+inline void Package::clear_has_ackid() {
+  _has_bits_[0] &= ~0x00400000u;
+}
+inline void Package::clear_ackid() {
+  ackid_ = GOOGLE_ULONGLONG(0);
+  clear_has_ackid();
+}
+inline ::google::protobuf::uint64 Package::ackid() const {
+  return ackid_;
+}
+inline void Package::set_ackid(::google::protobuf::uint64 value) {
+  set_has_ackid();
+  ackid_ = value;
 }
 
 
