@@ -1,1 +1,0 @@
-../dm/hec-kill.sh
