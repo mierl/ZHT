@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module Neighbor-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="124" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="16" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="2" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="62.000" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="8.000" level="1" />
+<weighted_methods_per_class_unity value="25" level="0" />
+<weighted_methods_per_class_visibility value="25" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="0" level="0" />
+<coupling_between_objects value="6" level="0" />
+<IF4 value="64" level="0" />
+<IF4_per_member_function value="********" level="2" />
+<IF4_visible value="9" level="0" />
+<IF4_visible_per_member_function value="********" level="2" />
+<IF4_concrete value="0" level="0" />
+<IF4_concrete_per_member_function value="********" level="0" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="Neighbor.h" line="47" />
+<lines_of_code value="8" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>Neighbor()</name>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor.cpp" line="38" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="49" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>Neighbor(const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor.cpp" line="42" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="50" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>assign(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="57" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="84" />
+</extent>
+<lines_of_code value="14" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getAddress()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="59" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="123" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getAddressString()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="62" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="133" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getFormat()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="81" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="79" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getWorkload()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="64" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="128" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getWorkloadString()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="67" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="138" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>host()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="77" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="173" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>operator ()()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="55" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="67" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>operator ()(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="56" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="72" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>ouuid()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="73" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="158" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>ouuidstr()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="74" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="163" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>ouuidstr(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="75" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="168" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>port()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="78" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="178" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>setAddress(const Address &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="60" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="103" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>setAddress(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="61" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="108" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>setWorkload(const Workload &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="65" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="113" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>setWorkload(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="66" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="118" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>toHostPort()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="54" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="62" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>toString()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="53" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="50" />
+</extent>
+<lines_of_code value="9" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>uuid()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="69" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="143" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>uuidstr()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="70" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="148" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>uuidstr(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="71" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor-impl.h" line="153" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>~Neighbor()</name>
+<extent>
+<description>definition</description>
+<source_reference file="Neighbor.cpp" line="48" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="Neighbor.h" line="51" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>Neighbor</name>
+<client_module>
+<name>NeighborManager</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager.h" line="78" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager.h" line="110" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager.h" line="117" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager.h" line="124" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager.h" line="125" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager-impl.h" line="222" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager-impl.h" line="227" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager-impl.h" line="232" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager-impl.h" line="382" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="NeighborManager-impl.h" line="453" />
+</extent>
+<name>ZHTManager</name>
+<visible>false</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="109" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="110" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="86" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="87" />
+</extent>
+</client_module>
+<supplier_module>
+<name>Address</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="60" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Neighbor.h" line="84" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="103" />
+</extent>
+<name>Workload</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="65" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Neighbor.h" line="85" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="113" />
+</extent>
+<name>string</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.cpp" line="42" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="50" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="56" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="57" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="61" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="66" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="71" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor.h" line="75" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="72" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="84" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="108" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="118" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="153" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="Neighbor-impl.h" line="168" />
+</extent>
+<name>uint64_t</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="Neighbor.h" line="86" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

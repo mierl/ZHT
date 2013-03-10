@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module Constants-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="33" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="0" />
+<lines_of_code value="35" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="0.943" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+<weighted_methods_per_class_unity value="2" level="0" />
+<weighted_methods_per_class_visibility value="2" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="0" level="0" />
+<coupling_between_objects value="1" level="0" />
+<IF4 value="0" level="0" />
+<IF4_per_member_function value="********" level="0" />
+<IF4_visible value="0" level="0" />
+<IF4_visible_per_member_function value="********" level="0" />
+<IF4_concrete value="0" level="0" />
+<IF4_concrete_per_member_function value="********" level="0" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="Constants.h" line="42" />
+<lines_of_code value="27" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="35" level="0" />
+<lines_of_code_per_line_of_comment value="0.771" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>Constants()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Constants.h" line="44" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Constants.cpp" line="67" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>~Constants()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="Constants.h" line="45" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="Constants.cpp" line="71" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>Constants</name>
+<client_module>
+</client_module>
+<supplier_module>
+<name>string</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="48" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="50" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="55" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="60" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="61" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="74" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="75" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="76" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="77" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="78" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="79" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="80" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="81" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="Constants.h" line="82" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

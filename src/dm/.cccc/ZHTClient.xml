@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module ZHTClient-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="385" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="72" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="31" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="12.419" level="1" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="2.323" level="0" />
+<weighted_methods_per_class_unity value="24" level="0" />
+<weighted_methods_per_class_visibility value="12" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="0" level="0" />
+<coupling_between_objects value="8" level="0" />
+<IF4 value="0" level="0" />
+<IF4_per_member_function value="********" level="0" />
+<IF4_visible value="0" level="0" />
+<IF4_visible_per_member_function value="********" level="0" />
+<IF4_concrete value="0" level="0" />
+<IF4_concrete_per_member_function value="********" level="0" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="ZHTClient.h" line="50" />
+<lines_of_code value="19" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="5" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>ZHTClient()</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="57" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="58" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>ZHTClient(const string &amp;,const bool &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="61" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="61" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="2" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>commonOp(const string &amp;,const string &amp;,string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="99" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="89" />
+</extent>
+<lines_of_code value="30" level="0" />
+<McCabes_cyclomatic_complexity value="8" level="0" />
+<lines_of_comment value="2" level="0" />
+<lines_of_code_per_line_of_comment value="15.000" level="1" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="4.000" level="0" />
+</member_function>
+<member_function>
+<name>commonOpInternal(const string &amp;,const HostEntity *,const string &amp;,string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="160" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="90" />
+</extent>
+<lines_of_code value="31" level="1" />
+<McCabes_cyclomatic_complexity value="9" level="0" />
+<lines_of_comment value="9" level="0" />
+<lines_of_code_per_line_of_comment value="3.444" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="1.000" level="0" />
+</member_function>
+<member_function>
+<name>getDestZHTByKey(const HostEntity &amp;,const string &amp;,string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="359" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="83" />
+</extent>
+<lines_of_code value="15" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getHostByKey(const string &amp;,HostEntity &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="342" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="80" />
+</extent>
+<lines_of_code value="12" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getHostByKey2(const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="378" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="81" />
+</extent>
+<lines_of_code value="11" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getRingPosByKey(const uint64_t &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="395" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="85" />
+</extent>
+<lines_of_code value="12" level="0" />
+<McCabes_cyclomatic_complexity value="4" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getSockByKey2(const string &amp;,const bool &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="465" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="87" />
+</extent>
+<lines_of_code value="33" level="1" />
+<McCabes_cyclomatic_complexity value="8" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="******" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="******" level="2" />
+</member_function>
+<member_function>
+<name>getSockCached(const HostEntity *,const bool &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="413" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="96" />
+</extent>
+<lines_of_code value="7" level="0" />
+<McCabes_cyclomatic_complexity value="3" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getSockCached(const string &amp;,const uint &amp;,const bool &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="424" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="97" />
+</extent>
+<lines_of_code value="30" level="0" />
+<McCabes_cyclomatic_complexity value="6" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="******" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="******" level="2" />
+</member_function>
+<member_function>
+<name>init(const string &amp;,const bool &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="70" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="65" />
+</extent>
+<lines_of_code value="14" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="2" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>init2(const string &amp;,const bool &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="91" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="66" />
+</extent>
+<lines_of_code value="6" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>insert(const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="154" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="69" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>lookup(const string &amp;,string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="143" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="67" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>parseStatusAndResult(const int &amp;,string &amp;,string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="252" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="100" />
+</extent>
+<lines_of_code value="23" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="4" level="0" />
+<lines_of_code_per_line_of_comment value="5.750" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>readDynamicMembership(string)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="512" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="93" />
+</extent>
+<lines_of_code value="45" level="1" />
+<McCabes_cyclomatic_complexity value="9" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="******" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="******" level="2" />
+</member_function>
+<member_function>
+<name>remove(const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="148" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="68" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>sendPkg(const string &amp;,const uint &amp;,const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="205" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="74" />
+</extent>
+<lines_of_code value="7" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>sendPkg(const string &amp;,const uint &amp;,const string &amp;,string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="213" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="76" />
+</extent>
+<lines_of_code value="7" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="3" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>sendPkgInternal(const string &amp;,const uint &amp;,const string &amp;,string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="225" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="102" />
+</extent>
+<lines_of_code value="19" level="0" />
+<McCabes_cyclomatic_complexity value="3" level="0" />
+<lines_of_comment value="3" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>tearDown()</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="283" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="70" />
+</extent>
+<lines_of_code value="21" level="0" />
+<McCabes_cyclomatic_complexity value="4" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="******" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>tearDown2()</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="312" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="71" />
+</extent>
+<lines_of_code value="19" level="0" />
+<McCabes_cyclomatic_complexity value="4" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>~ZHTClient()</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTClient.cpp" line="66" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTClient.h" line="62" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>ZHTClient</name>
+<client_module>
+</client_module>
+<supplier_module>
+<name>HostEntity</name>
+<visible>false</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="160" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="342" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="359" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="413" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="80" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="83" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="90" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="96" />
+</extent>
+<name>LRUCache</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="ZHTClient.h" line="108" />
+</extent>
+<name>MAP</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="ZHTClient.h" line="112" />
+</extent>
+<name>bool</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="61" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="70" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="91" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="413" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="425" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="465" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="61" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="65" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="66" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="87" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="96" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="98" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="ZHTClient.h" line="111" />
+</extent>
+<name>string</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="61" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="70" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="91" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="99" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="99" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="100" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="143" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="143" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="148" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="154" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="160" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="161" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="161" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="205" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="206" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="213" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="214" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="214" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="225" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="226" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="226" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="252" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="253" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="342" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="360" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="360" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="378" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="424" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="465" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="ZHTClient.cpp" line="512" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="61" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="65" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="66" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="67" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="67" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="68" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="69" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="74" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="75" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="76" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="77" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="77" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="80" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="81" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="84" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="84" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="87" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="89" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="89" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="89" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="90" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="91" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="91" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="ZHTClient.h" line="93" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="97" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="100" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="101" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="102" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="103" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="103" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="ZHTClient.h" line="113" />
+</extent>
+<name>uint</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="205" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="213" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="225" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="424" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="74" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="76" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="97" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="102" />
+</extent>
+<name>uint64_t</name>
+<visible>false</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.cpp" line="395" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTClient.h" line="85" />
+</extent>
+<name>vector</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="ZHTClient.h" line="115" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

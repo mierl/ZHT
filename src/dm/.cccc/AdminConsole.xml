@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module AdminConsole-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="85" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="12" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="5" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="17.000" level="1" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="2.400" level="0" />
+<weighted_methods_per_class_unity value="10" level="0" />
+<weighted_methods_per_class_visibility value="8" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="0" level="0" />
+<coupling_between_objects value="4" level="0" />
+<IF4 value="0" level="0" />
+<IF4_per_member_function value="********" level="0" />
+<IF4_visible value="0" level="0" />
+<IF4_visible_per_member_function value="********" level="0" />
+<IF4_concrete value="0" level="0" />
+<IF4_concrete_per_member_function value="********" level="0" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="AdminConsole.h" line="46" />
+<lines_of_code value="10" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>AdminConsole(const uint &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole.cpp" line="44" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="48" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addPhysicalNode()</name>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole.cpp" line="54" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="51" />
+</extent>
+<lines_of_code value="6" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addZHT(const string &amp;,const uint &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="53" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole-impl.h" line="50" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addZHT(const uint &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="52" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole-impl.h" line="44" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getSocket()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="60" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole-impl.h" line="105" />
+</extent>
+<lines_of_code value="11" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>removePhysicalNode()</name>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole.cpp" line="63" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="55" />
+</extent>
+<lines_of_code value="6" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>removeZHT(const string &amp;,const uint &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="57" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole-impl.h" line="62" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>removeZHT(const uint &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="56" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole-impl.h" line="56" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>runOnOpcode(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="61" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole-impl.h" line="69" />
+</extent>
+<lines_of_code value="27" level="0" />
+<McCabes_cyclomatic_complexity value="4" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="27.000" level="1" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>~AdminConsole()</name>
+<extent>
+<description>definition</description>
+<source_reference file="AdminConsole.cpp" line="50" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="AdminConsole.h" line="49" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>AdminConsole</name>
+<client_module>
+</client_module>
+<supplier_module>
+<name>HostEntity</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="AdminConsole.h" line="69" />
+</extent>
+<name>bool</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="AdminConsole.h" line="64" />
+</extent>
+<name>string</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="53" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="57" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="61" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole-impl.h" line="50" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole-impl.h" line="62" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole-impl.h" line="69" />
+</extent>
+<name>uint</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.cpp" line="44" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="48" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="52" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="53" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="56" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole.h" line="57" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="AdminConsole.h" line="65" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="AdminConsole.h" line="68" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole-impl.h" line="44" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole-impl.h" line="50" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole-impl.h" line="56" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="AdminConsole-impl.h" line="63" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

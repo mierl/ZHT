@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module MutexCondition-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="44" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="6" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="7" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="6.286" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.857" level="0" />
+<weighted_methods_per_class_unity value="9" level="0" />
+<weighted_methods_per_class_visibility value="6" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="0" level="0" />
+<coupling_between_objects value="4" level="0" />
+<IF4 value="16" level="0" />
+<IF4_per_member_function value="********" level="2" />
+<IF4_visible value="0" level="0" />
+<IF4_visible_per_member_function value="********" level="0" />
+<IF4_concrete value="16" level="0" />
+<IF4_concrete_per_member_function value="********" level="2" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="MutexCondition.h" line="45" />
+<lines_of_code value="7" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="3" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>MutexCondition()</name>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition.cpp" line="38" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="47" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>destroy()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="57" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition-impl.h" line="48" />
+</extent>
+<lines_of_code value="6" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>init()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="56" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition-impl.h" line="41" />
+</extent>
+<lines_of_code value="6" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>lock()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="50" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition-impl.h" line="55" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>operator =(...)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="59" />
+</extent>
+<lines_of_code value="1" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>signal()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="53" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition-impl.h" line="73" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>unLock()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="51" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition-impl.h" line="61" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>wait()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="52" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition-impl.h" line="67" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>~MutexCondition()</name>
+<extent>
+<description>definition</description>
+<source_reference file="MutexCondition.cpp" line="43" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="MutexCondition.h" line="48" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>MutexCondition</name>
+<client_module>
+<name>MigrateStatus</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="MigrateStatus.h" line="60" />
+</extent>
+<name>PorterStatus</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="PorterStatus.h" line="61" />
+</extent>
+</client_module>
+<supplier_module>
+<name>pthread_cond_t</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="MutexCondition.h" line="62" />
+</extent>
+<name>pthread_mutex_t</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="MutexCondition.h" line="63" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

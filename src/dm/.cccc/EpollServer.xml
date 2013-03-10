@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module EpollServer-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="203" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="45" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="43" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="4.721" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="1.047" level="0" />
+<weighted_methods_per_class_unity value="7" level="0" />
+<weighted_methods_per_class_visibility value="6" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="0" level="0" />
+<coupling_between_objects value="3" level="0" />
+<IF4 value="0" level="0" />
+<IF4_per_member_function value="********" level="0" />
+<IF4_visible value="0" level="0" />
+<IF4_visible_per_member_function value="********" level="0" />
+<IF4_concrete value="0" level="0" />
+<IF4_concrete_per_member_function value="********" level="0" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="EpollServer.h" line="59" />
+<lines_of_code value="8" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="3" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>EpollServer()</name>
+<extent>
+<description>definition</description>
+<source_reference file="EpollServer.cpp" line="66" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="EpollServer.h" line="71" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>EpollServer(ZProcessor *)</name>
+<extent>
+<description>definition</description>
+<source_reference file="EpollServer.cpp" line="61" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="EpollServer.h" line="61" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>create_and_bind(const char *)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="EpollServer.h" line="64" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="EpollServer-impl.h" line="58" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>create_and_bind(const char *,const char *)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="EpollServer.h" line="65" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="EpollServer-impl.h" line="62" />
+</extent>
+<lines_of_code value="31" level="1" />
+<McCabes_cyclomatic_complexity value="9" level="0" />
+<lines_of_comment value="4" level="0" />
+<lines_of_code_per_line_of_comment value="7.750" level="1" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="2.250" level="0" />
+</member_function>
+<member_function>
+<name>make_socket_non_blocking(const int &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="EpollServer.h" line="66" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="EpollServer-impl.h" line="104" />
+</extent>
+<lines_of_code value="16" level="0" />
+<McCabes_cyclomatic_complexity value="5" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="******" level="0" />
+</member_function>
+<member_function>
+<name>serve(const char *)</name>
+<extent>
+<description>definition</description>
+<source_reference file="EpollServer.cpp" line="74" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="EpollServer.h" line="68" />
+</extent>
+<lines_of_code value="134" level="2" />
+<McCabes_cyclomatic_complexity value="30" level="1" />
+<lines_of_comment value="36" level="0" />
+<lines_of_code_per_line_of_comment value="3.722" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.833" level="0" />
+</member_function>
+<member_function>
+<name>~EpollServer()</name>
+<extent>
+<description>definition</description>
+<source_reference file="EpollServer.cpp" line="70" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="EpollServer.h" line="62" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>EpollServer</name>
+<client_module>
+</client_module>
+<supplier_module>
+<name>ZProcessor</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="EpollServer.cpp" line="61" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="EpollServer.h" line="61" />
+</extent>
+<extent>
+<description>has by reference</description>
+<source_reference file="EpollServer.h" line="75" />
+</extent>
+<name>bool</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="EpollServer.h" line="72" />
+</extent>
+<name>uint</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="EpollServer.h" line="74" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

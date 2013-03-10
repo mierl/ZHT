@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module ZHTManager-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="260" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="39" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="61" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="4.262" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.639" level="0" />
+<weighted_methods_per_class_unity value="21" level="0" />
+<weighted_methods_per_class_visibility value="9" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="0" level="0" />
+<coupling_between_objects value="5" level="0" />
+<IF4 value="16" level="0" />
+<IF4_per_member_function value="********" level="2" />
+<IF4_visible value="0" level="0" />
+<IF4_visible_per_member_function value="********" level="0" />
+<IF4_concrete value="4" level="0" />
+<IF4_concrete_per_member_function value="********" level="2" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="ZHTManager.h" line="46" />
+<lines_of_code value="13" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>ZHTManager(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="51" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>ZHTManager(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="54" />
+</extent>
+<lines_of_code value="1" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addAllZHTOnNode()</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="60" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="57" />
+</extent>
+<lines_of_code value="15" level="0" />
+<McCabes_cyclomatic_complexity value="3" level="0" />
+<lines_of_comment value="2" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addAllZHTOnNodeInternal(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="84" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="68" />
+</extent>
+<lines_of_code value="11" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addZHT(const string &amp;,const uint &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="103" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="59" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addZHT(const uint &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="98" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="58" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>addZHTInternal(const string &amp;,const uint &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="148" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="70" />
+</extent>
+<lines_of_code value="56" level="1" />
+<McCabes_cyclomatic_complexity value="12" level="1" />
+<lines_of_comment value="33" level="0" />
+<lines_of_code_per_line_of_comment value="1.697" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.364" level="0" />
+</member_function>
+<member_function>
+<name>getGlobalmembershipChanges(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="291" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="97" />
+</extent>
+<lines_of_code value="21" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="11" level="0" />
+<lines_of_code_per_line_of_comment value="1.909" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>getSourceZHTAsNeighbor(const Neighbor &amp;,Neighbor &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="109" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="86" />
+</extent>
+<lines_of_code value="14" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>initNeighborManager()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="65" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager-impl.h" line="42" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>isSameNeighbor(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="318" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="84" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>migrateFromNeighbor(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="349" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="78" />
+</extent>
+<lines_of_code value="43" level="1" />
+<McCabes_cyclomatic_complexity value="10" level="0" />
+<lines_of_comment value="10" level="0" />
+<lines_of_code_per_line_of_comment value="4.300" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="1.000" level="0" />
+</member_function>
+<member_function>
+<name>migrateToNeighbor(const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="323" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="82" />
+</extent>
+<lines_of_code value="12" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>notifyMigCancle(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="241" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="104" />
+</extent>
+<lines_of_code value="11" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>notifyMigDone(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="254" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="101" />
+</extent>
+<lines_of_code value="13" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="3" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>notifyMigDoneInternal(const string &amp;,const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="274" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="107" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>notifyMigDoneInternal(const string &amp;,const string &amp;,const string &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="280" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="108" />
+</extent>
+<lines_of_code value="10" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>removeAllZHTOnNode()</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="406" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="61" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>removeZHT(const string &amp;,const uint &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="415" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="63" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>removeZHT(const uint &amp;)</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="411" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="62" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>~ZHTManager()</name>
+<extent>
+<description>definition</description>
+<source_reference file="ZHTManager.cpp" line="56" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="ZHTManager.h" line="55" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>ZHTManager</name>
+<client_module>
+<name>AdminService</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="AdminService.h" line="66" />
+</extent>
+</client_module>
+<supplier_module>
+<name>Neighbor</name>
+<visible>false</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="109" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="110" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="86" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="87" />
+</extent>
+<name>NeighborManager</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="ZHTManager.h" line="115" />
+</extent>
+<name>string</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="103" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="148" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="274" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="275" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="280" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="281" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="281" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="323" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="415" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="54" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="59" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="63" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="70" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="82" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="107" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="107" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="108" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="108" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="109" />
+</extent>
+<extent>
+<description>has by value</description>
+<source_reference file="ZHTManager.h" line="112" />
+</extent>
+<name>uint</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="98" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="103" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="148" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="411" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.cpp" line="415" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="58" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="59" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="62" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="63" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="ZHTManager.h" line="70" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

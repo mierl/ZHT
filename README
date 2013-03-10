@@ -1,0 +1,103 @@
+-------------------FILE DIRECTORY-------------------
+The following files in this directory:
+benchmark_client.cpp:  			ZHT benchmark program
+benchmark_client_detailed.cpp:		ZHT benchmark program
+
+c_zhtclient_main.c:			ZHT c binding test cases
+c_zhtclient.cpp:			ZHT c binding impl
+c_zhtclient.h:				ZHT c binding header
+c_zhtclientStd.cpp:			ZHT c binding internals impl
+c_zhtclientStd.h:			ZHT c binding internals header
+cpp_zhtclient.cpp:			ZHT c++ binding impl
+cpp_zhtclient.h:			ZHT c++ binding header
+lru_cache.cpp:				ZHT connection cache impl
+lru_cache.h:				ZHT connection cache header
+meta.pb.cc:				ZHT client-server-communication-package c++ binding impl
+meta.pb.h:				ZHT client-server-communication package c++ binding header
+meta.pb-c.c:				ZHT client-server-communication-package c binding impl
+meta.pb-c.h:				ZHT client-server-communication-package c binding impl
+net_util.cpp:				ZHT client-server-communication-library impl
+net_util.h:				ZHT client-server-communication-library header
+novoht.cpp:				ZHT storage engine impl
+novoht.h:				ZHT storage engine header
+server_general.cpp:			ZHT server impl
+zht_util.cpp:				ZHT utility functions impl
+zht_util.cpp:				ZHT utility functions header
+
+Makefile:				make file
+sample_Makefile:			sample make file to compile and built user's ZHT applications
+
+neighbor:				file that contains neighbored nodes in DHT overlay network
+zht.cfg:				configure parameters other than neighbors
+
+README:					this file
+
+
+-------------------SOFTWARE REQUIREMENTS-------------------
+Google protocol buffers c binding, 0.15 or later
+		http://code.google.com/p/protobuf-c/downloads/list
+
+
+Google protocol buffers c++ binding, 2.3.0 or later
+		http://code.google.com/p/protobuf/downloads/list
+
+
+-------------------COMPILE AND INSTALL-------------------
+Assuming that Google protocol buffers c and c++ bindings are configured with --prefix=/usr/local while running ./configure
+
+To compile and install:
+	make
+
+If you install Google protocol buffers c and c++ bindings to customized directory, e.g./home/tony/Installed/built, make sure to export them, e.g.
+export USER_LIB=$USER_LIB:/home/tony/Installed/built/lib
+export USER_INCLUDE=$USER_INCLUDE:/home/tony/Installed/built/include
+
+, otherwise the ZHT runtime fails to locate dependencies
+
+
+-------------------RUN THE BENCHMARK-------------------
+To run benchmark:
+1. ./zht_server.exe 50000 neighbor zht.cfg TCP
+2. ./zht_benchmark.exe 10000 neighbor zht.cfg TCP
+
+NOTE that the startup arguments can not be OUT OF ORDER, e.g. 
+	50000 neighbor zht.cfg TCP, for ZHT server, and
+	10000 neighbor zht.cfg TCP, for ZHT client,
+
+	are the SEQUENCE expected, CHANGING THE ORDER is likely to lead to ERRORS.
+
+In ./zht_server.exe 50000 neighbor zht.cfg TCP, 
+	50000 means ZHT server PORT, 
+	neighbor is the file that contains neighbored nodes in DHT overlay network,
+	zht.cfg is to config other parameters of ZHT,
+	TCP is to use tcp protocol, instead, UDP is used.
+
+In ./zht_benchmark.exe 10000 neighbor zht.cfg TCP
+	10000 means running 10000 iterations of ZHT INSERT/LOOKUP/REMOVE/APPEND, 
+	neighbor is the file that contains neighbored nodes in DHT overlay network,
+	zht.cfg is to config other parameters of ZHT,
+	TCP is to use tcp protocol, instead, UDP is used.
+
+
+-------------------STANDALONE DEPLOYMENT-------------------
+To deploy ZHT on a single node,
+1. ./zht_server.exe 50000 neighbor zht.cfg TCP
+2. ./your_zht_client.exe neighbor zht.cfg TCP
+
+NOTE that your_zht_client.exe is your binary that invokes ZHT client to INSERT/LOOKUP/REMOVE/APPEND key/value pairs.
+Similarly, 50000 neighbor zht.cfg TCP or neighbor zht.cfg TCP are SEQUENCE expected, CHANGING THE ORDER is likely to lead to ERRORS.
+
+
+-------------------CLUSTER DEPLOYMENT-------------------
+To deploye ZHT on a cluster of nodes:
+1. copy zht binary, that is, zht_server.exe, to every node.
+2. copy configure files, that is, neighbor, zht.cfg, to every node.
+3. edit the the file neighbor to contain all the ip and port of these nodes, DO NOT USE localhost.
+4. In every node, run ./zht_server.exe 50000 neighbor zht.cfg TCP, assuming 50000 is the port configured.
+5. run your ZHT applications.
+
+
+-------------------DEVELOPE YOUR ZHT APPLICATIONS-------------------
+To develope your own ZHT applications, please refer TO c_zhtclient_main.c, which extensively tests ZHT client c binding, internally invoking c++ binding.
+
+To compile your own ZHT applications(e.g.your_zht_app.c), we give out the sample Makefile for this purpose, see also sample_Makefile in src/, to save your time.

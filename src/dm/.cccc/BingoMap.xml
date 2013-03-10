@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module BingoMap-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="88" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="9" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="1" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="88.000" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="9.000" level="1" />
+<weighted_methods_per_class_unity value="15" level="0" />
+<weighted_methods_per_class_visibility value="15" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="2" level="0" />
+<coupling_between_objects value="8" level="0" />
+<IF4 value="225" level="1" />
+<IF4_per_member_function value="********" level="2" />
+<IF4_visible value="81" level="1" />
+<IF4_visible_per_member_function value="********" level="2" />
+<IF4_concrete value="16" level="0" />
+<IF4_concrete_per_member_function value="********" level="2" />
+</module_summary>
+<module_detail>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="55" />
+<lines_of_code value="1" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+<description>definition</description>
+<source_reference file="BingoMap.h" line="75" />
+<lines_of_code value="7" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>BingoMap()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="81" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="122" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>BingoMap(const int &amp;,const int &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="83" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="134" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>BingoMap(const int &amp;,const int &amp;,const float &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="85" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="146" />
+</extent>
+<lines_of_code value="6" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>BingoMap(const string &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="82" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="128" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>BingoMap(const string &amp;,const int &amp;,const int &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="84" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="140" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>BingoMap(const string &amp;,const int &amp;,const int &amp;,const float &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="86" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="153" />
+</extent>
+<lines_of_code value="7" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>capacity()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="94" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="198" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>clear()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="95" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="204" />
+</extent>
+<lines_of_code value="8" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>get(const KTYPE &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="91" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="170" />
+</extent>
+<lines_of_code value="10" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="1" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>iterator()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="99" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="216" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>put(const KTYPE &amp;,const VTYPE &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="90" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="164" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>remove(const KTYPE &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="92" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="186" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>size()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="93" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="192" />
+</extent>
+<lines_of_code value="4" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>toString(const KTYPE &amp;)</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="97" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="224" />
+</extent>
+<lines_of_code value="6" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>~BingoMap()</name>
+<extent>
+<description>declaration</description>
+<source_reference file="BingoMap.h" line="88" />
+</extent>
+<extent>
+<description>definition</description>
+<source_reference file="BingoMap-impl.h" line="160" />
+</extent>
+<lines_of_code value="3" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>BingoMap</name>
+<client_module>
+<name>BPairIterator</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="60" />
+</extent>
+<extent>
+<description>has by reference</description>
+<source_reference file="BingoMap.h" line="70" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="60" />
+</extent>
+<name>ConfigMap</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>inheritance</description>
+<source_reference file="ConfigMap.h" line="45" />
+</extent>
+<name>NeighborMap</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>inheritance</description>
+<source_reference file="NeighborMap.h" line="46" />
+</extent>
+</client_module>
+<supplier_module>
+<name>KTYPE</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="90" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="91" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="92" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="97" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="164" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="170" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="186" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="224" />
+</extent>
+<name>NoVoHT</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="BingoMap.h" line="102" />
+</extent>
+<name>VTYPE</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="90" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="164" />
+</extent>
+<name>pair_iterator</name>
+<visible>false</visible>
+<concrete>true</concrete>
+<extent>
+<description>has by value</description>
+<source_reference file="BingoMap.h" line="103" />
+</extent>
+<name>string</name>
+<visible>true</visible>
+<concrete>false</concrete>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="82" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="84" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap.h" line="86" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="128" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="140" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="BingoMap-impl.h" line="153" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>
