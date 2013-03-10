@@ -26,6 +26,8 @@
 # include <errno.h>
 #include "net_util.h"
 #include "zht_util.h"
+
+#include <unistd.h>
 //struct timeval tp;
 using namespace std;
 

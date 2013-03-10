@@ -22,6 +22,8 @@
 #include "net_util.h"
 #include "zht_util.h"
 
+#include <unistd.h>
+
 #define SOCKET_ERROR -1
 
 class BdRecvBase;

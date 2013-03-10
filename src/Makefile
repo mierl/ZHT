@@ -1,30 +1,31 @@
 
-TARGETS = zht_c_binding.exe zht_benchmark.exe zht_server.exe
+TARGETS = zht_c_binding zht_benchmark zht_server
 CC = gcc
 CCFLAGS = -g
-LIBFLAGS = -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotobuf-c
+LIBFLAGS = -lstdc++ -lrt -lpthread -lm -lc -lprotobuf
 
 
-
+server: zht_server
 all:	$(TARGETS)
 	
 
 
-zht_c_binding.exe: c_zhtclient_main.o c_zhtclient.o c_zhtclientStd.o cpp_zhtclient.o meta.pb-c.o lru_cache.o meta.pb.o net_util.o novoht.o zht_util.o
+zht_c_binding: c_zhtclient_main.o c_zhtclient.o c_zhtclientStd.o cpp_zhtclient.o meta.pb-c.o lru_cache.o meta.pb.o net_util.o novoht.o zht_util.o
+	$(CC) $(CCFLAGS) -o $@ $^ $(LIBFLAGS) -lprotobuf-c
+
+
+zht_benchmark: benchmark_client.o cpp_zhtclient.o meta.pb-c.o lru_cache.o meta.pb.o net_util.o novoht.o zht_util.o
 	$(CC) $(CCFLAGS) -o $@ $^ $(LIBFLAGS)
 
 
-zht_benchmark.exe: benchmark_client.o cpp_zhtclient.o meta.pb-c.o lru_cache.o meta.pb.o net_util.o novoht.o zht_util.o
+
+zht_server: server_general.o lru_cache.o meta.pb.o net_util.o novoht.o zht_util.o
 	$(CC) $(CCFLAGS) -o $@ $^ $(LIBFLAGS)
 
 
-
-zht_server.exe: server_general.o meta.pb-c.o lru_cache.o meta.pb.o net_util.o novoht.o zht_util.o
-	$(CC) $(CCFLAGS) -o $@ $^ $(LIBFLAGS)
-
-
-%.o:	%.c
+%.o:	%.cpp
 	$(CC) $(CCFLAGS) -c $< $^ $(LIBFLAGS)
+
 	
 
 c_zhtclient_main.o:		c_zhtclient_main.c
@@ -49,6 +50,6 @@ zht_util.o:				zht_util.cpp
 
 clean:
 	rm *.o
-	rm *.exe
+	rm $(TARGETS)
 	rm *.gch*
 	rm *.bin*
