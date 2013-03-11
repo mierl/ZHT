@@ -1,7 +1,5 @@
 -------------------FILE DIRECTORY-------------------
-
 The following files in this directory:
-
 benchmark_client.cpp:  			ZHT benchmark program
 benchmark_client_detailed.cpp:		ZHT benchmark program
 
@@ -45,22 +43,28 @@ Google protocol buffers c++ binding, 2.3.0 or later
 
 
 -------------------COMPILE AND INSTALL-------------------
-Assuming that Google protocol buffers c and c++ bindings are configured with --prefix=/usr/local while running ./configure
+Assuming that Google protocol buffers c and c++ bindings are installed to default directory, that is, /usr/local, in other words,  ./configured --prefix=/usr/local
 
-To compile and install:
+To compile and install ZHT:
 	make
 
-If you install Google protocol buffers c and c++ bindings to customized directory, e.g./home/tony/Installed/built, make sure to export them, e.g.
-export USER_LIB=$USER_LIB:/home/tony/Installed/built/lib
-export USER_INCLUDE=$USER_INCLUDE:/home/tony/Installed/built/include
+If you installed Google protocol buffers c and c++ bindings to customized directory, e.g./home/xiaobingo/install, MAKE SURE TO EXPORT them, e.g.
+1. cd to your home directory
+2. vim/gedit .bashrc
+3. append the following lines to the end,
+	export USER_LIB=/home/xiaobingo/install/lib/
+	export USER_INCLUDE=/home/xiaobingo/install/include/
+	export LD_LIBRARY_PATH=$USER_LIB
+4. source .bashrc
+5. COMPILE/RUN ZHT AT NEW TERMINAL
 
-, otherwise the ZHT runtime fails to locate dependencies
+, otherwise, you probably fail to compile ZHT or locate dependencies required by ZHT runtime.
 
 
 -------------------RUN THE BENCHMARK-------------------
 To run benchmark:
-1. ./zht_server.exe 50000 neighbor zht.cfg TCP
-2. ./zht_benchmark.exe 10000 neighbor zht.cfg TCP
+1. ./zht_server 50000 neighbor zht.cfg TCP
+2. ./zht_benchmark 10000 neighbor zht.cfg TCP
 
 NOTE that the startup arguments can not be OUT OF ORDER, e.g. 
 	50000 neighbor zht.cfg TCP, for ZHT server, and
@@ -68,13 +72,13 @@ NOTE that the startup arguments can not be OUT OF ORDER, e.g.
 
 	are the SEQUENCE expected, CHANGING THE ORDER is likely to lead to ERRORS.
 
-In ./zht_server.exe 50000 neighbor zht.cfg TCP, 
+In ./zht_server 50000 neighbor zht.cfg TCP, 
 	50000 means ZHT server PORT, 
 	neighbor is the file that contains neighbored nodes in DHT overlay network,
 	zht.cfg is to config other parameters of ZHT,
 	TCP is to use tcp protocol, instead, UDP is used.
 
-In ./zht_benchmark.exe 10000 neighbor zht.cfg TCP
+In ./zht_benchmark 10000 neighbor zht.cfg TCP
 	10000 means running 10000 iterations of ZHT INSERT/LOOKUP/REMOVE/APPEND, 
 	neighbor is the file that contains neighbored nodes in DHT overlay network,
 	zht.cfg is to config other parameters of ZHT,
@@ -83,19 +87,19 @@ In ./zht_benchmark.exe 10000 neighbor zht.cfg TCP
 
 -------------------STANDALONE DEPLOYMENT-------------------
 To deploy ZHT on a single node,
-1. ./zht_server.exe 50000 neighbor zht.cfg TCP
-2. ./your_zht_client.exe neighbor zht.cfg TCP
+1. ./zht_server 50000 neighbor zht.cfg TCP
+2. ./your_zht_client neighbor zht.cfg TCP
 
-NOTE that your_zht_client.exe is your binary that invokes ZHT client to INSERT/LOOKUP/REMOVE/APPEND key/value pairs.
+NOTE that your_zht_client is your binary that invokes ZHT client to INSERT/LOOKUP/REMOVE/APPEND key/value pairs.
 Similarly, 50000 neighbor zht.cfg TCP or neighbor zht.cfg TCP are SEQUENCE expected, CHANGING THE ORDER is likely to lead to ERRORS.
 
 
 -------------------CLUSTER DEPLOYMENT-------------------
 To deploye ZHT on a cluster of nodes:
-1. copy zht binary, that is, zht_server.exe, to every node.
+1. copy zht binary, that is, zht_server, to every node.
 2. copy configure files, that is, neighbor, zht.cfg, to every node.
 3. edit the the file neighbor to contain all the ip and port of these nodes, DO NOT USE localhost.
-4. In every node, run ./zht_server.exe 50000 neighbor zht.cfg TCP, assuming 50000 is the port configured.
+4. In every node, run ./zht_server 50000 neighbor zht.cfg TCP, assuming 50000 is the port configured.
 5. run your ZHT applications.
 
 
