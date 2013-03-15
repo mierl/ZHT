@@ -25,7 +25,7 @@ zht_util.cpp:				ZHT utility functions impl
 zht_util.cpp:				ZHT utility functions header
 
 Makefile:				make file
-sample_Makefile:			sample make file to compile and built user's ZHT applications
+sample_Makefile:			sample make file to compile and build user's ZHT applications
 
 neighbor:				file that contains neighbored nodes in DHT overlay network
 zht.cfg:				configure parameters other than neighbors
