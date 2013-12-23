@@ -37,7 +37,7 @@ const int MAX_NUM_REPLICA = 3;
 
 struct HostEntity Replicas[MAX_NUM_REPLICA];
 
-bool TCP; // for switch between TCP and UDP
+bool protocol; // for switch between TCP and UDP
 
 BdRecvBase *pbrb;
 
@@ -476,7 +476,7 @@ int makeConnForReplica(struct HostEntity &dest) {
 	if (dest.sock < 0) {
 //		cout << "makeConnForReplica ..........  2" << endl;
 		//sock = makeClientSocket((char*) dest.host.c_str(), dest.port, true);
-		sock = makeClientSocket((char*) dest.host.c_str(), dest.port, TCP);
+		sock = makeClientSocket((char*) dest.host.c_str(), dest.port, protocol);
 //		cout << "makeConnForReplica ..........  3" << endl;
 		reuseSock(sock);
 //		cout << "makeConnForReplica ..........  4" << endl;
@@ -529,7 +529,7 @@ int general_replica(Package package, struct HostEntity &destination) {
 //      cout << "socket_replica--------2, sock = " << sock << endl;
 //        generalSendTCP(sock, str.c_str());
 	generalSendTo(destination.host.c_str(), destination.port, sock, str.c_str(),
-			str.size(), TCP);
+			str.size(), protocol);
 //      cout << "socket_replica--------3" << endl;
 	void *buff_return = (void*) malloc(sizeof(int32_t));
 	//      int r = d3_svr_recv(sock, buff_return, sizeof(int32_t), 0, &recv_addr);
@@ -614,7 +614,7 @@ void dataService(int client_sock, void* buff, size_t bufsize,
 		sAllInOne.append(result);
 
 		generalSendBack(client_sock, sAllInOne.c_str(), sAllInOne.size(),
-				fromAddr, 0, TCP);
+				fromAddr, 0, protocol);
 	}
 		break;
 
@@ -634,7 +634,7 @@ void dataService(int client_sock, void* buff, size_t bufsize,
 		}
 
 		buff1 = &operation_status;
-		if (TCP == true) {
+		if (protocol == true) {
 			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
 		} else {
 			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
@@ -668,7 +668,7 @@ void dataService(int client_sock, void* buff, size_t bufsize,
 		}
 
 		buff1 = &operation_status;
-		if (TCP == true) {
+		if (protocol == true) {
 			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
 		} else {
 			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
@@ -696,7 +696,7 @@ void dataService(int client_sock, void* buff, size_t bufsize,
 			//              cout << "insert finished, return: " << operation_status << endl;
 		}
 		buff1 = &operation_status;
-		if (TCP == true) {
+		if (protocol == true) {
 			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
 		} else {
 			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
@@ -720,7 +720,7 @@ void dataService(int client_sock, void* buff, size_t bufsize,
 		operation_status = -98; //unrecognized operation
 
 		buff1 = &operation_status;
-		if (TCP == true) {
+		if (protocol == true) {
 			r = send(client_sock, &operation_status, sizeof(int32_t), 0);
 		} else {
 			r = sendto(client_sock, &operation_status, sizeof(int32_t), 0,
@@ -796,7 +796,7 @@ int Host2Index(const char* hostName) {
 int main(int argc, char *argv[]) {
 
 	if (argc != 5) { //or 3?
-		fprintf(stderr, "Usage: %s [port]\n", argv[0]);
+		fprintf(stderr, "Usage: %s [port] [neighborList] [configFile] [protocol]\n", argv[0]);
 		cout << "argc = " << argc << endl;
 		exit(EXIT_FAILURE);
 	}
@@ -804,9 +804,9 @@ int main(int argc, char *argv[]) {
 	char* isTCP = argv[4];
 
 	if (!strcmp("TCP", isTCP)) {
-		TCP = true;
+		protocol = true;
 	} else {
-		TCP = false;
+		protocol = false;
 	}
 
 	LISTEN_PORT = argv[1];
@@ -843,7 +843,7 @@ int main(int argc, char *argv[]) {
 	struct epoll_event event;
 	struct epoll_event *events;
 
-	listener = makeSvrSocket(atoi(LISTEN_PORT), TCP);
+	listener = makeSvrSocket(atoi(LISTEN_PORT), protocol);
 	if (listener == -1)
 		abort();
 
@@ -851,7 +851,7 @@ int main(int argc, char *argv[]) {
 	if (s == -1)
 		abort();
 
-	if (TCP == true) {
+	if (protocol == true) {
 		s = listen(listener, SOMAXCONN);
 		if (s == -1) {
 			perror("listen");
@@ -908,7 +908,7 @@ int main(int argc, char *argv[]) {
 				continue;
 			} else if (listener == events[i].data.fd) { //TCP has new connection:  here UDP should take over
 				// We have a notification on the listening socket, which means one or more incoming connections.
-				if (TCP == true) {
+				if (protocol == true) {
 					while (1) {
 						struct sockaddr in_addr;
 						socklen_t in_len;
@@ -954,7 +954,7 @@ int main(int argc, char *argv[]) {
 					continue;
 
 				} //end if(TCP==true)
-				else if (TCP == false) {
+				else if (protocol == false) {
 
 					sockaddr_in fromAddr;
 					char recvBuff[Env::MAX_MSG_SIZE];
@@ -969,7 +969,7 @@ int main(int argc, char *argv[]) {
 				}
 			} else {
 
-				if (TCP == true) {
+				if (protocol == true) {
 
 					// TCP data on existing connection
 					// We have data on the fd waiting to be read. Read and display it. We must read whatever data is available

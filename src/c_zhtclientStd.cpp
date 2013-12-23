@@ -8,7 +8,7 @@
 #include <string.h>
 using namespace std;
 
-bool TCP = false;
+bool protocol = false;
 
 int c_zht_init_std(ZHTClient_c * zhtClient, const char *memberConfig,
 		const char *zhtConfig, bool tcp) {
