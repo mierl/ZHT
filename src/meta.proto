@@ -1,0 +1,7 @@
+message Package{
+        optional string virtualPath = 1; 
+        optional string realFullPath = 2;        
+        optional bool isDir = 3;                
+        optional int32 replicanum = 4; //nagative number means it's not an original request.
+        repeated string listItem = 5;            
+}

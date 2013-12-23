@@ -1,0 +1,81 @@
+benchmark_client.cpp: ZHT benchmark(s)   
+bigdata_transfer.cpp: how to transfer a big message over the network
+bigdata_transfer.h:
+ConfEntry.cpp: configuration entry with name/value pair, e.g. PROTOCOL TCP in zht.conf
+ConfEntry.h
+ConfHandler.cpp: configuration handler that parses config file(e.g. zht.conf and neighbor.conf)
+ConfHandler.h
+Const.cpp: define constants, e.g. PROTO_VAL_TCP = "TCP";
+Const.h
+Const-impl.h
+cpp_zhtclient.cpp: ZHT client API C++ binding
+cpp_zhtclient.h
+cpp_zhtclient_test.cpp: C++ examples that call ZHT client API C++ binding
+cpp_zhtclient_threaded_test.cpp: C++ examples that call ZHT client API C++ binding in multi-threaded context
+c_zhtclient.cpp: ZHT client API C binding, which delegates calls to <c_zhtclientStd.cpp>
+c_zhtclient.h
+c_zhtclient_lanl_threaded.c: C examples that call ZHT client API(e.g. c_zht_compare_swap) C binding in multi-threaded context
+c_zhtclientStd.cpp: C wrapper of ZHT client API C++ binding
+c_zhtclientStd.h
+c_zhtclient_test.c: C examples that call ZHT client API C binding
+c_zhtclient_threaded_test.cpp: C examples that call ZHT client API C binding in multi-threaded context
+Env.cpp: environmental parameters, e.g. BUF_SIZE(buffer size), MSG_DEFAULTSIZE(message's default size)
+Env.h
+EpollServer.cpp: Epoll server that dispatches incoming socket requests
+EpollServer.h
+HTWorker.cpp: hashtable worker that processes insert/remove/lookup/append physically
+HTWorker.h
+ipc_plus.cpp: wrapper of System V IPC (inter-process-communication) message queue, used for ZHT applications talking to mpi_broker
+ipc_plus.h
+ip_proxy_stub.cpp: abstraction for IP protocol family, e.g. sendrecv message in client proxy, or recvsend message in server stub 
+ip_proxy_stub.h
+ip_server.cpp: abstraction for processing incoming socket requests, for IP protocol family
+ip_server.h
+lock_guard.cpp: wrapper of lock(e.g. pthread_mutex_t), in thread-safe and exception-safe manner
+lock_guard.h
+lru_cache.cpp: LRU cache eviction policy implementation.
+lru_cache.h
+Makefile: make file the whole system
+meta.pb-c.c: Google-protocol-buffer-C-binding package generated based on meta.proto, only used inside <c_zhtclient_test.c>  
+meta.pb.cc: Google-protocol-buffer-C++-binding package generated based on meta.proto, not used so far
+meta.pb-c.h
+meta.pb.h
+meta.proto: Google-protocol-buffer specification file 
+mpi_broker.cpp: a MPI process running as broker to talk to ZHT server over MPI protocol, on behalf of ZHT applications
+mpi_proxy_stub.cpp: MPI proxy and stub that concrete the protocol abstractions, e.g. ProtoProxy(sendrecv message) and ProtoStub(recvsend message)     
+mpi_proxy_stub.h
+mpi_server.cpp: abstraction for processing incoming MPI requests, for MPI protocol family
+mpi_server.h
+mq_proxy_stub.cpp: message-queue proxy and stub that concrete the protocol abstractions, e.g. ProtoProxy(sendrecv message) and ProtoStub(recvsend message)
+mq_proxy_stub.h
+neighbor2.conf: neighbors configuration file used for multiple ZHT servers launch on local machine, using IP protocol family
+neighbor.conf: neighbors configuration file used for multiple ZHT servers launch on local machine or clusters, using IP protocol family
+neighbor.mpi.conf: neighbors configuration file used for multiple ZHT servers launch on local machine or clusters, using MPI protocol family
+novoht.cpp: Non-Volatile Hashtable running as ZHT backend storage engine
+novoht.h
+protocol_shared.h: shared header file for network protocol abstractions
+proxy_stub.cpp: the protocol abstractions, e.g. ProtoProxy(sendrecv message) and ProtoStub(recvsend message)
+proxy_stub.h
+ProxyStubFactory.cpp: factory class for instantiating concrete proxy and stub, e.g. MPIProxy and MPIStub 
+ProxyStubFactory.h
+startall.sh: shell script to launch multiple ZHT servers based on the configuration file neighbor2.conf
+stopall.sh: shell script to stop all multiple ZHT servers launched by <startall.sh>
+StrTokenizer.cpp: C++ utility tool for splitting string based on delimiter
+StrTokenizer.h
+tcp_proxy_stub.cpp: TCP proxy and stub that concrete the protocol abstractions, e.g. ProtoProxy(sendrecv message) and ProtoStub(recvsend message)
+tcp_proxy_stub.h
+udp_proxy_stub.cpp: UDP proxy and stub that concrete the protocol abstractions, e.g. ProtoProxy(sendrecv message) and ProtoStub(recvsend message)
+udp_proxy_stub.h
+Util.cpp: utilities for time, hash, token ring processing
+Util.h
+zht.conf: configuration file for parameters used for ZHT launch and runtime
+ZHTServer.cpp: ZHT server program that is compiled to zhtserver or zht-mpiserver executables  
+ZHTUtil.cpp: utilities for ZHT 
+ZHTUtil.h
+zpack.pb-c.c: Google-protocol-buffer-C-binding package generated based on zpack.proto, used for ZHT client and server communication
+zpack.pb.cc: Google-protocol-buffer-C++-binding package generated based on zpack.proto, used for ZHT client and server communication
+zpack.pb-c.h
+zpack.pb.h
+zpack.proto: Google-protocol-buffer specification file
+ZProcessor.cpp: abstraction for processing incoming socket requests, for both IP and MPI protocol family 
+ZProcessor.h
