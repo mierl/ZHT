@@ -94,7 +94,7 @@ void *insert_threaded(void *arg) {
 	char buf[100];
 	//sprintf(buf, "%lu", pthread_self());
 
-	sprintf(buf, "%lu", 140328762492672);
+	sprintf(buf, "%lu", 140328762492672ULL);
 
 	int rc = c_zht_insert(key, buf);
 
@@ -313,7 +313,7 @@ void* state_change_callback_threaded(void *arg) {
 	//int rc = c_zht_insert(key, buf); //first, insert the key/value pair
 
 	//sprintf(buf, "%lu", pthread_self());
-	sprintf(buf, "%lu", 140328762492672);
+	sprintf(buf, "%lu", 140328762492672ULL);
 	int rc = c_state_change_callback(key, buf, 500);
 
 	fprintf(stdout,
