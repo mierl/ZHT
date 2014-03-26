@@ -104,13 +104,13 @@ pthread_mutex_t* IPProtoProxy::getSockMutex(const string& host,
 
 void IPProtoProxy::putSockMutex(const string& host, const uint& port) {
 
+	LockGuard lock(&MC_MUTEX);
+
 	string hashKey = HashUtil::genBase(host, port);
 
 	MIT it = MUTEX_CACHE.find(hashKey);
 
 	if (it == MUTEX_CACHE.end()) {
-
-		LockGuard lock(&MC_MUTEX);
 
 		pthread_mutex_t sock_mutex;
 		pthread_mutex_init(&sock_mutex, NULL);

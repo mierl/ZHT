@@ -115,13 +115,13 @@ int TCPProxy::getSockCached(const string& host, const uint& port) {
 	int sock = 0;
 
 #ifdef SOCKET_CACHE
+	LockGuard lock(&CC_MUTEX);
+
 	string hashKey = HashUtil::genBase(host, port);
 
 	MIT it = CONN_CACHE.find(hashKey);
 
 	if (it == CONN_CACHE.end()) {
-
-		LockGuard lock(&CC_MUTEX);
 
 		sock = makeClientSocket(host, port);
 
