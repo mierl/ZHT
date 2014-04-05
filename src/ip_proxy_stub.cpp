@@ -90,6 +90,8 @@ int IPProtoProxy::reuseSock(int sock) {
 pthread_mutex_t* IPProtoProxy::getSockMutex(const string& host,
 		const uint& port) {
 
+	LockGuard lock(&MC_MUTEX);
+
 	string hashKey = HashUtil::genBase(host, port);
 
 	MIT it = MUTEX_CACHE.find(hashKey);
