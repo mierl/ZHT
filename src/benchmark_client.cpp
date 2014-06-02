@@ -66,6 +66,7 @@ void init_packages() {
 		package.add_listitem("item-----3");
 		package.add_listitem("item-----4");
 		package.add_listitem("item-----5");
+		package.add_listitem(HashUtil::randomString(8192));
 		pkgList.push_back(package.SerializeAsString());
 	}
 }
@@ -169,7 +170,7 @@ float benchmarkLookup() {
 		pkg.ParseFromString(pkg_str);
 
 		int ret = zc.lookup(pkg.virtualpath(), result);
-
+		cout << "Found result: "<< result << endl;
 		if (ret < 0) {
 			errCount++;
 		} else if (result.empty()) { //empty string
