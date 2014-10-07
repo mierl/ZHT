@@ -92,4 +92,7 @@ mpi:
 		
 	mpicxx ZHTServer.cpp mpi_server.cpp ProxyStubFactory.cpp proxy_stub.cpp mpi_proxy_stub.cpp Util.cpp Env.cpp mq_proxy_stub.cpp ipc_plus.cpp ConfHandler.cpp ConfEntry.cpp StrTokenizer.cpp HTWorker.cpp Const.cpp novoht.cpp meta.pb.cc zpack.pb.cc lock_guard.cpp $(MPIFLAGS) $(MPILIBFLAGS) -o zht-mpiserver
 
-	
+install: all
+	mkdir -p /usr/local/include/zht
+	cp *.h /usr/local/include/zht
+	cp libzht.a /usr/local/lib
