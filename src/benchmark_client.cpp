@@ -37,7 +37,7 @@
 #include <getopt.h>
 #include <unistd.h>
 
-#include "meta.pb.h"
+#include "zpack.pb.h"
 #include "Util.h"
 
 #include "cpp_zhtclient.h"
@@ -48,17 +48,24 @@ using namespace iit::datasys::zht::dm;
 
 ZHTClient zc;
 int numOfOps = -1;
-int lenString = 52;
+int keyLen = 10;
+int valLen = 118;
 vector<string> pkgList;
 
 void init_packages() {
 
 	for (int i = 0; i < numOfOps; i++) {
 
-		Package package;
-		package.set_virtualpath(HashUtil::randomString(lenString)); //as key
-		package.set_isdir(true);
-		package.set_replicanum(5); //orginal--Note: never let it be nagative!!!
+		ZPack package;
+		package.set_key(HashUtil::randomString(keyLen));
+		package.set_val(HashUtil::randomString(valLen));
+		//package.set_virtualpath(HashUtil::randomString(lenString)); //as key
+		//package.set_isdir(true);
+		//package.set_opcode();
+
+		//package.set_replicanum(5); //orginal--Note: never let it be nagative!!!
+
+		/*
 		package.set_realfullpath(
 				"Some-Real-longer-longer-and-longer-Paths--------");
 		package.add_listitem("item-----1");
@@ -67,6 +74,7 @@ void init_packages() {
 		package.add_listitem("item-----4");
 		package.add_listitem("item-----5");
 		package.add_listitem(HashUtil::randomString(8192));
+		*/
 		pkgList.push_back(package.SerializeAsString());
 	}
 }
@@ -85,10 +93,10 @@ int benchmarkInsert() {
 		c++;
 
 		string pkg_str = *it;
-		Package pkg;
+		ZPack pkg;
 		pkg.ParseFromString(pkg_str);
 
-		int ret = zc.insert(pkg.virtualpath(), pkg_str);
+		int ret = zc.insert(pkg.key(), pkg.val());
 
 		if (ret < 0) {
 			errCount++;
@@ -105,20 +113,23 @@ int benchmarkInsert() {
 	return 0;
 }
 
+
+
+
 int benchmarkAppend() {
 
-	vector<string> pkgList_append;
+	vector<string> pkgList_append = pkgList;
 
 	vector<string>::iterator it;
-	for (it = pkgList.begin(); it != pkgList.end(); it++) {
+	//for (it = pkgList.begin(); it != pkgList.end(); it++) {
 
-		Package package;
-		package.ParseFromString((*it));
+	//	ZPack package;
+	//	package.ParseFromString((*it));
 
-		package.add_listitem("item-----6-append");
+	//	package. add_listitem("item-----6-append");
 
-		pkgList_append.push_back(package.SerializeAsString());
-	}
+	//	pkgList_append.push_back(package.SerializeAsString());
+	//}
 
 	double start = 0;
 	double end = 0;
@@ -131,10 +142,10 @@ int benchmarkAppend() {
 		c++;
 
 		string pkg_str = *it;
-		Package pkg;
+		ZPack pkg;
 		pkg.ParseFromString(pkg_str);
 
-		int ret = zc.append(pkg.virtualpath(), pkg_str);
+		int ret = zc.append(pkg.key(), HashUtil::randomString(valLen));
 
 		if (ret < 0) {
 			errCount++;
@@ -166,11 +177,11 @@ float benchmarkLookup() {
 		c++;
 
 		string pkg_str = *it;
-		Package pkg;
+		ZPack pkg;
 		pkg.ParseFromString(pkg_str);
 
-		int ret = zc.lookup(pkg.virtualpath(), result);
-		cout << "Found result: "<< result << endl;
+		int ret = zc.lookup(pkg.key(), result);
+		//cout << "Found result: "<< result << endl;
 		if (ret < 0) {
 			errCount++;
 		} else if (result.empty()) { //empty string
@@ -203,10 +214,10 @@ float benchmarkRemove() {
 		c++;
 
 		string pkg_str = *it;
-		Package pkg;
+		ZPack pkg;
 		pkg.ParseFromString(pkg_str);
 
-		int ret = zc.remove(pkg.virtualpath());
+		int ret = zc.remove(pkg.key());
 
 		if (ret < 0) {
 			errCount++;
@@ -222,6 +233,7 @@ float benchmarkRemove() {
 
 	return 0;
 }
+
 
 int benchmark(string &zhtConf, string &neighborConf) {
 

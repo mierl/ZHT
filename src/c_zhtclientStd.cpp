@@ -31,7 +31,7 @@
 #include "c_zhtclientStd.h"
 
 #include "cpp_zhtclient.h"
-#include "meta.pb.h"
+//#include "meta.pb.h"
 #include "lock_guard.h"
 
 #include <string.h>
