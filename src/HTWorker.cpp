@@ -60,7 +60,7 @@ HTWorker::QUEUE* HTWorker::PQUEUE = new QUEUE();
 
 bool HTWorker::FIRST_ASYNC = false;
 
-int HTWorker::SCCB_POLL_INTERVAL = Env::get_sccb_poll_interval();
+int HTWorker::SCCB_POLL_INTERVAL = 100;//Env::get_sccb_poll_interval();
 
 HTWorker::HTWorker() :
 		_stub(NULL), _instant_swap(get_instant_swap()) {

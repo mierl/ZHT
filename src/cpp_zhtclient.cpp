@@ -276,7 +276,7 @@ string ZHTClient::commonOpInternal(const string &opcode, const string &key,
 
 	ZPack zpack;
 	zpack.set_opcode(opcode); //"001": lookup, "002": remove, "003": insert, "004": append, "005", compare_swap
-	zpack.set_replicanum(3);
+	zpack.set_replicanum(3); // Reserved but not used at this point.
 
 	if (key.empty())
 		return Const::ZSC_REC_EMPTYKEY; //-1, empty key not allowed.
