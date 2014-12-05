@@ -49,7 +49,7 @@ using namespace iit::datasys::zht::dm;
 ZHTClient zc;
 int numOfOps = -1;
 int keyLen = 10;
-int valLen = 118;
+int valLen = 1000;
 vector<string> pkgList;
 
 void init_packages() {
@@ -273,7 +273,7 @@ int main(int argc, char **argv) {
 	string neighborConf = "";
 
 	int c;
-	while ((c = getopt(argc, argv, "z:n:o:h")) != -1) {
+	while ((c = getopt(argc, argv, "z:n:o:v:h")) != -1) {
 		switch (c) {
 		case 'z':
 			zhtConf = string(optarg);
@@ -283,6 +283,9 @@ int main(int argc, char **argv) {
 			break;
 		case 'o':
 			numOfOps = atoi(optarg);
+			break;
+		case 'v':
+			valLen = atoi(optarg);
 			break;
 		case 'h':
 			printHelp = 1;
@@ -321,5 +324,5 @@ int main(int argc, char **argv) {
 void printUsage(char *argv_0) {
 
 	fprintf(stdout, "Usage:\n%s %s\n", argv_0,
-			"-z zht.conf -n neighbor.conf -o number_of_operations [-h(help)] ");
+			"-z zht.conf -n neighbor.conf -o number_of_operations -v value_size [-h(help)] ");
 }
