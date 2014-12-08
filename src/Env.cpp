@@ -33,7 +33,7 @@
 
 using namespace iit::datasys::zht::dm;
 
-const uint Env::BUF_SIZE = 512 + 38;
+const uint Env::BUF_SIZE = 512 + 38; //512 is pkg size of big message transferring, 38 is header length, include uuid.
 const int Env::MSG_DEFAULTSIZE = 1024 * 1024 * 2; //2M
 const int Env::SCCB_POLL_DEFAULT_INTERVAL = 1; //1 ms;
 

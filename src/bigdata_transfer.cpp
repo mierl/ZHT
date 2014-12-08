@@ -116,7 +116,7 @@ string Blob::toString() const {
 }
 
 Blob& Blob::assign(const string& blob) {
-
+	//add header, total length is 38 bytes.
 	size_t sc = 0;
 
 	uuid(strtoull(blob.substr(sc, getUuidLen()).c_str(), NULL, 10));
