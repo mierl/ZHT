@@ -2,12 +2,12 @@
 ZHT is a zero-hop distributed hash table(see also the paper, http://datasys.cs.iit.edu/projects/ZHT/ZHT-CRC-PID2666213-Final.pdf).
 
 -------------------SOFTWARE REQUIREMENTS-------------------
-Google protocol buffers c binding, VERSION 0.15 or later
-		http://code.google.com/p/protobuf-c/downloads/list
+Google protocol buffers c binding, VERSION 0.15 or later.  0.15 version is included.
+http://code.google.com/p/protobuf-c/downloads/list
 
 
-Google protocol buffers c++ binding, VERSION 2.4.1
-		http://code.google.com/p/protobuf/downloads/list
+Google protocol buffers c++ binding, VERSION 2.4.1 is supported and included. 
+Note: newer versions may NOT work!
 
 
 -------------------ABOUT ZHT API, SPECIAL ATTENTION-------------------
