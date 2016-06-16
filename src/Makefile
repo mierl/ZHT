@@ -1,6 +1,6 @@
 TARGETS = zht_ctest zht_cpptest zht_ben zhtserver libzht.a c_zhtclient_threaded_test cpp_zhtclient_threaded_test c_zhtclient_lanl_threaded
-CC = gcc
-CCFLAGS = -g -I${USER_INCLUDE} -L${USER_LIB} -DPF_INET -DBIG_MSG -DSOCKET_CACHE -DSCCB -DTSQUEUE
+CC = gcc #gcc
+CCFLAGS = -g -std=c++11 -I${USER_INCLUDE} -L${USER_LIB} -DPF_INET -DBIG_MSG -DSOCKET_CACHE -DSCCB -DTSQUEUE
 #CCFLAGS = -g -I${USER_INCLUDE} -L${USER_LIB} -DTHREADED_SERVE -DPF_INET -DBIG_MSG -DSOCKET_CACHE -DSCCB -DTSQUEUE 
 MPIFLAGS = -g -I${USER_INCLUDE} -L${USER_LIB} -DMPI_INET
 LIBFLAGS = -lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotobuf-c
