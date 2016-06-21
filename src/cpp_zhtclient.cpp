@@ -37,7 +37,7 @@
 #include "ConfHandler.h"
 #include "Env.h"
 #include "StrTokenizer.h"
-
+#include "zht_evo.capnp.h"
 using namespace iit::datasys::zht::dm;
 
 ZHTClient::ZHTClient() :
